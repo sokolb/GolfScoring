@@ -6,5 +6,6 @@ describe("NavBar Tests", () => {
         const wrapper = shallow(<NavBar />);
         const btnPlayer = wrapper.find({ name: "btnPlayers" });
         expect(btnPlayer.length).toBe(1);
+        expect(btnPlayer.text()).toEqual("Players");
     });
 });
