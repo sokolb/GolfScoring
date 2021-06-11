@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import Login from "../Login/Login";
 import NavBar from "../NavBar/Navbar";
-import App from "./App";
+import { App } from "./App";
 
 var props;
 
@@ -13,7 +13,7 @@ describe("App tests", () => {
     });
 
     it("renders correct components when no one is logged in", () => {
-        props.loggedInUser = null;
+        props.loggedInUser = undefined;
         const wrapper = shallow(<App {...props} />);
 
         const loginComponent = wrapper.find(Login);

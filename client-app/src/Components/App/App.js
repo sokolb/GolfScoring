@@ -1,19 +1,31 @@
 import NavBar from "../NavBar/Navbar";
 import "./App.css";
 import Login from "../Login/Login";
+import { Component } from "react";
+import { connect } from "react-redux";
 
-function App(props) {
-    return (
-        <div className="App">
-            {props.loggedInUser !== null && (
-                <div>
-                    <label name="loggedInUser">{"Logged in user: " + props.loggedInUser}</label>
-                    <NavBar />
-                </div>
-            )}
-            {props.loggedInUser === null && <Login />}
-        </div>
-    );
+export class App extends Component {
+    render() {
+        return (
+            <div className="App">
+                {this.props.loggedInUser !== undefined && (
+                    <div>
+                        <label name="loggedInUser">{"Logged in user: " + this.props.loggedInUser}</label>
+                        <NavBar />
+                    </div>
+                )}
+                {this.props.loggedInUser === undefined && <Login />}
+            </div>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        golf: state.survey,
+    };
+};
+
+const actionCreators = {};
+
+export default connect(mapStateToProps, actionCreators)(App);
