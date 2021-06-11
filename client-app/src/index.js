@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./Components/App/App";
 import reportWebVitals from "./reportWebVitals";
+import configureStore from "./Store/configureStore";
+
+const store = configureStore();
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
