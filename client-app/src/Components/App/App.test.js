@@ -1,18 +1,44 @@
 import { shallow } from "enzyme";
+import Login from "../Login/Login";
 import NavBar from "../NavBar/Navbar";
 import App from "./App";
 
+var props;
+
 describe("App tests", () => {
-    it("renders title", () => {
-        const wrapper = shallow(<App />);
-        const title = wrapper.find({ name: "title" });
-        expect(title.length).toEqual(1);
-        expect(title.text()).toEqual("Match Play");
+    beforeEach(() => {
+        props = {
+            loggedInUser: "brian.sokoloski@gmail.com",
+        };
     });
 
-    it("renders nav bar", () => {
-        const wrapper = shallow(<App />);
+    it("renders correct components when no one is logged in", () => {
+        props.loggedInUser = null;
+        const wrapper = shallow(<App {...props} />);
+
+        const loginComponent = wrapper.find(Login);
+        expect(loginComponent.length).toEqual(1);
+        const navBar = wrapper.find(NavBar);
+        expect(navBar.length).toEqual(0);
+        const loggedinUser = wrapper.find({ name: "loggedInUser" });
+        expect(loggedinUser.length).toEqual(0);
+    });
+
+    it("renders correct components when user is logged in", () => {
+        const wrapper = shallow(<App {...props} />);
+
+        const loginComponent = wrapper.find(Login);
+        expect(loginComponent.length).toEqual(0);
         const navBar = wrapper.find(NavBar);
         expect(navBar.length).toEqual(1);
+        const loggedinUser = wrapper.find({ name: "loggedInUser" });
+        expect(loggedinUser.length).toEqual(1);
+    });
+
+    it("display logged in user", () => {
+        const wrapper = shallow(<App {...props} />);
+
+        const loggedinUser = wrapper.find({ name: "loggedInUser" });
+        expect(loggedinUser.text()).toEqual("Logged in user: " + props.loggedInUser);
     });
 });
