@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { setLoggedInUser } from "../../Actions/GolfActions";
+import { logInUser } from "../../Actions/GolfActions";
 import { connect } from "react-redux";
+import GhinDataService from "../../Ghin/GhinDataService";
 
 export class Login extends Component {
     render() {
@@ -14,20 +15,26 @@ export class Login extends Component {
                 <label>Password</label>
                 <input name="password"></input>
                 <br />
-                <button name="btnSubmit">Submit</button>
+                <button name="btnSubmit" onClick={this.handleSubmitClick}>
+                    Submit
+                </button>
             </div>
         );
     }
+
+    handleSubmitClick = () => {
+        this.props.logInUser("", "");
+    };
 }
 
 const mapStateToProps = (state) => {
     return {
-        golf: state.survey,
+        golf: state.golf,
     };
 };
 
 const actionCreators = {
-    setLoggedInUser,
+    logInUser,
 };
 
 export default connect(mapStateToProps, actionCreators)(Login);

@@ -8,6 +8,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loggedInUser: action.user,
+                userToken: action.userToken,
             };
         default:
             return state;

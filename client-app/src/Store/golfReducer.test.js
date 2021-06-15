@@ -11,8 +11,10 @@ describe("Golf Reducer tests", () => {
 
     it("should match the state when SET_LOGGED_IN_USER is dispatched", () => {
         const user = "testUser1234";
+        const userToken = "asdfsdaf23r2qawf";
         targetState.loggedInUser = user;
+        targetState.userToken = userToken;
 
-        expect(reducer(initialState, { type: actionTypes.SET_LOGGED_IN_USER, user: user })).toEqual(targetState);
+        expect(reducer(initialState, { type: actionTypes.SET_LOGGED_IN_USER, user, userToken })).toEqual(targetState);
     });
 });
