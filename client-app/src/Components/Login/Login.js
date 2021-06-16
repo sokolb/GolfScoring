@@ -1,19 +1,42 @@
 import React, { Component } from "react";
 import { logInUser } from "../../Actions/GolfActions";
 import { connect } from "react-redux";
-import GhinDataService from "../../Ghin/GhinDataService";
 
 export class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            userName: "",
+            password: "",
+        };
+
+        this.handleUserNameChange = this.handleUserNameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    }
+
+    handleUserNameChange(event) {
+        this.setState({
+            userName: event.target.value,
+        });
+    }
+
+    handlePasswordChange(event) {
+        this.setState({
+            password: event.target.value,
+        });
+    }
+
     render() {
         return (
             <div>
                 <h1>Login:</h1>
                 <br />
-                <label>Email Address</label>
-                <input name="userName"></input>
+                <label>Email Address or GHIN</label>
+                <input name="userName" onChange={this.handleUserNameChange}></input>
                 <br />
                 <label>Password</label>
-                <input name="password"></input>
+                <input name="password" onChange={this.handlePasswordChange}></input>
                 <br />
                 <button name="btnSubmit" onClick={this.handleSubmitClick}>
                     Submit
@@ -23,7 +46,7 @@ export class Login extends Component {
     }
 
     handleSubmitClick = () => {
-        this.props.logInUser("", "");
+        this.props.logInUser(this.state.userName, this.state.password);
     };
 }
 
