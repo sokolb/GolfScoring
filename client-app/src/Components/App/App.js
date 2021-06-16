@@ -5,16 +5,24 @@ import { Component } from "react";
 import { connect } from "react-redux";
 
 export class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+    }
+
     render() {
         return (
             <div className="App">
-                {this.props.loggedInUser !== undefined && (
+                {console.log("here")}
+                {console.log(this.props)}
+                {this.props.golf.loggedInUser !== undefined && (
                     <div>
-                        <label name="loggedInUser">{"Logged in user: " + this.props.loggedInUser}</label>
+                        <label name="loggedInUser">{"Logged in user: " + this.props.golf.loggedInUser}</label>
                         <NavBar />
                     </div>
                 )}
-                {this.props.loggedInUser === undefined && <Login />}
+                {this.props.golf.loggedInUser === undefined && <Login />}
             </div>
         );
     }
@@ -22,7 +30,7 @@ export class App extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        golf: state.survey,
+        golf: state.golf,
     };
 };
 

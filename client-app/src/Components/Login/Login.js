@@ -13,6 +13,7 @@ export class Login extends Component {
 
         this.handleUserNameChange = this.handleUserNameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
     }
 
     handleUserNameChange(event) {
@@ -27,6 +28,10 @@ export class Login extends Component {
         });
     }
 
+    handleSubmitClick() {
+        this.props.logInUser(this.state.userName, this.state.password);
+    }
+
     render() {
         return (
             <div>
@@ -36,7 +41,7 @@ export class Login extends Component {
                 <input name="userName" onChange={this.handleUserNameChange}></input>
                 <br />
                 <label>Password</label>
-                <input name="password" onChange={this.handlePasswordChange}></input>
+                <input name="password" type="password" onChange={this.handlePasswordChange}></input>
                 <br />
                 <button name="btnSubmit" onClick={this.handleSubmitClick}>
                     Submit
@@ -44,10 +49,6 @@ export class Login extends Component {
             </div>
         );
     }
-
-    handleSubmitClick = () => {
-        this.props.logInUser(this.state.userName, this.state.password);
-    };
 }
 
 const mapStateToProps = (state) => {
