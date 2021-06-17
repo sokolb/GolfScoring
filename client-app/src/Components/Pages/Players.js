@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addPlayer } from "../../Actions/GolfActions";
+import GhinDataService from "../../Ghin/GhinDataService";
 
 export class Players extends Component {
     constructor(props) {
@@ -36,7 +37,7 @@ export class Players extends Component {
     }
 
     handleSubmitClick = () => {
-        this.props.addPlayer(this.state.firstName, this.state.lastName, this.state.GHIN);
+        this.props.addPlayer(this.state.firstName, this.state.lastName, this.state.GHIN, this.props.golf.userToken);
     };
 
     render() {

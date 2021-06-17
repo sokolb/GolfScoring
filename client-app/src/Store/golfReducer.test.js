@@ -29,15 +29,17 @@ describe("Golf Reducer tests", () => {
         var firstName = "Brian";
         var lastName = "Johnson";
         var GHIN = "111123";
+        var handicap = "18.2";
 
         var player = {
-            firstName: firstName,
-            lastName: lastName,
-            GHIN: GHIN,
+            firstName,
+            lastName,
+            GHIN,
+            handicap,
         };
 
         targetState.players[0] = player;
 
-        expect(reducer(initialState, { type: actionTypes.ADD_PLAYER, firstName, lastName, GHIN })).toEqual(targetState);
+        expect(reducer(initialState, { type: actionTypes.ADD_PLAYER, firstName, lastName, GHIN, handicap })).toEqual(targetState);
     });
 });

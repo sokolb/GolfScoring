@@ -32,13 +32,18 @@ const setCurrentPageCreator = (pageName) => ({
     type: actionTypes.SET_CURRENT_PAGE,
 });
 
-export const addPlayer = (firstName, lastName, GHIN) => async (dispatch) => {
-    dispatch(addPlayerCreator(firstName, lastName, GHIN));
+export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispatch) => {
+    var handicap = "-1";
+    await GhinDataService.getUserHandicap(GHIN, user_token).then((response) => {
+        handicap = response.data.golfer.handicap_index;
+        dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+    });
 };
 
-const addPlayerCreator = (firstName, lastName, GHIN) => ({
+const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
     firstName,
     lastName,
     GHIN,
+    handicap,
     type: actionTypes.ADD_PLAYER,
 });

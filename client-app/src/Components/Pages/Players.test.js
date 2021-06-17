@@ -6,7 +6,7 @@ var props;
 describe("Players Tests", () => {
     beforeEach(() => {
         props = {
-            golf: {},
+            golf: { userToken: "abc123" },
             addPlayer: jest.fn(),
         };
     });
@@ -42,7 +42,7 @@ describe("Players Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addPlayer).toHaveBeenCalledWith(firstName, lastName, GHIN);
+        expect(props.addPlayer).toHaveBeenCalledWith(firstName, lastName, GHIN, props.golf.userToken);
     });
 
     function createEvent(value) {

@@ -4,24 +4,12 @@ import { addPlayer, logInUser, setCurrentPage, setLoggedInUser } from "./GolfAct
 
 jest.mock("../Ghin/GhinDataService");
 
-var responseData;
-
 describe("Actions tests", () => {
-    beforeEach(() => {
-        responseData = {
-            data: {
-                golfer_user: {
-                    golfer_user_token: "asdfasdf32r23rar",
-                },
-            },
-        };
-    });
-
     it("logInUser calls get user token from API", async () => {
         const dispatch = jest.fn();
         var user = "brian.sokoloski3@gmail.com";
         var pwd = "@bc!23";
-        GhinDataService.getUserToken.mockReturnValue(Promise.resolve(responseData));
+        GhinDataService.getUserToken.mockReturnValue(Promise.resolve({ data: {} }));
 
         await logInUser(user, pwd)(dispatch);
 
@@ -77,14 +65,49 @@ describe("Actions tests", () => {
         expect(dispatch).toHaveBeenCalledWith({ pageName: pageName, type: actionTypes.SET_CURRENT_PAGE });
     });
 
-    it("addPlayer dispatches ADD_PLAYER", () => {
+    it("addPlayer calls getUserHandicap", async () => {
         const dispatch = jest.fn();
         var firstName = "Brian";
         var lastName = "Smith";
         var GHIN = "1234132";
+        var handicap = "17.3";
+        var user_token = "asfdsadfasdfdsaasdf";
 
-        addPlayer(firstName, lastName, GHIN)(dispatch);
+        var responseData = {
+            data: {
+                golfer: {
+                    handicap_index: handicap,
+                },
+            },
+        };
 
-        expect(dispatch).toHaveBeenCalledWith({ firstName, lastName, GHIN, type: actionTypes.ADD_PLAYER });
+        GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+
+        await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+
+        expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
+    });
+
+    it("addPlayer dispatches ADD_PLAYER", async () => {
+        const dispatch = jest.fn();
+        var firstName = "Brian";
+        var lastName = "Smith";
+        var GHIN = "1234132";
+        var handicap = "17.3";
+        var user_token = "asfdsadfasdfdsaasdf";
+
+        var responseData = {
+            data: {
+                golfer: {
+                    handicap_index: handicap,
+                },
+            },
+        };
+
+        GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+
+        await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+
+        expect(dispatch).toHaveBeenCalledWith({ firstName, lastName, GHIN, handicap, type: actionTypes.ADD_PLAYER });
     });
 });
