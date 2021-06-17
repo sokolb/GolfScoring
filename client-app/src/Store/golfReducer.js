@@ -15,6 +15,17 @@ export default (state = initialState, action) => {
                 ...state,
                 currentPage: action.pageName,
             };
+        case actionTypes.ADD_PLAYER:
+            var players = state.players;
+            players.push({
+                firstName: action.firstName,
+                lastName: action.lastName,
+                GHIN: action.GHIN,
+            });
+            return {
+                ...state,
+                players: players,
+            };
         default:
             return state;
     }

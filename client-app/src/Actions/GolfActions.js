@@ -31,3 +31,14 @@ const setCurrentPageCreator = (pageName) => ({
     pageName,
     type: actionTypes.SET_CURRENT_PAGE,
 });
+
+export const addPlayer = (firstName, lastName, GHIN) => async (dispatch) => {
+    dispatch(addPlayerCreator(firstName, lastName, GHIN));
+};
+
+const addPlayerCreator = (firstName, lastName, GHIN) => ({
+    firstName,
+    lastName,
+    GHIN,
+    type: actionTypes.ADD_PLAYER,
+});

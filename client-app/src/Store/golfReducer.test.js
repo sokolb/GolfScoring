@@ -24,4 +24,20 @@ describe("Golf Reducer tests", () => {
 
         expect(reducer(initialState, { type: actionTypes.SET_CURRENT_PAGE, pageName })).toEqual(targetState);
     });
+
+    it("should match the state when ADD_PLAYER is dispatched", () => {
+        var firstName = "Brian";
+        var lastName = "Johnson";
+        var GHIN = "111123";
+
+        var player = {
+            firstName: firstName,
+            lastName: lastName,
+            GHIN: GHIN,
+        };
+
+        targetState.players[0] = player;
+
+        expect(reducer(initialState, { type: actionTypes.ADD_PLAYER, firstName, lastName, GHIN })).toEqual(targetState);
+    });
 });

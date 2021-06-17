@@ -1,6 +1,6 @@
 import GhinDataService from "../Ghin/GhinDataService.js";
 import * as actionTypes from "./ActionTypes.js";
-import { logInUser, setCurrentPage, setLoggedInUser } from "./GolfActions.js";
+import { addPlayer, logInUser, setCurrentPage, setLoggedInUser } from "./GolfActions.js";
 
 jest.mock("../Ghin/GhinDataService");
 
@@ -75,5 +75,16 @@ describe("Actions tests", () => {
         setCurrentPage(pageName)(dispatch);
 
         expect(dispatch).toHaveBeenCalledWith({ pageName: pageName, type: actionTypes.SET_CURRENT_PAGE });
+    });
+
+    it("addPlayer dispatches ADD_PLAYER", () => {
+        const dispatch = jest.fn();
+        var firstName = "Brian";
+        var lastName = "Smith";
+        var GHIN = "1234132";
+
+        addPlayer(firstName, lastName, GHIN)(dispatch);
+
+        expect(dispatch).toHaveBeenCalledWith({ firstName, lastName, GHIN, type: actionTypes.ADD_PLAYER });
     });
 });

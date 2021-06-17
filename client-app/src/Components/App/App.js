@@ -3,14 +3,9 @@ import "./App.css";
 import Login from "../Login/Login";
 import { Component } from "react";
 import { connect } from "react-redux";
+import Players from "../Pages/Players";
 
 export class App extends Component {
-    // constructor(props) {
-    //     super(props);
-
-    //     //this.state = {};
-    // }
-
     render() {
         return (
             <div className="App">
@@ -21,6 +16,7 @@ export class App extends Component {
                     </div>
                 )}
                 {this.props.golf.loggedInUser === undefined && <Login />}
+                {this.props.golf.currentPage === "Players" && <Players />}
             </div>
         );
     }

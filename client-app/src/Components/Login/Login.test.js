@@ -23,11 +23,26 @@ describe("Login Tests", () => {
     });
 
     it("submit button calls setLoggedInUser action", () => {
+        var userName = "b@b.com";
+        var pwd = "abc123";
         const wrapper = shallow(<Login {...props} />);
+
+        const userNameTextBox = wrapper.find({ name: "userName" });
+
+        userNameTextBox.simulate("change", createEvent(userName));
+
+        const pwdTextBox = wrapper.find({ name: "password" });
+        pwdTextBox.simulate("change", createEvent(pwd));
 
         const logInButton = wrapper.find({ name: "btnSubmit" });
         logInButton.simulate("click");
 
-        expect(props.logInUser).toHaveBeenCalled();
+        expect(props.logInUser).toHaveBeenCalledWith(userName, pwd);
     });
+
+    function createEvent(value) {
+        return {
+            target: { value },
+        };
+    }
 });

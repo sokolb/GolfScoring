@@ -1,6 +1,7 @@
 import { shallow } from "enzyme";
 import Login from "../Login/Login";
 import NavBar from "../NavBar/Navbar";
+import Players from "../Pages/Players";
 import { App } from "./App";
 
 var props;
@@ -10,6 +11,7 @@ describe("App tests", () => {
         props = {
             golf: {
                 loggedInUser: "brian.sokoloski@gmail.com",
+                currentPage: "home",
             },
         };
     });
@@ -42,5 +44,14 @@ describe("App tests", () => {
 
         const loggedinUser = wrapper.find({ name: "loggedInUser" });
         expect(loggedinUser.text()).toEqual("Logged in user: " + props.golf.loggedInUser);
+    });
+
+    it("displays Players component when store is set to that page", () => {
+        props.golf.currentPage = "Players";
+        const wrapper = shallow(<App {...props} />);
+
+        const playersComponent = wrapper.find(Players);
+
+        expect(playersComponent.length).toEqual(1);
     });
 });
