@@ -8,12 +8,14 @@ var props;
 describe("App tests", () => {
     beforeEach(() => {
         props = {
-            loggedInUser: "brian.sokoloski@gmail.com",
+            golf: {
+                loggedInUser: "brian.sokoloski@gmail.com",
+            },
         };
     });
 
     it("renders correct components when no one is logged in", () => {
-        props.loggedInUser = undefined;
+        props.golf.loggedInUser = undefined;
         const wrapper = shallow(<App {...props} />);
 
         const loginComponent = wrapper.find(Login);
@@ -39,6 +41,6 @@ describe("App tests", () => {
         const wrapper = shallow(<App {...props} />);
 
         const loggedinUser = wrapper.find({ name: "loggedInUser" });
-        expect(loggedinUser.text()).toEqual("Logged in user: " + props.loggedInUser);
+        expect(loggedinUser.text()).toEqual("Logged in user: " + props.golf.loggedInUser);
     });
 });

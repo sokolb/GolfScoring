@@ -5,17 +5,15 @@ import { Component } from "react";
 import { connect } from "react-redux";
 
 export class App extends Component {
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-        this.state = {};
-    }
+    //     //this.state = {};
+    // }
 
     render() {
         return (
             <div className="App">
-                {console.log("here")}
-                {console.log(this.props)}
                 {this.props.golf.loggedInUser !== undefined && (
                     <div>
                         <label name="loggedInUser">{"Logged in user: " + this.props.golf.loggedInUser}</label>

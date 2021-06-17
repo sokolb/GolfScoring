@@ -17,4 +17,11 @@ describe("Golf Reducer tests", () => {
 
         expect(reducer(initialState, { type: actionTypes.SET_LOGGED_IN_USER, user, userToken })).toEqual(targetState);
     });
+
+    it("should match the state when SET_CURRENT_PAGE is dispatched", () => {
+        var pageName = "PageXYZ";
+        targetState.currentPage = pageName;
+
+        expect(reducer(initialState, { type: actionTypes.SET_CURRENT_PAGE, pageName })).toEqual(targetState);
+    });
 });

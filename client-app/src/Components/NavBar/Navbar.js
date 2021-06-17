@@ -1,11 +1,31 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { setCurrentPage } from "../../Actions/GolfActions";
 
-function NavBar() {
-    return (
-        <div>
-            <button name="btnPlayers">Players</button>
-        </div>
-    );
+export class NavBar extends Component {
+    render() {
+        return (
+            <div>
+                <button name="btnPlayers" onClick={() => this.handleNavigationButtonClick("Players")}>
+                    Players
+                </button>
+            </div>
+        );
+    }
+
+    handleNavigationButtonClick(pageName) {
+        this.props.setCurrentPage(pageName);
+    }
 }
 
-export default NavBar;
+const mapStateToProps = (state) => {
+    return {
+        golf: state.golf,
+    };
+};
+
+const actionCreators = {
+    setCurrentPage,
+};
+
+export default connect(mapStateToProps, actionCreators)(NavBar);

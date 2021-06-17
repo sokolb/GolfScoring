@@ -22,3 +22,12 @@ const setLoggedInUserCreator = (user, userToken) => ({
     userToken,
     type: actionTypes.SET_LOGGED_IN_USER,
 });
+
+export const setCurrentPage = (pageName) => async (dispatch) => {
+    dispatch(setCurrentPageCreator(pageName));
+};
+
+const setCurrentPageCreator = (pageName) => ({
+    pageName,
+    type: actionTypes.SET_CURRENT_PAGE,
+});
