@@ -45,8 +45,8 @@ describe("Golf Reducer tests", () => {
 
     it("should match the state when SET_PLAYERS is dispatched", () => {
         var players = [
-            { GHIN: 324524, firstName: "bob", lastName: "smith", handicap: "12" },
-            { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: "26.9" },
+            { GHIN: 324524, firstName: "bob", lastName: "smith", handicap: 12 },
+            { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: 6.9 },
         ];
         targetState.players = players;
 

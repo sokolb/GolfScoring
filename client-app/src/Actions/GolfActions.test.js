@@ -130,8 +130,8 @@ describe("Actions tests", () => {
 
         var responseData = {
             players: [
-                { GHIN: 324524, firstName: "bob", lastName: "smth", handicap: "12" },
-                { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: "26.9" },
+                { GHIN: 324524, firstName: "bob", lastName: "smth", handicap: 12 },
+                { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: 26.9 },
             ],
         };
 

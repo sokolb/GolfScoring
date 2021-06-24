@@ -1,12 +1,19 @@
 import { shallow } from "enzyme";
 import { Players } from "../Pages/Players";
+import Player from "./Player";
 
 var props;
 
 describe("Players Tests", () => {
     beforeEach(() => {
         props = {
-            golf: { userToken: "abc123" },
+            golf: {
+                userToken: "abc123",
+                players: [
+                    { GHIN: 11221, firstName: "Bob", lastName: "Smith", handicap: 2 },
+                    { GHIN: 243332, firstName: "Sally", lastName: "Jones", handicap: 3 },
+                ],
+            },
             addPlayer: jest.fn(),
             getPlayers: jest.fn(),
         };
@@ -56,5 +63,13 @@ describe("Players Tests", () => {
         const wrapper = shallow(<Players {...props} />);
 
         expect(props.getPlayers).toHaveBeenCalled();
+    });
+
+    it("Renders correct number of players", () => {
+        const wrapper = shallow(<Players {...props} />);
+
+        const allPlayers = wrapper.find(Player);
+
+        expect(allPlayers.length).toEqual(2);
     });
 });

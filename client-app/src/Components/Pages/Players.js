@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addPlayer, getPlayers } from "../../Actions/GolfActions";
-import GhinDataService from "../../DataServices/GhinDataService";
+import Player from "./Player";
 
 export class Players extends Component {
     constructor(props) {
@@ -49,18 +49,29 @@ export class Players extends Component {
             <div>
                 <h1>Players</h1>
                 <br />
-                <label>First Name:</label>
-                <input name="firstName" onChange={this.handleFirstNameChange} />
-                <br />
-                <label>Last Name:</label>
-                <input name="lastName" onChange={this.handleLastNameChange} />
-                <br />
-                <label>GHIN:</label>
-                <input name="GHIN" onChange={this.handleGHINChange} />
-                <br />
-                <button name="submit" onClick={this.handleSubmitClick}>
-                    Submit
-                </button>
+                <div>
+                    <h2>Add Player</h2>
+                    <br />
+                    <label>First Name:</label>
+                    <input name="firstName" onChange={this.handleFirstNameChange} />
+                    <br />
+                    <label>Last Name:</label>
+                    <input name="lastName" onChange={this.handleLastNameChange} />
+                    <br />
+                    <label>GHIN:</label>
+                    <input name="GHIN" onChange={this.handleGHINChange} />
+                    <br />
+                    <button name="submit" onClick={this.handleSubmitClick}>
+                        Submit
+                    </button>
+                </div>
+                <div>
+                    <h2>Player List</h2>
+                    {this.props.golf.players !== undefined &&
+                        this.props.golf.players.map((p) => {
+                            return <Player key={p.GHIN} player={p} />;
+                        })}
+                </div>
             </div>
         );
     }
