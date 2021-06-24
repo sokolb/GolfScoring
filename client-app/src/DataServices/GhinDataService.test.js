@@ -1,5 +1,5 @@
 import Axios from "axios";
-import GhinDataService from "../Ghin/GhinDataService";
+import GhinDataService from "./GhinDataService";
 
 jest.mock("axios");
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addPlayer } from "../../Actions/GolfActions";
-import GhinDataService from "../../Ghin/GhinDataService";
+import { addPlayer, getPlayers } from "../../Actions/GolfActions";
+import GhinDataService from "../../DataServices/GhinDataService";
 
 export class Players extends Component {
     constructor(props) {
@@ -16,6 +16,10 @@ export class Players extends Component {
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleGHINChange = this.handleGHINChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getPlayers("Players_Testing.json");
     }
 
     handleFirstNameChange(event) {
@@ -70,6 +74,7 @@ const mapStateToProps = (state) => {
 
 const actionCreators = {
     addPlayer,
+    getPlayers,
 };
 
 export default connect(mapStateToProps, actionCreators)(Players);

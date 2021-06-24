@@ -1,8 +1,11 @@
-import GhinDataService from "../Ghin/GhinDataService.js";
+import GhinDataService from "../DataServices/GhinDataService.js";
+import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import { addPlayer, logInUser, setCurrentPage, setLoggedInUser } from "./GolfActions.js";
+import { addPlayer, getPlayers, logInUser, setCurrentPage, setLoggedInUser } from "./GolfActions.js";
+import { file } from "@babel/types";
 
-jest.mock("../Ghin/GhinDataService");
+jest.mock("../DataServices/GhinDataService");
+jest.mock("../DataServices/AppData");
 
 describe("Actions tests", () => {
     it("logInUser calls get user token from API", async () => {
@@ -109,5 +112,33 @@ describe("Actions tests", () => {
         await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
         expect(dispatch).toHaveBeenCalledWith({ firstName, lastName, GHIN, handicap, type: actionTypes.ADD_PLAYER });
+    });
+
+    it("getPlayers calls getPlayers endpoint", async () => {
+        const dispatch = jest.fn();
+        var fileName = "test.json";
+        AppData.getPlayers.mockReturnValue(Promise.resolve({ data: {} }));
+
+        await getPlayers(fileName)(dispatch);
+
+        expect(AppData.getPlayers).toHaveBeenCalledWith(fileName);
+    });
+
+    it("getPlayers dispatches SET_PLAYERS on successful API call", async () => {
+        const dispatch = jest.fn();
+        var fileName = "test.json";
+
+        var responseData = {
+            players: [
+                { GHIN: 324524, firstName: "bob", lastName: "smth", handicap: "12" },
+                { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: "26.9" },
+            ],
+        };
+
+        AppData.getPlayers.mockReturnValue(Promise.resolve({ data: responseData }));
+
+        await getPlayers(fileName)(dispatch);
+
+        expect(dispatch).toHaveBeenCalledWith({ players: responseData.players, type: actionTypes.SET_PLAYERS });
     });
 });

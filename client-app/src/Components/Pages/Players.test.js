@@ -8,6 +8,7 @@ describe("Players Tests", () => {
         props = {
             golf: { userToken: "abc123" },
             addPlayer: jest.fn(),
+            getPlayers: jest.fn(),
         };
     });
 
@@ -50,4 +51,10 @@ describe("Players Tests", () => {
             target: { value },
         };
     }
+
+    it("Calls GetPlayers on when rendered", () => {
+        const wrapper = shallow(<Players {...props} />);
+
+        expect(props.getPlayers).toHaveBeenCalled();
+    });
 });

@@ -27,6 +27,11 @@ export default (state = initialState, action) => {
                 ...state,
                 players: players,
             };
+        case actionTypes.SET_PLAYERS:
+            return {
+                ...state,
+                players: action.players,
+            };
         default:
             return state;
     }

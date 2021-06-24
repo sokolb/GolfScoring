@@ -1,4 +1,5 @@
-import GhinDataService from "../Ghin/GhinDataService.js";
+import AppData from "../DataServices/AppData.js";
+import GhinDataService from "../DataServices/GhinDataService.js";
 import * as actionTypes from "./ActionTypes.js";
 
 export const logInUser = (user, pwd) => async (dispatch) => {
@@ -46,4 +47,21 @@ const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
     GHIN,
     handicap,
     type: actionTypes.ADD_PLAYER,
+});
+
+export const getPlayers = (fileName) => async (dispatch) => {
+    await AppData.getPlayers(fileName)
+        .then((response) => {
+            dispatch(setPlayersCreator(response.data.players));
+        })
+        .catch((error) => {
+            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+                console.log(error.response);
+            }
+        });
+};
+
+const setPlayersCreator = (players) => ({
+    players,
+    type: actionTypes.SET_PLAYERS,
 });
