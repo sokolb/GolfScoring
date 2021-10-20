@@ -1,4 +1,4 @@
-import initialState from "./initialState";
+import initialState from "./InitialState";
 import * as actionTypes from "../Actions/ActionTypes";
 
 // eslint-disable-next-line
