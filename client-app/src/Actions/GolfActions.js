@@ -3,65 +3,82 @@ import GhinDataService from "../DataServices/GhinDataService.js";
 import * as actionTypes from "./ActionTypes.js";
 
 export const logInUser = (user, pwd) => async (dispatch) => {
-    await GhinDataService.getUserToken(user, pwd)
-        .then((response) => {
-            dispatch(setLoggedInUserCreator(user, response.data.golfer_user.golfer_user_token));
-        })
-        .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-                console.log(error.response);
-            }
-        });
-};
-
-export const setLoggedInUser = (user, userToken) => async (dispatch) => {
-    dispatch(setLoggedInUserCreator(user, userToken));
-};
-
-const setLoggedInUserCreator = (user, userToken) => ({
-    user,
-    userToken,
-    type: actionTypes.SET_LOGGED_IN_USER,
-});
-
-export const setCurrentPage = (pageName) => async (dispatch) => {
-    dispatch(setCurrentPageCreator(pageName));
-};
-
-const setCurrentPageCreator = (pageName) => ({
-    pageName,
-    type: actionTypes.SET_CURRENT_PAGE,
-});
-
-export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispatch) => {
-    var handicap = "-1";
-    await GhinDataService.getUserHandicap(GHIN, user_token).then((response) => {
-        handicap = response.data.golfer.handicap_index;
-        dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+  await GhinDataService.getUserToken(user, pwd)
+    .then((response) => {
+      dispatch(
+        setLoggedInUserCreator(
+          user,
+          response.data.golfer_user.golfer_user_token
+        )
+      );
+    })
+    .catch((error) => {
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+        console.log(error.response);
+      }
     });
 };
 
+export const setLoggedInUser = (user, userToken) => async (dispatch) => {
+  dispatch(setLoggedInUserCreator(user, userToken));
+};
+
+const setLoggedInUserCreator = (user, userToken) => ({
+  user,
+  userToken,
+  type: actionTypes.SET_LOGGED_IN_USER,
+});
+
+export const setCurrentPage = (pageName) => async (dispatch) => {
+  dispatch(setCurrentPageCreator(pageName));
+};
+
+const setCurrentPageCreator = (pageName) => ({
+  pageName,
+  type: actionTypes.SET_CURRENT_PAGE,
+});
+
+export const addPlayer =
+  (firstName, lastName, GHIN, user_token) => async (dispatch) => {
+    var handicap = "-1";
+    await GhinDataService.getUserHandicap(GHIN, user_token)
+      .then((response) => {
+        handicap = response.data.golfer.handicap_index;
+        dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+      })
+      .catch((error) => {
+        console.log("we in here");
+        console.log(error.response);
+        dispatch(setErrorMessageCreator(error.response.data.golfer));
+      });
+  };
+
 const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
-    firstName,
-    lastName,
-    GHIN,
-    handicap,
-    type: actionTypes.ADD_PLAYER,
+  firstName,
+  lastName,
+  GHIN,
+  handicap,
+  type: actionTypes.ADD_PLAYER,
+});
+
+const setErrorMessageCreator = (errorMessage) => ({
+  errorMessage,
+  type: actionTypes.SET_ERROR_MESSAGE,
 });
 
 export const getPlayers = (fileName) => async (dispatch) => {
-    await AppData.getPlayers(fileName)
-        .then((response) => {
-            dispatch(setPlayersCreator(response.data.players));
-        })
-        .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-                console.log(error.response);
-            }
-        });
+  await AppData.getPlayers(fileName)
+    .then((response) => {
+      dispatch(setPlayersCreator(response.data.players));
+    })
+    .catch((error) => {
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+        console.log(error.response);
+      }
+    });
 };
 
 const setPlayersCreator = (players) => ({
-    players,
-    type: actionTypes.SET_PLAYERS,
+  players,
+  type: actionTypes.SET_PLAYERS,
 });

@@ -3,3 +3,4 @@ export const LOG_IN_USER = "LOG_IN_USER";
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const SET_PLAYERS = "SET_PLAYERS";
+export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";

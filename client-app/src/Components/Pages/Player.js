@@ -4,12 +4,20 @@ import { connect } from "react-redux";
 export class Player extends Component {
     render() {
         return (
-            <div>
-                <label name="firstName">{this.props.player.firstName}</label>
-                <label name="lastName">{this.props.player.lastName}</label>
-                <label name="GHIN">{this.props.player.GHIN}</label>
-                <label name="handicap">{this.props.player.handicap}</label>;
-            </div>
+            <tr>
+                <td>
+                    <label name="firstName">{this.props.player.firstName}</label>
+                </td>
+                <td>
+                    <label name="lastName">{this.props.player.lastName}</label>
+                </td>
+                <td>
+                    <label name="GHIN">{this.props.player.GHIN}</label>
+                </td>
+                <td>
+                    <label name="handicap">{this.props.player.handicap}</label>
+                </td>
+            </tr>
         );
     }
 }
