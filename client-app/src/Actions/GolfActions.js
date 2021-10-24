@@ -47,8 +47,6 @@ export const addPlayer =
         dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
       })
       .catch((error) => {
-        console.log("we in here");
-        console.log(error.response);
         dispatch(setErrorMessageCreator(error.response.data.golfer));
       });
   };
@@ -59,6 +57,15 @@ const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
   GHIN,
   handicap,
   type: actionTypes.ADD_PLAYER,
+});
+
+export const removePlayer = (id) => (dispatch) => {
+  dispatch(removePlayerCreator(id));
+};
+
+const removePlayerCreator = (id) => ({
+  id,
+  type: actionTypes.REMOVE_PLAYER,
 });
 
 const setErrorMessageCreator = (errorMessage) => ({

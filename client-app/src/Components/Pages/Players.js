@@ -51,9 +51,9 @@ export class Players extends Component {
 
   submitButtonDisabled() {
     return (
-      this.state.firstName == "" ||
-      this.state.lastName == "" ||
-      this.state.GHIN == ""
+      this.state.firstName === "" ||
+      this.state.lastName === "" ||
+      this.state.GHIN === ""
     );
   }
 
@@ -95,13 +95,15 @@ export class Players extends Component {
               textAlign: "left",
               marginLeft: "auto",
               marginRight: "auto",
+              width: "50%",
             }}
           >
             <tr>
-              <td>First Name</td>
-              <td>Last Name</td>
-              <td>GHIN</td>
-              <td>Handicap</td>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>GHIN</th>
+              <th>Handicap</th>
+              <th></th>
             </tr>
             {this.props.golf.players !== undefined &&
               this.props.golf.players.map((p) => {

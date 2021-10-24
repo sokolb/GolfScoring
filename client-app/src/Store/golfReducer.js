@@ -18,6 +18,7 @@ export default (state = initialState, action) => {
     case actionTypes.ADD_PLAYER:
       var players = state.players;
       players.push({
+        id: "1234",
         firstName: action.firstName,
         lastName: action.lastName,
         GHIN: action.GHIN,
@@ -28,6 +29,12 @@ export default (state = initialState, action) => {
         players: players,
         errorMessage: "",
       };
+
+    case actionTypes.REMOVE_PLAYER:
+      var newPlayersArray = state.players.filter(
+        (player) => player.id !== action.id
+      );
+      return { ...state, players: newPlayersArray };
     case actionTypes.SET_PLAYERS:
       return {
         ...state,

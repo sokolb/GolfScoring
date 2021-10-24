@@ -1,6 +1,18 @@
 {
-    "players": [
-        { "GHIN": 1111, "firstName": "Brian", "lastName": "Sokoloski", "handicap": 11.2 },
-        { "GHIN": 2222, "firstName": "Andy", "lastName": "Melchert", "handicap": 26 }
-    ]
+  "players": [
+    {
+      "id": "1",
+      "GHIN": 1111,
+      "firstName": "Brian",
+      "lastName": "Sokoloski",
+      "handicap": 11.2
+    },
+    {
+      "id": "2",
+      "GHIN": 2222,
+      "firstName": "Andy",
+      "lastName": "Melchert",
+      "handicap": 26
+    }
+  ]
 }

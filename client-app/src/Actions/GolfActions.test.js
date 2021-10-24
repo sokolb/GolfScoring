@@ -7,8 +7,8 @@ import {
   logInUser,
   setCurrentPage,
   setLoggedInUser,
+  removePlayer,
 } from "./GolfActions.js";
-import { file } from "@babel/types";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
@@ -141,6 +141,17 @@ describe("Actions tests", () => {
       GHIN,
       handicap,
       type: actionTypes.ADD_PLAYER,
+    });
+  });
+
+  it("removePlayer dispatches REMOVE_PLAYER", () => {
+    const dispatch = jest.fn();
+    let id = "12345";
+    removePlayer(id)(dispatch);
+
+    expect(dispatch).toHaveBeenCalledWith({
+      id: id,
+      type: actionTypes.REMOVE_PLAYER,
     });
   });
 

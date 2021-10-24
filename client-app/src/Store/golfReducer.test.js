@@ -4,6 +4,22 @@ import reducer from "./golfReducer.js";
 
 var targetState;
 
+var player1 = {
+  id: expect.any(String),
+  firstName: "Brian",
+  lastName: "Johnson",
+  GHIN: "111123",
+  handicap: "18.2",
+};
+
+var player2 = {
+  id: expect.any(String),
+  GHIN: 42342,
+  firstName: "Jane",
+  lastName: "Doe",
+  handicap: 6.9,
+};
+
 describe("Golf Reducer tests", () => {
   beforeEach(() => {
     initialState.errorMessage = "";
@@ -35,27 +51,15 @@ describe("Golf Reducer tests", () => {
   });
 
   it("should match the state when ADD_PLAYER is dispatched", () => {
-    var firstName = "Brian";
-    var lastName = "Johnson";
-    var GHIN = "111123";
-    var handicap = "18.2";
-
-    var player = {
-      firstName,
-      lastName,
-      GHIN,
-      handicap,
-    };
-
-    targetState.players[0] = player;
+    targetState.players[0] = player1;
 
     expect(
       reducer(initialState, {
         type: actionTypes.ADD_PLAYER,
-        firstName,
-        lastName,
-        GHIN,
-        handicap,
+        firstName: player1.firstName,
+        lastName: player1.lastName,
+        GHIN: player1.GHIN,
+        handicap: player1.handicap,
       })
     ).toEqual(targetState);
   });
@@ -63,37 +67,38 @@ describe("Golf Reducer tests", () => {
   it("ADD_PLAYER should clear out any previous error message", () => {
     initialState.errorMessage = "Previous error message";
 
-    var firstName = "Brian";
-    var lastName = "Johnson";
-    var GHIN = "111123";
-    var handicap = "18.2";
-
-    var player = {
-      firstName,
-      lastName,
-      GHIN,
-      handicap,
-    };
-
-    targetState.players[0] = player;
+    targetState.players[0] = player1;
     targetState.errorMessage = "";
 
     expect(
       reducer(initialState, {
         type: actionTypes.ADD_PLAYER,
-        firstName,
-        lastName,
-        GHIN,
-        handicap,
+        firstName: player1.firstName,
+        lastName: player1.lastName,
+        GHIN: player1.GHIN,
+        handicap: player1.handicap,
       }).errorMessage
     ).toEqual("");
   });
 
+  it("should match state when REMOVE_PLAYER is dispatched", () => {
+    player1.id = "4444";
+    player2.id = "1234";
+    initialState.players[0] = player1;
+    initialState.players[1] = player2;
+
+    targetState.players = [player1];
+
+    expect(
+      reducer(initialState, {
+        type: actionTypes.REMOVE_PLAYER,
+        id: "1234",
+      })
+    ).toEqual(targetState);
+  });
+
   it("should match the state when SET_PLAYERS is dispatched", () => {
-    var players = [
-      { GHIN: 324524, firstName: "bob", lastName: "smith", handicap: 12 },
-      { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: 6.9 },
-    ];
+    var players = [player1, player2];
     targetState.players = players;
 
     expect(
@@ -101,7 +106,7 @@ describe("Golf Reducer tests", () => {
     ).toEqual(targetState);
   });
 
-  it("shoudl match the state when SET_ERROR_MESSAGE is dispatched", () => {
+  it("should match the state when SET_ERROR_MESSAGE is dispatched", () => {
     var errorMessage = "play missing error message";
     targetState.errorMessage = errorMessage;
 
