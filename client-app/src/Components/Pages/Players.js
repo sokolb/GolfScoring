@@ -49,6 +49,14 @@ export class Players extends Component {
     );
   };
 
+  submitButtonDisabled() {
+    return (
+      this.state.firstName == "" ||
+      this.state.lastName == "" ||
+      this.state.GHIN == ""
+    );
+  }
+
   render() {
     return (
       <div>
@@ -66,7 +74,11 @@ export class Players extends Component {
           <label>GHIN:</label>
           <input name="GHIN" onChange={this.handleGHINChange} />
           <br />
-          <button name="submit" onClick={this.handleSubmitClick}>
+          <button
+            name="submit"
+            onClick={this.handleSubmitClick}
+            disabled={this.submitButtonDisabled()}
+          >
             Submit
           </button>
         </div>

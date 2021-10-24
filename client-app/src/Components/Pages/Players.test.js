@@ -95,4 +95,26 @@ describe("Players Tests", () => {
 
     expect(errorLabel.length).toEqual(0);
   });
+
+  test.each([
+    ["Brian", "Sokoloski", "12345", false],
+    ["Brian", "Sokoloski", "", true],
+    ["Brian", "", "12346", true],
+    ["", "Sokoloski", "12347", true],
+  ])(
+    "Submit button disabled/enabled correctly with params: firstName %s lastName %s GHIN %i",
+    (firstName, lastName, GHIN, disabled) => {
+      const wrapper = shallow(<Players {...props} />);
+
+      const firstNameTextBox = wrapper.find({ name: "firstName" });
+      firstNameTextBox.simulate("change", { target: { value: firstName } });
+      const lastNameTextBox = wrapper.find({ name: "lastName" });
+      lastNameTextBox.simulate("change", { target: { value: lastName } });
+      const ghinTextBox = wrapper.find({ name: "GHIN" });
+      ghinTextBox.simulate("change", { target: { value: GHIN } });
+      const submitButton = wrapper.find({ name: "submit" });
+
+      expect(submitButton.props().disabled).toEqual(disabled);
+    }
+  );
 });
