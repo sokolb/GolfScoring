@@ -1,11 +1,13 @@
 import initialState from "./initialState";
 import * as actionTypes from "../Actions/ActionTypes";
 import reducer from "./golfReducer.js";
+import { v4 as uuidv4 } from "uuid";
+
+jest.mock("uuid");
 
 var targetState;
 
 var player1 = {
-  id: expect.any(String),
   firstName: "Brian",
   lastName: "Johnson",
   GHIN: "111123",
@@ -13,7 +15,6 @@ var player1 = {
 };
 
 var player2 = {
-  id: expect.any(String),
   GHIN: 42342,
   firstName: "Jane",
   lastName: "Doe",
@@ -51,6 +52,9 @@ describe("Golf Reducer tests", () => {
   });
 
   it("should match the state when ADD_PLAYER is dispatched", () => {
+    const uuid = "3b1823f4-b36c-4288-a827-0000000000";
+    uuidv4.mockReturnValue(uuid);
+    player1.id = uuid;
     targetState.players[0] = player1;
 
     expect(
