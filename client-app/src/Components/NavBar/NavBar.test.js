@@ -4,28 +4,48 @@ import { NavBar } from "./Navbar";
 var props;
 
 describe("NavBar Tests", () => {
-    beforeEach(() => {
-        props = {
-            golf: {},
-            setCurrentPage: jest.fn(),
-        };
-    });
+  beforeEach(() => {
+    props = {
+      golf: {},
+      setCurrentPage: jest.fn(),
+    };
+  });
 
-    it("Renders Players button", () => {
-        const wrapper = shallow(<NavBar {...props} />);
-        const btnPlayer = wrapper.find({ name: "btnPlayers" });
-        expect(btnPlayer.length).toBe(1);
-        expect(btnPlayer.text()).toEqual("Players");
-    });
+  it("Renders correct buttons", () => {
+    const wrapper = shallow(<NavBar {...props} />);
 
-    it("Players button click calls setCurrentPage", () => {
-        var pageName = "Players";
+    const btnPlayer = wrapper.find({ name: "btnPlayers" });
+    expect(btnPlayer.length).toBe(1);
+    expect(btnPlayer.text()).toEqual("Players");
 
-        const wrapper = shallow(<NavBar {...props} />);
-        const btnPlayer = wrapper.find({ name: "btnPlayers" });
+    const btnTeams = wrapper.find({ name: "btnTeams" });
+    expect(btnTeams.length).toBe(1);
+    expect(btnTeams.text()).toEqual("Teams");
+  });
 
-        btnPlayer.simulate("click");
+  it("Players button click calls setCurrentPage", () => {
+    var pageName = "Players";
 
-        expect(props.setCurrentPage).toHaveBeenCalledWith(pageName);
-    });
+    const wrapper = shallow(<NavBar {...props} />);
+    const btnPlayer = wrapper.find({ name: "btnPlayers" });
+
+    btnPlayer.simulate("click");
+
+    expect(props.setCurrentPage).toHaveBeenCalledWith(pageName);
+  });
+
+  test.each([
+    ["btnPlayers", "Players"],
+    ["btnTeams", "Teams"],
+  ])(
+    "Button %s calls setCurrentPage with correct pageName %s",
+    (buttonName, pageName) => {
+      const wrapper = shallow(<NavBar {...props} />);
+      const button = wrapper.find({ name: buttonName });
+
+      button.simulate("click");
+
+      expect(props.setCurrentPage).toHaveBeenCalledWith(pageName);
+    }
+  );
 });
