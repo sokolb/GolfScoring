@@ -53,8 +53,16 @@ export class Players extends Component {
     return (
       this.state.firstName === "" ||
       this.state.lastName === "" ||
-      this.state.GHIN === ""
+      this.state.GHIN === "" ||
+      this.playerExistsWithGHIN(this.state.GHIN)
     );
+  }
+
+  playerExistsWithGHIN(targetGHIN) {
+    let player = this.props.golf.players.find(
+      (player) => player.GHIN.toString() === targetGHIN
+    );
+    return player !== undefined;
   }
 
   render() {

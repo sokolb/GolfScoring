@@ -10,8 +10,13 @@ describe("Players Tests", () => {
       golf: {
         userToken: "abc123",
         players: [
-          { GHIN: 11221, firstName: "Bob", lastName: "Smith", handicap: 2 },
-          { GHIN: 243332, firstName: "Sally", lastName: "Jones", handicap: 3 },
+          { GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2 },
+          {
+            GHIN: "243332",
+            firstName: "Sally",
+            lastName: "Jones",
+            handicap: 3,
+          },
         ],
       },
       addPlayer: jest.fn(),
@@ -117,4 +122,20 @@ describe("Players Tests", () => {
       expect(submitButton.props().disabled).toEqual(disabled);
     }
   );
+
+  it("Submit button is disabled when player with GHIN already exists", () => {
+    const wrapper = shallow(<Players {...props} />);
+
+    const firstNameTextBox = wrapper.find({ name: "firstName" });
+    firstNameTextBox.simulate("change", { target: { value: "Brian" } });
+    const lastNameTextBox = wrapper.find({ name: "lastName" });
+    lastNameTextBox.simulate("change", { target: { value: "Sok" } });
+    const ghinTextBox = wrapper.find({ name: "GHIN" });
+    ghinTextBox.simulate("change", {
+      target: { value: props.golf.players[0].GHIN },
+    });
+    const submitButton = wrapper.find({ name: "submit" });
+
+    expect(submitButton.props().disabled).toEqual(true);
+  });
 });
