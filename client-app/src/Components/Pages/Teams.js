@@ -16,6 +16,14 @@ export class Teams extends Component {
                 <div>
                     <h2>Add Team</h2>
                     <br />
+                    <select name="playersSelectionBox" multiple={true}>
+                        {this.props.golf.players
+                            .filter((player) => !this.props.golf.teams.some((team) => team.teamMemberIds.includes(player.id)))
+                            .map((player) => {
+                                return <option key={player.id}>{player.firstName + " " + player.lastName}</option>;
+                            })}
+                    </select>
+                    <br />
                     <button name="submit">Submit</button>
                 </div>
                 <div style={{ textAlign: "center" }}>
