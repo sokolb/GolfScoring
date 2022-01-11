@@ -4,16 +4,10 @@ import { removeTeam } from "../../Actions/GolfActions";
 
 export class Team extends Component {
     getTeamMemberNames() {
-        var retval = "";
-        if (this.props.team.teamMemberIds !== undefined && this.props.team.teamMemberIds !== null) {
-            this.props.team.teamMemberIds.forEach((teamMemberId) => {
-                if (retval.length > 0) {
-                    retval += " | ";
-                }
-                retval += teamMemberId;
-            });
-        }
-        return retval;
+        return this.props.players
+            .filter((player) => this.props.team.teamMemberIds.includes(player.id))
+            .map((player) => player.firstName + " " + player.lastName)
+            .join(" | ");
     }
 
     render() {
@@ -36,7 +30,9 @@ export class Team extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        players: state.golf.players,
+    };
 };
 
 const actionCreators = { removeTeam };
