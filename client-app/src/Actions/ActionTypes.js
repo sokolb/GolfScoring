@@ -7,3 +7,4 @@ export const SET_ERROR_MESSAGE = "SET_ERROR_MESSAGE";
 export const REMOVE_PLAYER = "REMOVE_PLAYER";
 export const SET_TEAMS = "SET_TEAMS";
 export const REMOVE_TEAM = "REMOVE_TEAM";
+export const ADD_TEAM = "ADD_TEAM";
