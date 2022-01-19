@@ -123,10 +123,31 @@ describe("Teams Tests", () => {
         expect(props.addTeam).toHaveBeenCalledWith(teamMemberIds);
     });
 
+    test.each([
+        [["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"], false],
+        [[], true],
+        [["3b1823f4-b36c-4288-1111-ed0b00bc6653"], true],
+    ])("Submit button disabled/enabled correctly with params: selectedTeamMemberIds %s", (teamMemberIds, disabled) => {
+        const wrapper = shallow(<Teams {...props} />);
+
+        const playerSelectionBox = wrapper.find({
+            name: "playersSelectionBox",
+        });
+        playerSelectionBox.simulate("change", createEvent(teamMemberIds));
+
+        const submitButton = wrapper.find({ name: "submit" });
+        expect(submitButton.props().disabled).toEqual(disabled);
+    });
+
     function createEvent(value) {
+        var values = [];
+        for (var v in value) {
+            values.push({ value: value[v] });
+        }
+
         return {
             target: {
-                selectedOptions: [{ value: value[0] }, { value: value[1] }],
+                selectedOptions: values,
             },
         };
     }

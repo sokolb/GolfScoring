@@ -29,6 +29,10 @@ export class Teams extends Component {
         this.props.addTeam(this.state.selectedTeamMemberIds);
     };
 
+    submitButtonDisabled() {
+        return this.state.selectedTeamMemberIds.length !== 2;
+    }
+
     render() {
         return (
             <div>
@@ -49,7 +53,7 @@ export class Teams extends Component {
                             })}
                     </select>
                     <br />
-                    <button name="submit" onClick={this.handleSubmitClick}>
+                    <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                         Submit
                     </button>
                 </div>
