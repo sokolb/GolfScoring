@@ -1,61 +1,61 @@
 from flask import Flask
+from flask import request
+from flask import Response
 import sqlite3
-from sqlalchemy import Column, Integer, Unicode, UnicodeText, String
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-import json
+from Player import Player
 
 app = Flask(__name__)
 
-con = sqlite3.connect('league.db')
+con = sqlite3.connect('league.db', check_same_thread=False)
 cur = con.cursor()
 
 cur.execute('''CREATE TABLE if not exists player
-            (id text, GHIN integer, firstName text, 
-            lastName text, handicap real)''')
+            (id INTEGER PRIMARY KEY, GHIN INTEGER, firstName TEXT, 
+            lastName TEXT, handicap REAL)''')
 cur.execute('''CREATE TABLE if not exists team
-            (id text, teamNumber text)''')
+            (id INTEGER PRIMARY KEY, teamNumber TEXT)''')
 cur.execute('''CREATE TABLE if not exists team_members
-            (id text, team_id text, player_id text)''')           
+            (id INTEGER PRIMARY KEY, team_id TEXT, player_id TEXT)''')           
 con.commit()
-con.close()
-
-
-engine = create_engine('sqlite:///league.db', echo=True)
-Base = declarative_base(bind=engine)
-
-class Player(Base):
-    __tablename__ = 'player'
-    id = Column(String(40), primary_key=True)
-    ghin = Column(String(40))
-    firstName = Column(String(40))
-    lastName = Column(String(40))
-    handicap = Column(String(40))
-
-    def __init__(self, id, ghin, firstName, lastName, handicap):
-        self.id = id
-        self.ghin = ghin
-        self.firstName = firstName
-        self.lastName = lastName
-        self.handicap = handicap
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4)
-
-Base.metadata.create_all()
-
-Session = sessionmaker(bind=engine)
-s = Session()
 
 @app.route("/helloWorld")
 def helloWorld():
-    p = Player('idhere', '9999', 'tom', 'smith', '11')
-    s.add_all([p])
-    s.commit()
-
+    p = Player("brian", 'sok', 11242, 10.3)
     return p.toJSON()
+
+@app.route('/player/<player_id>', methods = ['GET', 'POST', 'DELETE'])
+def player(player_id):
+    if request.method == 'GET':
+        cur.execute("SELECT * FROM player WHERE id = " + player_id)
+        data = cur.fetchone()
+        if data is None:
+            retval = Response(response="not found with that id", status=200, mimetype="application/text")
+        else:
+            player = Player(data[0], data[1], data[2], data[3], data[4])
+            retval = Response(response=player.toJSON(), status=200, mimetype="application/text")
+        return retval
+
+    if request.method == 'POST':
+        data = request.json
+        data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'])
+        if player_id == "-1":
+            sql = "INSERT INTO player(GHIN, firstName, lastName, handicap) VALUES (?,?,?,?)"
+            cur.execute(sql, data_tuple)
+            player_id = str(cur.lastrowid)
+        else:
+            sql = '''UPDATE player SET GHIN = ?, firstName = ?, 
+                lastName = ?, handicap = ? WHERE id = ''' + player_id
+            cur.execute(sql, data_tuple)
+        con.commit()
+        return Response(response=player_id, status=200, mimetype="application/text")
+
+    if request.method == 'DELETE':
+        cur.execute("DELETE FROM player WHERE id = " + player_id)
+        con.commit()
+        return Response(response="Success", status=200, mimetype="application/text")
+
+    else:
+        return Response(response="Backend Server Error", status=500, mimetype="application/text")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8082, debug=True)
