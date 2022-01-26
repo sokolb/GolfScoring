@@ -3,6 +3,7 @@ from flask import request
 from flask import Response
 import sqlite3
 from Player import Player
+import json
 
 app = Flask(__name__)
 
@@ -20,19 +21,19 @@ con.commit()
 
 @app.route("/helloWorld")
 def helloWorld():
-    p = Player("brian", 'sok', 11242, 10.3)
-    return p.toJSON()
+    return "hello world!"
 
 @app.route('/player/<player_id>', methods = ['GET', 'POST', 'DELETE'])
 def player(player_id):
     if request.method == 'GET':
-        cur.execute("SELECT * FROM player WHERE id = " + player_id)
+        cur.execute("SELECT id, firstName, lastName, GHIN, handicap FROM player WHERE id = " + player_id)
         data = cur.fetchone()
         if data is None:
             retval = Response(response="not found with that id", status=200, mimetype="application/text")
         else:
             player = Player(data[0], data[1], data[2], data[3], data[4])
             retval = Response(response=player.toJSON(), status=200, mimetype="application/text")
+        retval.headers.add('Access-Control-Allow-Origin', '*')
         return retval
 
     if request.method == 'POST':
@@ -47,15 +48,37 @@ def player(player_id):
                 lastName = ?, handicap = ? WHERE id = ''' + player_id
             cur.execute(sql, data_tuple)
         con.commit()
-        return Response(response=player_id, status=200, mimetype="application/text")
+        retval = Response(response=player_id, status=200, mimetype="application/text")
+        retval.headers.add('Access-Control-Allow-Origin', '*')
+        return retval
 
     if request.method == 'DELETE':
         cur.execute("DELETE FROM player WHERE id = " + player_id)
         con.commit()
-        return Response(response="Success", status=200, mimetype="application/text")
+        retval = Response(response="Success", status=200, mimetype="application/text")
+        retval.headers.add('Access-Control-Allow-Origin', '*')
+        return retval
 
     else:
-        return Response(response="Backend Server Error", status=500, mimetype="application/text")
+        retval = Response(response="Backend Server Error", status=500, mimetype="application/text")
+        retval.headers.add('Access-Control-Allow-Origin', '*')
+        return retval
+
+@app.route("/getAllPlayers")
+def getAllPlayers():
+    playersList = []
+    cur.execute("SELECT id, firstName, lastName, GHIN, handicap FROM player")
+    data = cur.fetchall()
+    if data is None:
+        retval = Response(response="no players found", status=200, mimetype="application/text")
+    else:
+        for playerData in data:
+            player = Player(playerData[0], playerData[1], playerData[2], playerData[3], playerData[4])
+            playersList.append(player)
+        retval = Response(response=json.dumps(playersList, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4), status=200, mimetype="application/json")
+    retval.headers.add('Access-Control-Allow-Origin', '*')
+    return retval
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8082, debug=True)
