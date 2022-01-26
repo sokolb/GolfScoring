@@ -38,7 +38,7 @@ describe("AppData", () => {
                 headers: {
                     "content-type": "application/json",
                 },
-                data: player,
+                player,
             };
 
             Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));

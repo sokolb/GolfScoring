@@ -13,7 +13,6 @@ class AppData {
         return Axios.post("http://localhost:8082/player/-1", {
             headers: {
                 "content-type": "application/json",
-                "Access-Control-Allow-Origin": "*",
             },
             player,
         });

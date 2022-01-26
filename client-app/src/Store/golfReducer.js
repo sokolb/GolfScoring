@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         case actionTypes.ADD_PLAYER:
             var players = state.players;
             players.push({
-                id: uuidv4(),
+                id: action.id,
                 firstName: action.firstName,
                 lastName: action.lastName,
                 GHIN: action.GHIN,

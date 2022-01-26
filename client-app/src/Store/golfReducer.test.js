@@ -62,14 +62,14 @@ describe("Golf Reducer tests", () => {
 
     describe("Player", () => {
         it("should match the state when ADD_PLAYER is dispatched", () => {
-            const uuid = "3b1823f4-b36c-4288-a827-0000000000";
-            uuidv4.mockReturnValue(uuid);
-            player1.id = uuid;
+            var id = "4";
+            player1.id = id;
             targetState.players[0] = player1;
 
             expect(
                 reducer(initialState, {
                     type: actionTypes.ADD_PLAYER,
+                    id: id,
                     firstName: player1.firstName,
                     lastName: player1.lastName,
                     GHIN: player1.GHIN,

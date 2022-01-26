@@ -138,6 +138,7 @@ describe("Actions tests", () => {
 
         it("addPlayer dispatches ADD_PLAYER", async () => {
             const dispatch = jest.fn();
+            var id = "3";
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
@@ -151,13 +152,17 @@ describe("Actions tests", () => {
                     },
                 },
             };
-
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
-            AppData.addPlayer.mockReturnValue(Promise.resolve(""));
+
+            var responseFromApi = {
+                data: id,
+            };
+            AppData.addPlayer.mockReturnValue(Promise.resolve(responseFromApi));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
+                id,
                 firstName,
                 lastName,
                 GHIN,

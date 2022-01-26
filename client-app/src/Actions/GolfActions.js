@@ -51,12 +51,13 @@ export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispa
             handicap,
         };
         await AppData.addPlayer(player).then((response) => {
-            dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+            dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap));
         });
     }
 };
 
-const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
+const addPlayerCreator = (id, firstName, lastName, GHIN, handicap) => ({
+    id,
     firstName,
     lastName,
     GHIN,
