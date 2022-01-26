@@ -8,11 +8,11 @@ describe("AppData", () => {
         jest.resetAllMocks();
     });
 
-    it("getPlayers is called with correct parameter", async () => {
+    it("getPlayersFromFile is called with correct parameter", async () => {
         var fileName = "test.json";
 
         Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
-        await AppData.getPlayers(fileName);
+        await AppData.getPlayersFromFile(fileName);
 
         expect(Axios.get).toHaveBeenCalledWith(fileName);
     });
@@ -21,7 +21,7 @@ describe("AppData", () => {
         var fileName = "team_test.json";
 
         Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
-        await AppData.getTeams(fileName);
+        await AppData.getTeamsFromFile(fileName);
 
         expect(Axios.get).toHaveBeenCalledWith(fileName);
     });

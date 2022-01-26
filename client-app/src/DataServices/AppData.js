@@ -1,11 +1,11 @@
 import Axios from "axios";
 
 class AppData {
-    getPlayers(fileName) {
+    getPlayersFromFile(fileName) {
         return Axios.get(fileName);
     }
 
-    getTeams(fileName) {
+    getTeamsFromFile(fileName) {
         return Axios.get(fileName);
     }
 }
