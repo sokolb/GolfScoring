@@ -36,13 +36,24 @@ const setCurrentPageCreator = (pageName) => ({
 export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispatch) => {
     var handicap = "-1";
     await GhinDataService.getUserHandicap(GHIN, user_token)
-        .then((response) => {
+        .then(async (response) => {
             handicap = response.data.golfer.handicap_index;
-            dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
         })
         .catch((error) => {
             dispatch(setErrorMessageCreator(error.response.data.golfer));
         });
+
+    if (handicap !== "-1") {
+        var player = {
+            GHIN,
+            firstName,
+            lastName,
+            handicap,
+        };
+        await AppData.addPlayer(player).then((response) => {
+            dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+        });
+    }
 };
 
 const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({

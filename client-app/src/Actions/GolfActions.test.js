@@ -98,10 +98,42 @@ describe("Actions tests", () => {
             };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+            AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
             expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
+        });
+
+        it("addPlayer calls addPlayer API", async () => {
+            const dispatch = jest.fn();
+            var firstName = "Brian";
+            var lastName = "Smith";
+            var GHIN = "1234132";
+            var handicap = "17.3";
+            var user_token = "asfdsadfasdfdsaasdf";
+
+            var responseData = {
+                data: {
+                    golfer: {
+                        handicap_index: handicap,
+                    },
+                },
+            };
+
+            var player = {
+                GHIN,
+                firstName,
+                lastName,
+                handicap,
+            };
+
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+            AppData.addPlayer.mockReturnValue(Promise.resolve(""));
+
+            await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+
+            expect(AppData.addPlayer).toHaveBeenCalledWith(player);
         });
 
         it("addPlayer dispatches ADD_PLAYER", async () => {
@@ -121,6 +153,7 @@ describe("Actions tests", () => {
             };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+            AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 

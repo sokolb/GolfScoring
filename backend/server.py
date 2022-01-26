@@ -1,11 +1,13 @@
 from flask import Flask
 from flask import request
 from flask import Response
+from flask_cors import CORS
 import sqlite3
 from Player import Player
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 con = sqlite3.connect('league.db', check_same_thread=False)
 cur = con.cursor()
@@ -37,7 +39,7 @@ def player(player_id):
         return retval
 
     if request.method == 'POST':
-        data = request.json
+        data = request.json['player']
         data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'])
         if player_id == "-1":
             sql = "INSERT INTO player(GHIN, firstName, lastName, handicap) VALUES (?,?,?,?)"
