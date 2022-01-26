@@ -20,7 +20,7 @@ export class Players extends Component {
 
     componentDidMount() {
         // this.props.getPlayers("Players_Testing.json");
-        this.props.getPlayers();
+        this.props.getPlayers("http://localhost:8082/getAllPlayers");
     }
 
     handleFirstNameChange(event) {
