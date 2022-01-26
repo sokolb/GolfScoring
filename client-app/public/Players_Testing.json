@@ -1,32 +1,30 @@
-{
-  "players": [
+[
     {
-      "id": "3b1823f4-b36c-4288-a827-ed0b00bc6653",
-      "GHIN": 1111,
-      "firstName": "Brian",
-      "lastName": "Sokoloski",
-      "handicap": 11.2
+        "id": "3b1823f4-b36c-4288-a827-ed0b00bc6653",
+        "GHIN": 1111,
+        "firstName": "Brian",
+        "lastName": "Sokoloski",
+        "handicap": 11.2
     },
     {
-      "id": "3b1823f4-b36c-4288-a827-ed0b00bc6644",
-      "GHIN": 3333,
-      "firstName": "Randy",
-      "lastName": "Sokoloski",
-      "handicap": 29
+        "id": "3b1823f4-b36c-4288-a827-ed0b00bc6644",
+        "GHIN": 3333,
+        "firstName": "Randy",
+        "lastName": "Sokoloski",
+        "handicap": 29
     },
     {
-      "id": "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e455",
-      "GHIN": 4444,
-      "firstName": "Kim",
-      "lastName": "Sokoloski",
-      "handicap": 33
+        "id": "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e455",
+        "GHIN": 4444,
+        "firstName": "Kim",
+        "lastName": "Sokoloski",
+        "handicap": 33
     },
     {
-      "id": "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e44a",
-      "GHIN": 2222,
-      "firstName": "Andy",
-      "lastName": "Melchert",
-      "handicap": 26
+        "id": "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e44a",
+        "GHIN": 2222,
+        "firstName": "Andy",
+        "lastName": "Melchert",
+        "handicap": 26
     }
-  ]
-}
+]

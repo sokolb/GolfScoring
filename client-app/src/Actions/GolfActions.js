@@ -5,10 +5,18 @@ import * as actionTypes from "./ActionTypes.js";
 export const logInUser = (user, pwd) => async (dispatch) => {
     await GhinDataService.getUserToken(user, pwd)
         .then((response) => {
-            dispatch(setLoggedInUserCreator(user, response.data.golfer_user.golfer_user_token));
+            dispatch(
+                setLoggedInUserCreator(
+                    user,
+                    response.data.golfer_user.golfer_user_token
+                )
+            );
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            if (
+                !process.env.NODE_ENV ||
+                process.env.NODE_ENV === "development"
+            ) {
                 console.log(error.response);
             }
         });
@@ -33,17 +41,18 @@ const setCurrentPageCreator = (pageName) => ({
     type: actionTypes.SET_CURRENT_PAGE,
 });
 
-export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispatch) => {
-    var handicap = "-1";
-    await GhinDataService.getUserHandicap(GHIN, user_token)
-        .then((response) => {
-            handicap = response.data.golfer.handicap_index;
-            dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
-        })
-        .catch((error) => {
-            dispatch(setErrorMessageCreator(error.response.data.golfer));
-        });
-};
+export const addPlayer =
+    (firstName, lastName, GHIN, user_token) => async (dispatch) => {
+        var handicap = "-1";
+        await GhinDataService.getUserHandicap(GHIN, user_token)
+            .then((response) => {
+                handicap = response.data.golfer.handicap_index;
+                dispatch(addPlayerCreator(firstName, lastName, GHIN, handicap));
+            })
+            .catch((error) => {
+                dispatch(setErrorMessageCreator(error.response.data.golfer));
+            });
+    };
 
 const addPlayerCreator = (firstName, lastName, GHIN, handicap) => ({
     firstName,
@@ -70,10 +79,13 @@ const setErrorMessageCreator = (errorMessage) => ({
 export const getPlayers = (fileName) => async (dispatch) => {
     await AppData.getPlayers(fileName)
         .then((response) => {
-            dispatch(setPlayersCreator(response.data.players));
+            dispatch(setPlayersCreator(response.data));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            if (
+                !process.env.NODE_ENV ||
+                process.env.NODE_ENV === "development"
+            ) {
                 console.log(error.response);
             }
         });
@@ -90,7 +102,10 @@ export const getTeams = (fileName) => async (dispatch) => {
             dispatch(setTeamsCreator(response.data.teams));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            if (
+                !process.env.NODE_ENV ||
+                process.env.NODE_ENV === "development"
+            ) {
                 console.log(error.response);
             }
         });

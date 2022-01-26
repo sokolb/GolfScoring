@@ -1,7 +1,17 @@
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import { addPlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam } from "./GolfActions.js";
+import {
+    addPlayer,
+    getPlayers,
+    getTeams,
+    logInUser,
+    setCurrentPage,
+    setLoggedInUser,
+    removePlayer,
+    removeTeam,
+    addTeam,
+} from "./GolfActions.js";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
@@ -11,7 +21,9 @@ describe("Actions tests", () => {
         const dispatch = jest.fn();
         var user = "brian.sokoloski3@gmail.com";
         var pwd = "@bc!23";
-        GhinDataService.getUserToken.mockReturnValue(Promise.resolve({ data: {} }));
+        GhinDataService.getUserToken.mockReturnValue(
+            Promise.resolve({ data: {} })
+        );
 
         await logInUser(user, pwd)(dispatch);
 
@@ -29,7 +41,9 @@ describe("Actions tests", () => {
                 },
             },
         };
-        GhinDataService.getUserToken.mockReturnValue(Promise.resolve(responseData));
+        GhinDataService.getUserToken.mockReturnValue(
+            Promise.resolve(responseData)
+        );
 
         await logInUser(user, pwd)(dispatch);
 
@@ -45,7 +59,9 @@ describe("Actions tests", () => {
         var user = "brian.sokoloski3@gmail.com";
         var pwd = "@bc!23";
 
-        GhinDataService.getUserToken.mockReturnValue(Promise.reject("Failure!"));
+        GhinDataService.getUserToken.mockReturnValue(
+            Promise.reject("Failure!")
+        );
 
         await logInUser(user, pwd)(dispatch);
 
@@ -95,11 +111,16 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(
+                Promise.resolve(responseData)
+            );
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
-            expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
+            expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(
+                GHIN,
+                user_token
+            );
         });
 
         it("addPlayer dispatches ADD_PLAYER", async () => {
@@ -118,7 +139,9 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(
+                Promise.resolve(responseData)
+            );
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
@@ -159,7 +182,9 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(Promise.reject(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(
+                Promise.reject(responseData)
+            );
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
@@ -183,19 +208,29 @@ describe("Actions tests", () => {
             const dispatch = jest.fn();
             var fileName = "test.json";
 
-            var responseData = {
-                players: [
-                    { GHIN: 324524, firstName: "bob", lastName: "smth", handicap: 12 },
-                    { GHIN: 42342, firstName: "Jane", lastName: "Doe", handicap: 26.9 },
-                ],
-            };
+            var responseData = [
+                {
+                    GHIN: 324524,
+                    firstName: "bob",
+                    lastName: "smth",
+                    handicap: 12,
+                },
+                {
+                    GHIN: 42342,
+                    firstName: "Jane",
+                    lastName: "Doe",
+                    handicap: 26.9,
+                },
+            ];
 
-            AppData.getPlayers.mockReturnValue(Promise.resolve({ data: responseData }));
+            AppData.getPlayers.mockReturnValue(
+                Promise.resolve({ data: responseData })
+            );
 
             await getPlayers(fileName)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
-                players: responseData.players,
+                players: responseData,
                 type: actionTypes.SET_PLAYERS,
             });
         });
@@ -210,16 +245,24 @@ describe("Actions tests", () => {
                 teams: [
                     {
                         teamNumber: 324524,
-                        teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1122", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133"],
+                        teamMemberIds: [
+                            "3b1823f4-b36c-4288-a827-ed0b00bc1122",
+                            "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133",
+                        ],
                     },
                     {
                         teamNumber: 42342,
-                        teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1144", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155"],
+                        teamMemberIds: [
+                            "3b1823f4-b36c-4288-a827-ed0b00bc1144",
+                            "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155",
+                        ],
                     },
                 ],
             };
 
-            AppData.getTeams.mockReturnValue(Promise.resolve({ data: responseData }));
+            AppData.getTeams.mockReturnValue(
+                Promise.resolve({ data: responseData })
+            );
 
             await getTeams(filename)(dispatch);
 
