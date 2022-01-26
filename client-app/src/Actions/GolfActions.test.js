@@ -1,87 +1,12 @@
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import {
-    addPlayer,
-    getPlayers,
-    getTeams,
-    logInUser,
-    setCurrentPage,
-    setLoggedInUser,
-    removePlayer,
-    removeTeam,
-    addTeam,
-} from "./GolfActions.js";
+import { addPlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam } from "./GolfActions.js";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
 
 describe("Actions tests", () => {
-    it("logInUser calls get user token from API", async () => {
-        const dispatch = jest.fn();
-        var user = "brian.sokoloski3@gmail.com";
-        var pwd = "@bc!23";
-        GhinDataService.getUserToken.mockReturnValue(
-            Promise.resolve({ data: {} })
-        );
-
-        await logInUser(user, pwd)(dispatch);
-
-        expect(GhinDataService.getUserToken).toHaveBeenCalledWith(user, pwd);
-    });
-
-    it("logInUser dispatches setLoggedInUser on success from API call", async () => {
-        const dispatch = jest.fn();
-        var user = "brian.sokoloski3@gmail.com";
-        var pwd = "@bc!23";
-        var responseData = {
-            data: {
-                golfer_user: {
-                    golfer_user_token: "asdfasdf32r23rar",
-                },
-            },
-        };
-        GhinDataService.getUserToken.mockReturnValue(
-            Promise.resolve(responseData)
-        );
-
-        await logInUser(user, pwd)(dispatch);
-
-        expect(dispatch).toHaveBeenCalledWith({
-            user,
-            userToken: responseData.data.golfer_user.golfer_user_token,
-            type: actionTypes.SET_LOGGED_IN_USER,
-        });
-    });
-
-    it("logInUser does not dispatch setLoggedInUser on failure from API call", async () => {
-        const dispatch = jest.fn();
-        var user = "brian.sokoloski3@gmail.com";
-        var pwd = "@bc!23";
-
-        GhinDataService.getUserToken.mockReturnValue(
-            Promise.reject("Failure!")
-        );
-
-        await logInUser(user, pwd)(dispatch);
-
-        expect(dispatch).not.toHaveBeenCalled();
-    });
-
-    it("setLoggedInUser dispatches SET_LOGGED_IN_USER", () => {
-        const dispatch = jest.fn();
-        var user = "brian.sokoloski3@gmail.com";
-        var userToken = "asdfjiofaweoijwef234";
-
-        setLoggedInUser(user, userToken)(dispatch);
-
-        expect(dispatch).toHaveBeenCalledWith({
-            user,
-            userToken,
-            type: actionTypes.SET_LOGGED_IN_USER,
-        });
-    });
-
     it("setCurrentPage dispatches SET_CURRENT_PAGE", () => {
         const dispatch = jest.fn();
         var pageName = "Players";
@@ -91,6 +16,67 @@ describe("Actions tests", () => {
         expect(dispatch).toHaveBeenCalledWith({
             pageName: pageName,
             type: actionTypes.SET_CURRENT_PAGE,
+        });
+    });
+
+    describe("Users", () => {
+        it("logInUser calls get user token from API", async () => {
+            const dispatch = jest.fn();
+            var user = "brian.sokoloski3@gmail.com";
+            var pwd = "@bc!23";
+            GhinDataService.getUserToken.mockReturnValue(Promise.resolve({ data: {} }));
+
+            await logInUser(user, pwd)(dispatch);
+
+            expect(GhinDataService.getUserToken).toHaveBeenCalledWith(user, pwd);
+        });
+
+        it("logInUser dispatches setLoggedInUser on success from API call", async () => {
+            const dispatch = jest.fn();
+            var user = "brian.sokoloski3@gmail.com";
+            var pwd = "@bc!23";
+            var responseData = {
+                data: {
+                    golfer_user: {
+                        golfer_user_token: "asdfasdf32r23rar",
+                    },
+                },
+            };
+            GhinDataService.getUserToken.mockReturnValue(Promise.resolve(responseData));
+
+            await logInUser(user, pwd)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                user,
+                userToken: responseData.data.golfer_user.golfer_user_token,
+                type: actionTypes.SET_LOGGED_IN_USER,
+            });
+        });
+
+        it("logInUser does not dispatch setLoggedInUser on failure from API call", async () => {
+            const dispatch = jest.fn();
+            var user = "brian.sokoloski3@gmail.com";
+            var pwd = "@bc!23";
+
+            GhinDataService.getUserToken.mockReturnValue(Promise.reject("Failure!"));
+
+            await logInUser(user, pwd)(dispatch);
+
+            expect(dispatch).not.toHaveBeenCalled();
+        });
+
+        it("setLoggedInUser dispatches SET_LOGGED_IN_USER", () => {
+            const dispatch = jest.fn();
+            var user = "brian.sokoloski3@gmail.com";
+            var userToken = "asdfjiofaweoijwef234";
+
+            setLoggedInUser(user, userToken)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                user,
+                userToken,
+                type: actionTypes.SET_LOGGED_IN_USER,
+            });
         });
     });
 
@@ -111,16 +97,11 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(
-                Promise.resolve(responseData)
-            );
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
-            expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(
-                GHIN,
-                user_token
-            );
+            expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
         });
 
         it("addPlayer dispatches ADD_PLAYER", async () => {
@@ -139,9 +120,7 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(
-                Promise.resolve(responseData)
-            );
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
@@ -154,15 +133,37 @@ describe("Actions tests", () => {
             });
         });
 
-        it("removePlayer dispatches REMOVE_PLAYER", () => {
+        it("removePlayer calls deletePlayer API", async () => {
+            const dispatch = jest.fn();
+            var playerId = "2244";
+            AppData.deletePlayer.mockReturnValue(Promise.resolve(""));
+
+            await removePlayer(playerId)(dispatch);
+
+            expect(AppData.deletePlayer).toHaveBeenCalledWith(playerId);
+        });
+
+        it("removePlayer dispatches REMOVE_PLAYER", async () => {
             const dispatch = jest.fn();
             let id = "12345";
-            removePlayer(id)(dispatch);
+            AppData.deletePlayer.mockReturnValue(Promise.resolve(""));
+
+            await removePlayer(id)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id: id,
                 type: actionTypes.REMOVE_PLAYER,
             });
+        });
+
+        it("removePlayer does not dispatch REMOVE_PLAYER when deletePlayer fails", async () => {
+            const dispatch = jest.fn();
+            let id = "12345";
+            AppData.deletePlayer.mockReturnValue(Promise.reject(""));
+
+            await removePlayer(id)(dispatch);
+
+            expect(dispatch).not.toHaveBeenCalled();
         });
 
         it("addPlayer dispatches SET_ERROR_MESSAGE when API call call fails", async () => {
@@ -182,9 +183,7 @@ describe("Actions tests", () => {
                 },
             };
 
-            GhinDataService.getUserHandicap.mockReturnValue(
-                Promise.reject(responseData)
-            );
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.reject(responseData));
 
             await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
 
@@ -223,9 +222,7 @@ describe("Actions tests", () => {
                 },
             ];
 
-            AppData.getPlayers.mockReturnValue(
-                Promise.resolve({ data: responseData })
-            );
+            AppData.getPlayers.mockReturnValue(Promise.resolve({ data: responseData }));
 
             await getPlayers(fileName)(dispatch);
 
@@ -244,23 +241,15 @@ describe("Actions tests", () => {
             var responseData = [
                 {
                     teamNumber: 324524,
-                    teamMemberIds: [
-                        "3b1823f4-b36c-4288-a827-ed0b00bc1122",
-                        "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133",
-                    ],
+                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1122", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133"],
                 },
                 {
                     teamNumber: 42342,
-                    teamMemberIds: [
-                        "3b1823f4-b36c-4288-a827-ed0b00bc1144",
-                        "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155",
-                    ],
+                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1144", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155"],
                 },
             ];
 
-            AppData.getTeamsFromFile.mockReturnValue(
-                Promise.resolve({ data: responseData })
-            );
+            AppData.getTeamsFromFile.mockReturnValue(Promise.resolve({ data: responseData }));
 
             await getTeams(filename)(dispatch);
 
