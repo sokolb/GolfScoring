@@ -20,6 +20,16 @@ describe("AppData", () => {
                 expect(Axios.get).toHaveBeenCalledWith(target);
             }
         );
+
+        it("deletePlayer calls API with correct value", async () => {
+            var playerId = 55;
+            var url = "http://localhost:8082/player/" + playerId;
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.deletePlayer(playerId);
+
+            expect(Axios.delete).toHaveBeenCalledWith(url);
+        });
     });
 
     it("getTeams is called with correct parameter", async () => {
