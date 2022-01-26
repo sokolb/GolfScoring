@@ -77,7 +77,7 @@ const setErrorMessageCreator = (errorMessage) => ({
 });
 
 export const getPlayers = (fileName) => async (dispatch) => {
-    await AppData.getPlayersFromFile(fileName)
+    await AppData.getPlayers(fileName)
         .then((response) => {
             dispatch(setPlayersCreator(response.data));
         })

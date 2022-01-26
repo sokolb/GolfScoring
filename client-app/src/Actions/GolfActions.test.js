@@ -197,11 +197,11 @@ describe("Actions tests", () => {
         it("getPlayers calls getPlayers endpoint", async () => {
             const dispatch = jest.fn();
             var fileName = "test.json";
-            AppData.getPlayersFromFile.mockReturnValue(Promise.resolve({ data: {} }));
+            AppData.getPlayers.mockReturnValue(Promise.resolve({ data: {} }));
 
             await getPlayers(fileName)(dispatch);
 
-            expect(AppData.getPlayersFromFile).toHaveBeenCalledWith(fileName);
+            expect(AppData.getPlayers).toHaveBeenCalledWith(fileName);
         });
 
         it("getPlayers dispatches SET_PLAYERS on successful API call", async () => {
@@ -223,7 +223,7 @@ describe("Actions tests", () => {
                 },
             ];
 
-            AppData.getPlayersFromFile.mockReturnValue(
+            AppData.getPlayers.mockReturnValue(
                 Promise.resolve({ data: responseData })
             );
 
