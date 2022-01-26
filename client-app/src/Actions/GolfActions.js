@@ -99,7 +99,7 @@ const setPlayersCreator = (players) => ({
 export const getTeams = (fileName) => async (dispatch) => {
     await AppData.getTeams(fileName)
         .then((response) => {
-            dispatch(setTeamsCreator(response.data.teams));
+            dispatch(setTeamsCreator(response.data));
         })
         .catch((error) => {
             if (

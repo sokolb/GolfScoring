@@ -241,24 +241,22 @@ describe("Actions tests", () => {
             const dispatch = jest.fn();
             var filename = "testTeams.json";
 
-            var responseData = {
-                teams: [
-                    {
-                        teamNumber: 324524,
-                        teamMemberIds: [
-                            "3b1823f4-b36c-4288-a827-ed0b00bc1122",
-                            "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133",
-                        ],
-                    },
-                    {
-                        teamNumber: 42342,
-                        teamMemberIds: [
-                            "3b1823f4-b36c-4288-a827-ed0b00bc1144",
-                            "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155",
-                        ],
-                    },
-                ],
-            };
+            var responseData = [
+                {
+                    teamNumber: 324524,
+                    teamMemberIds: [
+                        "3b1823f4-b36c-4288-a827-ed0b00bc1122",
+                        "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133",
+                    ],
+                },
+                {
+                    teamNumber: 42342,
+                    teamMemberIds: [
+                        "3b1823f4-b36c-4288-a827-ed0b00bc1144",
+                        "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155",
+                    ],
+                },
+            ];
 
             AppData.getTeams.mockReturnValue(
                 Promise.resolve({ data: responseData })
@@ -267,7 +265,7 @@ describe("Actions tests", () => {
             await getTeams(filename)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
-                teams: responseData.teams,
+                teams: responseData,
                 type: actionTypes.SET_TEAMS,
             });
         });
