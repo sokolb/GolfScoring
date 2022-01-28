@@ -15,22 +15,44 @@ export class Teams extends Component {
     }
 
     componentDidMount() {
-        this.props.getTeams("Teams_Testing.json");
+        // this.props.getTeams("Teams_Testing.json");
+        this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
     handleSelectionBoxChange(event) {
-        let selectedIds = [].slice.call(event.target.selectedOptions).map((option) => option.value);
+        let selectedIds = [].slice.call(event.target.selectedOptions).map((option) => parseInt(option.value));
         this.setState({
             selectedTeamMemberIds: selectedIds,
         });
     }
 
     handleSubmitClick = () => {
-        this.props.addTeam(this.state.selectedTeamMemberIds);
+        var teamNumber = this.findTeamNumber();
+        this.props.addTeam(teamNumber, this.state.selectedTeamMemberIds);
     };
 
     submitButtonDisabled() {
         return this.state.selectedTeamMemberIds.length !== 2;
+    }
+
+    findTeamNumber() {
+        var teamNumber = 1;
+        for (var i = 1; i < this.props.golf.teams.length + 1; i++) {
+            teamNumber = i;
+            var found = false;
+            for (var team in this.props.golf.teams) {
+                if (this.props.golf.teams[team].teamNumber === i) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                break;
+            } else {
+                teamNumber += 1;
+            }
+        }
+        return teamNumber;
     }
 
     render() {

@@ -4,6 +4,24 @@ import Team from "./Team";
 
 var props;
 
+var team1 = {
+    id: 1,
+    teamNumber: 1,
+    teamMemberIds: [1, 2],
+};
+
+var team2 = {
+    id: 2,
+    teamNumber: 2,
+    teamMemberIds: [3, 4],
+};
+
+var team3 = {
+    id: 3,
+    teamNumber: 3,
+    teamMemberIds: [1, 4],
+};
+
 describe("Teams Tests", () => {
     beforeEach(() => {
         props = {
@@ -12,30 +30,30 @@ describe("Teams Tests", () => {
                 teams: [
                     {
                         teamNumber: 1,
-                        teamMemberIds: ["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"],
+                        teamMemberIds: [1, 2],
                     },
                     {
                         teamNumber: 2,
-                        teamMemberIds: ["3b1823f4-3333-4288-a827-ed0b00bc1111", "0c6b559a-4444-44d1-9c8b-d7f3f8b92222"],
+                        teamMemberIds: [3, 4],
                     },
                 ],
                 players: [
                     {
-                        id: "3b1823f4-b36c-4288-1111-ed0b00bc6653",
+                        id: 1,
                         GHIN: 1234,
                         firstName: "Brian",
                         lastName: "Sokoloski",
                         handicap: 11,
                     },
                     {
-                        id: "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a",
+                        id: 2,
                         GHIN: 4321,
                         firstName: "Bob",
                         lastName: "Smith",
                         handicap: 12,
                     },
                     {
-                        id: "0c6b559a-ae1b-44d1-2222-d7f3f8b1111",
+                        id: 3,
                         GHIN: 5567,
                         firstName: "Mary",
                         lastName: "Johnson",
@@ -80,13 +98,13 @@ describe("Teams Tests", () => {
 
             expect(playerSelectionBox.props().children.length).toEqual(3);
 
-            expect(playerSelectionBox.props().children[0].key).toEqual("3b1823f4-b36c-4288-1111-ed0b00bc6653");
+            expect(playerSelectionBox.props().children[0].key).toEqual("1");
             expect(playerSelectionBox.props().children[0].props.children).toEqual("Brian Sokoloski");
 
-            expect(playerSelectionBox.props().children[1].key).toEqual("0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a");
+            expect(playerSelectionBox.props().children[1].key).toEqual("2");
             expect(playerSelectionBox.props().children[1].props.children).toEqual("Bob Smith");
 
-            expect(playerSelectionBox.props().children[2].key).toEqual("0c6b559a-ae1b-44d1-2222-d7f3f8b1111");
+            expect(playerSelectionBox.props().children[2].key).toEqual("3");
             expect(playerSelectionBox.props().children[2].props.children).toEqual("Mary Johnson");
         });
 
@@ -94,7 +112,7 @@ describe("Teams Tests", () => {
             props.golf.teams = [
                 {
                     teamNumber: 1,
-                    teamMemberIds: ["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"],
+                    teamMemberIds: [1, 2],
                 },
             ];
             const wrapper = shallow(<Teams {...props} />);
@@ -108,6 +126,7 @@ describe("Teams Tests", () => {
 
     it("Submit buttons calls addTeam with correct parameters", () => {
         props.golf.teams = [];
+        var teamNumber = 1;
         var teamMemberIds = [props.golf.players[0].id, props.golf.players[2].id];
 
         const wrapper = shallow(<Teams {...props} />);
@@ -120,7 +139,7 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamMemberIds);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds);
     });
 
     test.each([
@@ -137,6 +156,28 @@ describe("Teams Tests", () => {
 
         const submitButton = wrapper.find({ name: "submit" });
         expect(submitButton.props().disabled).toEqual(disabled);
+    });
+
+    test.each([
+        [[team1, team2], 3],
+        [[team1, team3], 2],
+        [[team1, team2, team3], 4],
+        [[], 1],
+    ])("teamNumber should be set to lowest ingeger not used for %o %s", (teams, teamNumber) => {
+        props.golf.teams = teams;
+        var teamMemberIds = [6, 7];
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        const playerSelectionBox = wrapper.find({
+            name: "playersSelectionBox",
+        });
+        playerSelectionBox.simulate("change", createEvent(teamMemberIds));
+
+        const submitButton = wrapper.find({ name: "submit" });
+        submitButton.simulate("click");
+
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds);
     });
 
     function createEvent(value) {

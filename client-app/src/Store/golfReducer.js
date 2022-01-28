@@ -1,6 +1,5 @@
 import initialState from "./InitialState";
 import * as actionTypes from "../Actions/ActionTypes";
-import { v4 as uuidv4 } from "uuid";
 
 // eslint-disable-next-line
 export default (state = initialState, action) => {
@@ -54,27 +53,9 @@ export default (state = initialState, action) => {
             };
         case actionTypes.ADD_TEAM:
             var teams = state.teams;
-
-            var teamNumber = 1;
-            for (var i = 1; i < teams.length + 1; i++) {
-                teamNumber = i;
-                var found = false;
-                for (var team in teams) {
-                    if (teams[team].teamNumber === i) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    break;
-                } else {
-                    teamNumber += 1;
-                }
-            }
-
             teams.push({
-                id: uuidv4(),
-                teamNumber: teamNumber,
+                id: action.id,
+                teamNumber: action.teamNumber,
                 teamMemberIds: action.teamMemberIds,
             });
             return {

@@ -18,8 +18,21 @@ class AppData {
         });
     }
 
-    getTeamsFromFile(fileName) {
+    getTeams(fileName) {
         return Axios.get(fileName);
+    }
+
+    deleteTeam(id) {
+        return Axios.delete(`http://localhost:8082/team/${id}`);
+    }
+
+    addTeam(team) {
+        return Axios.post("http://localhost:8082/team/-1", {
+            headers: {
+                "content-type": "application/json",
+            },
+            team,
+        });
     }
 }
 export default new AppData();

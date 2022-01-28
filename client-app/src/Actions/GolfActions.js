@@ -103,7 +103,7 @@ const setPlayersCreator = (players) => ({
 });
 
 export const getTeams = (fileName) => async (dispatch) => {
-    await AppData.getTeamsFromFile(fileName)
+    await AppData.getTeams(fileName)
         .then((response) => {
             dispatch(setTeamsCreator(response.data));
         })
@@ -119,8 +119,14 @@ const setTeamsCreator = (teams) => ({
     type: actionTypes.SET_TEAMS,
 });
 
-export const removeTeam = (id) => (dispatch) => {
-    dispatch(removeTeamCreator(id));
+export const removeTeam = (id) => async (dispatch) => {
+    await AppData.deleteTeam(id)
+        .then((response) => {
+            dispatch(removeTeamCreator(id));
+        })
+        .catch((error) => {
+            console.log(error.response);
+        });
 };
 
 const removeTeamCreator = (id) => ({
@@ -128,11 +134,19 @@ const removeTeamCreator = (id) => ({
     type: actionTypes.REMOVE_TEAM,
 });
 
-export const addTeam = (teamMemberIds) => async (dispatch) => {
-    dispatch(addTeamCreator(teamMemberIds));
+export const addTeam = (teamNumber, teamMemberIds) => async (dispatch) => {
+    var team = {
+        teamNumber,
+        teamMemberIds,
+    };
+    await AppData.addTeam(team).then((response) => {
+        dispatch(addTeamCreator(response.data, teamNumber, teamMemberIds));
+    });
 };
 
-const addTeamCreator = (teamMemberIds) => ({
+const addTeamCreator = (id, teamNumber, teamMemberIds) => ({
+    id,
+    teamNumber,
     teamMemberIds,
     type: actionTypes.ADD_TEAM,
 });

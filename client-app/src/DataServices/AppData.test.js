@@ -48,12 +48,41 @@ describe("AppData", () => {
         });
     });
 
-    it("getTeams is called with correct parameter", async () => {
-        var fileName = "team_test.json";
+    describe("Teams", () => {
+        test.each([["testTeamsFile.json"], ["http://someurl/getAllTeams"]])("getTeams is called with correct parameter of %s", async (target) => {
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.getTeams(target);
 
-        Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
-        await AppData.getTeamsFromFile(fileName);
+            expect(Axios.get).toHaveBeenCalledWith(target);
+        });
 
-        expect(Axios.get).toHaveBeenCalledWith(fileName);
+        it("deleteTeam calls API with correct value", async () => {
+            var teamId = 66;
+            var url = "http://localhost:8082/team/" + teamId;
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.deleteTeam(teamId);
+
+            expect(Axios.delete).toHaveBeenCalledWith(url);
+        });
+
+        it("addTeam calls API with correct values", async () => {
+            var team = {
+                teamNumber: 1,
+                teamMemberIds: [1, 4],
+            };
+            var url = "http://localhost:8082/team/-1";
+            var additionalData = {
+                headers: {
+                    "content-type": "application/json",
+                },
+                team,
+            };
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.addTeam(team);
+
+            expect(Axios.post).toHaveBeenCalledWith(url, additionalData);
+        });
     });
 });

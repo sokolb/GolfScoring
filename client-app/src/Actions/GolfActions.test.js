@@ -287,7 +287,7 @@ describe("Actions tests", () => {
                 },
             ];
 
-            AppData.getTeamsFromFile.mockReturnValue(Promise.resolve({ data: responseData }));
+            AppData.getTeams.mockReturnValue(Promise.resolve({ data: responseData }));
 
             await getTeams(filename)(dispatch);
 
@@ -297,10 +297,34 @@ describe("Actions tests", () => {
             });
         });
 
-        it("removeTeam dispatches REMOVE_TEAM", () => {
+        it("addTeam dispatches ADD_TEAM", async () => {
+            const dispatch = jest.fn();
+            var id = 4;
+            var teamMemberIds = ["abc123", "xyz321"];
+            var teamNumber = 3;
+
+            var responseFromApi = {
+                data: id,
+            };
+            AppData.addTeam.mockReturnValue(Promise.resolve(responseFromApi));
+
+            await addTeam(teamNumber, teamMemberIds)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                id,
+                teamNumber,
+                teamMemberIds,
+                type: actionTypes.ADD_TEAM,
+            });
+        });
+
+        it("removeTeam dispatches REMOVE_TEAM", async () => {
             const dispatch = jest.fn();
             let id = "12345abcdefg";
-            removeTeam(id)(dispatch);
+
+            AppData.deleteTeam.mockReturnValue(Promise.resolve(""));
+
+            await removeTeam(id)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id: id,
@@ -308,16 +332,24 @@ describe("Actions tests", () => {
             });
         });
 
-        it("addTeam dispatches ADD_TEAM", async () => {
+        it("removeTeam calls deleteTeam API", async () => {
             const dispatch = jest.fn();
-            var teamMemberIds = ["abc123", "xyz321"];
+            var teamId = 3;
+            AppData.deleteTeam.mockReturnValue(Promise.resolve(""));
 
-            await addTeam(teamMemberIds)(dispatch);
+            await removeTeam(teamId)(dispatch);
 
-            expect(dispatch).toHaveBeenCalledWith({
-                teamMemberIds,
-                type: actionTypes.ADD_TEAM,
-            });
+            expect(AppData.deleteTeam).toHaveBeenCalledWith(teamId);
+        });
+
+        it("remoteTeam does not dispatch REMOVE_TEAM when deleteTeam fails", async () => {
+            const dispatch = jest.fn();
+            let id = 66;
+            AppData.deleteTeam.mockReturnValue(Promise.reject(""));
+
+            await removeTeam(id)(dispatch);
+
+            expect(dispatch).not.toHaveBeenCalled();
         });
     });
 });

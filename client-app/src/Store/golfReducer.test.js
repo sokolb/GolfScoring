@@ -151,82 +151,24 @@ describe("Golf Reducer tests", () => {
         });
 
         it("should match the state when ADD_TEAM is dispatched", () => {
-            const uuid = "111823f4-b36c-4288-a827-0000000000";
-            uuidv4.mockReturnValue(uuid);
+            var id = 5;
             var teamMemberIds = ["abc567", "pp001"];
+            var teamNumber = 7;
 
             targetState.teams[0] = {
-                id: uuid,
-                teamNumber: 1,
-                teamMemberIds: teamMemberIds,
+                id,
+                teamNumber,
+                teamMemberIds,
             };
 
             expect(
                 reducer(initialState, {
                     type: actionTypes.ADD_TEAM,
-                    teamMemberIds: teamMemberIds,
+                    id,
+                    teamNumber,
+                    teamMemberIds,
                 })
             ).toEqual(targetState);
-        });
-
-        it("team ID should be set to lowest ingeger not used", () => {
-            const uuid1 = "111823f4-b36c-4288-a827-0000001111";
-            uuidv4.mockReturnValue(uuid1);
-            var team1MemberIds = ["abc111", "pp111"];
-            var state = reducer(initialState, {
-                type: actionTypes.ADD_TEAM,
-                teamMemberIds: team1MemberIds,
-            });
-
-            const uuid2 = "111823f4-b36c-4288-a827-0000002222";
-            uuidv4.mockReturnValue(uuid2);
-            var team2MemberIds = ["abc222", "pp222"];
-            state = reducer(state, {
-                type: actionTypes.ADD_TEAM,
-                teamMemberIds: team2MemberIds,
-            });
-
-            const uuid3 = "111823f4-b36c-4288-a827-0000003333";
-            uuidv4.mockReturnValue(uuid3);
-            var team3MemberIds = ["abc333", "pp333"];
-            state = reducer(state, {
-                type: actionTypes.ADD_TEAM,
-                teamMemberIds: team3MemberIds,
-            });
-
-            //remove team 2
-            state = reducer(state, {
-                type: actionTypes.REMOVE_TEAM,
-                id: uuid2,
-            });
-
-            var team1 = {
-                id: uuid1,
-                teamNumber: 1,
-                teamMemberIds: team1MemberIds,
-            };
-            var team2 = {
-                id: uuid2,
-                teamNumber: 2,
-                teamMemberIds: team2MemberIds,
-            };
-            var team3 = {
-                id: uuid3,
-                teamNumber: 3,
-                teamMemberIds: team3MemberIds,
-            };
-
-            targetState.teams[0] = team1;
-            targetState.teams[1] = team3;
-            targetState.teams[2] = team2;
-
-            uuidv4.mockReturnValue(uuid2);
-            state = reducer(state, {
-                type: actionTypes.ADD_TEAM,
-                teamMemberIds: team2MemberIds,
-            });
-
-            expect(state).toEqual(targetState);
         });
     });
 
