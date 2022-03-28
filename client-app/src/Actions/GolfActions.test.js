@@ -84,9 +84,46 @@ describe("Actions tests", () => {
         var handicap = 17.3;
         var responseData = {
             data: {
-                golfer: {
-                    handicap_index: handicap,
-                },
+                tee_sets: [
+                    {
+                        tee_set_id: 434364,
+                        name: "Blue",
+                        gender: "M",
+                        ratings: [
+                            {
+                                tee_set_side: "All 18",
+                                course_handicap: 11,
+                            },
+                            {
+                                tee_set_side: "B9",
+                                course_handicap: 6,
+                            },
+                            {
+                                tee_set_side: "F9",
+                                course_handicap: 5,
+                            },
+                        ],
+                    },
+                    {
+                        tee_set_id: 434365,
+                        name: "White",
+                        gender: "M",
+                        ratings: [
+                            {
+                                tee_set_side: "All 18",
+                                course_handicap: 10,
+                            },
+                            {
+                                tee_set_side: "B9",
+                                course_handicap: 6,
+                            },
+                            {
+                                tee_set_side: "F9",
+                                course_handicap: 4,
+                            },
+                        ],
+                    },
+                ],
             },
         };
 
@@ -96,53 +133,6 @@ describe("Actions tests", () => {
             var lastName = "Smith";
             var GHIN = "1234132";
             var user_token = "asfdsadfasdfdsaasdf";
-
-            var responseData = {
-                response: {
-                    data: {
-                        tee_sets: [
-                            {
-                                tee_set_id: 434364,
-                                name: "Blue",
-                                gender: "M",
-                                ratings: [
-                                    {
-                                        tee_set_side: "All 18",
-                                        course_handicap: 11,
-                                    },
-                                    {
-                                        tee_set_side: "B9",
-                                        course_handicap: 6,
-                                    },
-                                    {
-                                        tee_set_side: "F9",
-                                        course_handicap: 5,
-                                    },
-                                ],
-                            },
-                            {
-                                tee_set_id: 434365,
-                                name: "White",
-                                gender: "M",
-                                ratings: [
-                                    {
-                                        tee_set_side: "All 18",
-                                        course_handicap: 10,
-                                    },
-                                    {
-                                        tee_set_side: "B9",
-                                        course_handicap: 6,
-                                    },
-                                    {
-                                        tee_set_side: "F9",
-                                        course_handicap: 4,
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                },
-            };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
@@ -245,7 +235,9 @@ describe("Actions tests", () => {
             var responseData = {
                 response: {
                     data: {
-                        golfer: errorMessage,
+                        errors: {
+                            golfer_id: [errorMessage],
+                        },
                     },
                 },
             };

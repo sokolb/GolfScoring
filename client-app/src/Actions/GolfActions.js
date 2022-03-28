@@ -38,10 +38,9 @@ export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispa
     await GhinDataService.getUserHandicap(GHIN, user_token)
         .then(async (response) => {
             handicap = response.data.tee_sets[1].ratings[0].course_handicap;
-            handicap = 17.3;
         })
         .catch((error) => {
-            dispatch(setErrorMessageCreator(error.response.data));
+            dispatch(setErrorMessageCreator(error.response.data.errors.golfer_id[0]));
         });
 
     if (handicap !== "-1") {
