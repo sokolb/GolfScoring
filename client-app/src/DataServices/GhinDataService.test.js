@@ -36,9 +36,13 @@ describe("GhinDataService", () => {
     it("getUserHandicap fetches data successfully from the API", async () => {
         var GHIN = "1112321";
         var user_token = "axafsdfasdf";
+
+        var formattedDate = formatDate(new Date());
+
         var callData = {
             method: "GET",
-            url: `https://api2.ghin.com/api/v1/search_golfer.json?golfer_id=${GHIN}`,
+            // https://api2.ghin.com/api/v1/course_handicaps.json?course_id=749&golfer_id=5884935&played_at=2022-03-28&source=GHINcom
+            url: `https://api2.ghin.com/api/v1/course_handicaps.json?golfer_id=${GHIN}&course_id=749&source=GHINcom&played_at=${formattedDate}`,
             headers: {
                 "content-type": "application/json",
                 Authorization: `Bearer ${user_token}`,
@@ -53,4 +57,16 @@ describe("GhinDataService", () => {
 
         expect(Axios).toHaveBeenCalledWith(callData);
     });
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = "" + (d.getMonth() + 1),
+            day = "" + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+
+        return [year, month, day].join("-");
+    }
 });
