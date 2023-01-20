@@ -81,7 +81,7 @@ describe("Actions tests", () => {
     });
 
     describe("Players", () => {
-        var handicap = 17.3;
+        var handicap = 10;
         var responseData = {
             data: {
                 tee_sets: [
