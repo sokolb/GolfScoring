@@ -105,7 +105,7 @@ def team(team_id):
         return retval
 
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.get_json()['team']
         if team_id == "-1":
             sql = f"INSERT INTO team(teamNumber) VALUES ({data['teamNumber']})"
             cur.execute(sql)
