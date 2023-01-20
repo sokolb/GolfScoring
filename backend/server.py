@@ -19,7 +19,8 @@ cur = con.cursor()
 
 cur.execute('''CREATE TABLE if not exists player
             (id INTEGER PRIMARY KEY, GHIN INTEGER, firstName TEXT, 
-            lastName TEXT, handicap REAL, frontNine REAL, backNine REAL)''')
+            lastName TEXT, handicap REAL, frontNine REAL, backNine REAL, 
+            teePreference TEXT)''')
 cur.execute('''CREATE TABLE if not exists team
             (id INTEGER PRIMARY KEY, teamNumber INTEGER)''')
 cur.execute('''CREATE TABLE if not exists team_member
@@ -29,26 +30,27 @@ con.commit()
 @app.route('/player/<player_id>', methods = ['GET', 'POST', 'DELETE'])
 def player(player_id):
     if request.method == 'GET':
-        cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine FROM player WHERE id = " + player_id)
+        cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player WHERE id = " + player_id)
         data = cur.fetchone()
         if data is None:
             retval = Response(response="Player not found with id " + player_id, status=204, mimetype="application/text")
         else:
-            player = Player(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
+            player = Player(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
             retval = Response(response=player.toJSON(), status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
         return retval
 
     if request.method == 'POST':
         data = request.get_json()
-        data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'], data['frontNine'], data['backNine'])
+        data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'], data['frontNine'], data['backNine'], data['teePreference'])
         if player_id == "-1":
-            sql = "INSERT INTO player(GHIN, firstName, lastName, handicap, frontNine, backNine) VALUES (?,?,?,?,?,?)"
+            sql = "INSERT INTO player(GHIN, firstName, lastName, handicap, frontNine, backNine, teePreference) VALUES (?,?,?,?,?,?,?)"
             cur.execute(sql, data_tuple)
             player_id = str(cur.lastrowid)
         else:
             sql = '''UPDATE player SET GHIN = ?, firstName = ?, 
-                lastName = ?, handicap = ?, frontNine = ?, backNine = ? 
+                lastName = ?, handicap = ?, frontNine = ?, backNine = ?, 
+                teePreference = ? 
                 WHERE id = ''' + player_id
             cur.execute(sql, data_tuple)
         con.commit()
@@ -71,13 +73,13 @@ def player(player_id):
 @app.route("/getAllPlayers")
 def getAllPlayers():
     playersList = []
-    cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine FROM player")
+    cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player")
     data = cur.fetchall()
     if data is None:
         retval = Response(response="no players found", status=204, mimetype="application/text")
     else:
         for playerData in data:
-            player = Player(playerData[0], playerData[1], playerData[2], playerData[3], playerData[4], playerData[5], playerData[6])
+            player = Player(playerData[0], playerData[1], playerData[2], playerData[3], playerData[4], playerData[5], playerData[6], playerData[7])
             playersList.append(player)
         retval = Response(response=json.dumps(playersList, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4), status=200, mimetype="application/json")
