@@ -114,7 +114,9 @@ export class Players extends Component {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>GHIN</th>
-                            <th>Handicap</th>
+                            <th>Tee</th>
+                            <th>Front Nine</th>
+                            <th>Back Nine</th>
                             <th></th>
                         </tr>
                         {this.props.golf.players !== undefined &&
