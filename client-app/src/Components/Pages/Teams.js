@@ -89,15 +89,17 @@ export class Teams extends Component {
                             width: "50%",
                         }}
                     >
-                        <tr>
-                            <th>Team Number</th>
-                            <th>Team Members</th>
-                            <th></th>
-                        </tr>
-                        {this.props.golf.teams !== undefined &&
-                            this.props.golf.teams.map((t) => {
-                                return <Team key={t.teamNumber} team={t} />;
-                            })}
+                        <tbody>
+                            <tr>
+                                <th>Team Number</th>
+                                <th>Team Members</th>
+                                <th></th>
+                            </tr>
+                            {this.props.golf.teams !== undefined &&
+                                this.props.golf.teams.map((t) => {
+                                    return <Team key={t.teamNumber} team={t} />;
+                                })}
+                        </tbody>
                     </table>
                 </div>
             </div>
