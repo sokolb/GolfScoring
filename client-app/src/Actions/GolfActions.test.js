@@ -81,7 +81,7 @@ describe("Actions tests", () => {
     });
 
     describe("Players", () => {
-        var handicap = 10;
+        var handicap = 42;
         var responseData = {
             data: {
                 tee_sets: [
@@ -132,12 +132,13 @@ describe("Actions tests", () => {
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
+            var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
-            await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+            await addPlayer(firstName, lastName, GHIN, teePreference, user_token)(dispatch);
 
             expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
         });
@@ -148,18 +149,22 @@ describe("Actions tests", () => {
             var lastName = "Smith";
             var GHIN = "1234132";
             var user_token = "asfdsadfasdfdsaasdf";
+            var teePreference = "White";
 
             var player = {
                 GHIN,
                 firstName,
                 lastName,
-                handicap,
+                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                teePreference,
+                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
             };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
-            await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+            await addPlayer(firstName, lastName, GHIN, teePreference, user_token)(dispatch);
 
             expect(AppData.addPlayer).toHaveBeenCalledWith(player);
         });
@@ -170,6 +175,7 @@ describe("Actions tests", () => {
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
+            var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseData));
@@ -179,14 +185,17 @@ describe("Actions tests", () => {
             };
             AppData.addPlayer.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addPlayer(firstName, lastName, GHIN, user_token)(dispatch);
+            await addPlayer(firstName, lastName, GHIN, teePreference, user_token)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id,
                 firstName,
                 lastName,
                 GHIN,
-                handicap,
+                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                teePreference,
+                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
                 type: actionTypes.ADD_PLAYER,
             });
         });

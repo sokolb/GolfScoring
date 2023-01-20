@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { addPlayer, getPlayers } from "../../Actions/GolfActions";
 import Player from "./Player";
 
+const tees = ["Blue", "White", "Gold", "Red"];
+
 export class Players extends Component {
     constructor(props) {
         super(props);
@@ -11,11 +13,13 @@ export class Players extends Component {
             firstName: "",
             lastName: "",
             GHIN: "",
+            selectedTeePreference: "White",
         };
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleGHINChange = this.handleGHINChange.bind(this);
+        this.handleTeePreferenceSelectionBoxChange = this.handleTeePreferenceSelectionBoxChange.bind(this);
     }
 
     componentDidMount() {
@@ -42,28 +46,22 @@ export class Players extends Component {
     }
 
     handleSubmitClick = () => {
-        this.props.addPlayer(
-            this.state.firstName,
-            this.state.lastName,
-            this.state.GHIN,
-            this.props.golf.userToken
-        );
+        this.props.addPlayer(this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.props.golf.userToken);
     };
 
     submitButtonDisabled() {
-        return (
-            this.state.firstName === "" ||
-            this.state.lastName === "" ||
-            this.state.GHIN === "" ||
-            this.playerExistsWithGHIN(this.state.GHIN)
-        );
+        return this.state.firstName === "" || this.state.lastName === "" || this.state.GHIN === "" || this.playerExistsWithGHIN(this.state.GHIN);
     }
 
     playerExistsWithGHIN(targetGHIN) {
-        let player = this.props.golf.players.find(
-            (player) => player.GHIN.toString() === targetGHIN
-        );
+        let player = this.props.golf.players.find((player) => player.GHIN.toString() === targetGHIN);
         return player !== undefined;
+    }
+
+    handleTeePreferenceSelectionBoxChange(event) {
+        this.setState({
+            selectedTeePreference: event.target.value,
+        });
     }
 
     render() {
@@ -75,34 +73,33 @@ export class Players extends Component {
                     <h2>Add Player</h2>
                     <br />
                     <label>First Name:</label>
-                    <input
-                        name="firstName"
-                        onChange={this.handleFirstNameChange}
-                    />
+                    <input name="firstName" onChange={this.handleFirstNameChange} />
                     <br />
                     <label>Last Name:</label>
-                    <input
-                        name="lastName"
-                        onChange={this.handleLastNameChange}
-                    />
+                    <input name="lastName" onChange={this.handleLastNameChange} />
                     <br />
                     <label>GHIN:</label>
                     <input name="GHIN" onChange={this.handleGHINChange} />
                     <br />
-                    <button
-                        name="submit"
-                        onClick={this.handleSubmitClick}
-                        disabled={this.submitButtonDisabled()}
-                    >
+                    <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange}>
+                        {tees.map((tee) => {
+                            return (
+                                <option key={tee} value={tee}>
+                                    {tee}
+                                </option>
+                            );
+                        })}
+                    </select>
+                    <br />
+                    <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                         Submit
                     </button>
                 </div>
-                {this.props.golf.errorMessage !== undefined &&
-                    this.props.golf.errorMessage.length > 0 && (
-                        <label name="lblError" style={{ color: "red" }}>
-                            {this.props.golf.errorMessage}
-                        </label>
-                    )}
+                {this.props.golf.errorMessage !== undefined && this.props.golf.errorMessage.length > 0 && (
+                    <label name="lblError" style={{ color: "red" }}>
+                        {this.props.golf.errorMessage}
+                    </label>
+                )}
                 <div style={{ textAlign: "center" }}>
                     <h2>Player List</h2>
                     <table

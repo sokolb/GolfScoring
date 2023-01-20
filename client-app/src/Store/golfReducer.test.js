@@ -13,6 +13,9 @@ var player1 = {
     lastName: "Johnson",
     GHIN: "111123",
     handicap: "18.2",
+    teePreference: "White",
+    frontNine: 4,
+    backNine: 6,
 };
 
 var player2 = {
@@ -20,6 +23,9 @@ var player2 = {
     firstName: "Jane",
     lastName: "Doe",
     handicap: 6.9,
+    teePreference: "Red",
+    fronNine: 10,
+    backNine: 12,
 };
 
 var team1 = {
@@ -74,6 +80,9 @@ describe("Golf Reducer tests", () => {
                     lastName: player1.lastName,
                     GHIN: player1.GHIN,
                     handicap: player1.handicap,
+                    teePreference: player1.teePreference,
+                    frontNine: player1.frontNine,
+                    backNine: player1.backNine,
                 })
             ).toEqual(targetState);
         });

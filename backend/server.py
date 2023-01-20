@@ -41,7 +41,7 @@ def player(player_id):
         return retval
 
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.get_json()['player']
         data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'], data['frontNine'], data['backNine'], data['teePreference'])
         if player_id == "-1":
             sql = "INSERT INTO player(GHIN, firstName, lastName, handicap, frontNine, backNine, teePreference) VALUES (?,?,?,?,?,?,?)"

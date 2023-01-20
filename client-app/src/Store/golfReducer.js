@@ -23,6 +23,9 @@ export default (state = initialState, action) => {
                 lastName: action.lastName,
                 GHIN: action.GHIN,
                 handicap: action.handicap,
+                teePreference: action.teePreference,
+                frontNine: action.frontNine,
+                backNine: action.backNine,
             });
             return {
                 ...state,

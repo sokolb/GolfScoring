@@ -33,35 +33,62 @@ const setCurrentPageCreator = (pageName) => ({
     type: actionTypes.SET_CURRENT_PAGE,
 });
 
-export const addPlayer = (firstName, lastName, GHIN, user_token) => async (dispatch) => {
+export const addPlayer = (firstName, lastName, GHIN, teePreference, user_token) => async (dispatch) => {
     var handicap = "-1";
+    var frontNine = "-1";
+    var backNine = "-1";
     await GhinDataService.getUserHandicap(GHIN, user_token)
         .then(async (response) => {
-            handicap = response.data.tee_sets[1].ratings[0].course_handicap;
+            console.log(response.data);
+            var teeSetIndex = response.data.tee_sets.findIndex(function (item, i) {
+                return item.name === teePreference;
+            });
+            console.log("teeSetIndex: " + teeSetIndex);
+
+            var handicapIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
+                return item.tee_set_side === "All 18";
+            });
+            handicap = response.data.tee_sets[teeSetIndex].ratings[handicapIndex].course_handicap;
+
+            var frontNineIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
+                return item.tee_set_side === "F9";
+            });
+            frontNine = response.data.tee_sets[teeSetIndex].ratings[frontNineIndex].course_handicap;
+
+            var backNineIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
+                return item.tee_set_side === "B9";
+            });
+            backNine = response.data.tee_sets[teeSetIndex].ratings[backNineIndex].course_handicap;
         })
         .catch((error) => {
             dispatch(setErrorMessageCreator(error.response.data.errors.golfer_id[0]));
         });
 
-    if (handicap !== "-1") {
+    if (handicap !== "-1" && frontNine !== "-1" && backNine !== "-1") {
         var player = {
             GHIN,
             firstName,
             lastName,
             handicap,
+            teePreference,
+            frontNine,
+            backNine,
         };
         await AppData.addPlayer(player).then((response) => {
-            dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap));
+            dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
         });
     }
 };
 
-const addPlayerCreator = (id, firstName, lastName, GHIN, handicap) => ({
+const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine) => ({
     id,
     firstName,
     lastName,
     GHIN,
     handicap,
+    teePreference,
+    frontNine,
+    backNine,
     type: actionTypes.ADD_PLAYER,
 });
 
