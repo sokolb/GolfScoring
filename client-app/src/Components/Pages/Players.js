@@ -100,14 +100,14 @@ export class Players extends Component {
                         {this.props.golf.errorMessage}
                     </label>
                 )}
-                <div style={{ textAlign: "center" }}>
+                <div class="section-to-print" style={{ textAlign: "center" }}>
                     <h2>Player List</h2>
                     <table
                         style={{
                             textAlign: "left",
                             marginLeft: "auto",
                             marginRight: "auto",
-                            width: "50%",
+                            width: "80%",
                         }}
                     >
                         <tr>
