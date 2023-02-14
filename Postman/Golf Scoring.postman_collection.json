@@ -1,0 +1,329 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Golf Scoring Backend",
+		"_postman_id": "5dd286fc-1e62-6af8-d358-5961fb109ae5",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Player",
+			"description": "",
+			"item": [
+				{
+					"name": "GetAllPlayers",
+					"request": {
+						"url": "http://localhost:8082/getAllPlayers",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Player",
+					"request": {
+						"url": "http://localhost:8082/player/-1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"player\":{\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"Brian\",\n\t\t\"lastName\": \"Sokoloski\",\n\t\t\"handicap\": 10,\n\t\t\"frontNine\": 4,\n\t\t\"backNine\": 6,\n\t\t\"teePreference\": \"White\"\n\t}\n}"
+						},
+						"description": "Add new player"
+					},
+					"response": []
+				},
+				{
+					"name": "GetSpecificPlayer",
+					"request": {
+						"url": "http://localhost:8082/player/1",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Get player"
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePlayer",
+					"request": {
+						"url": "http://localhost:8082/player/1",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": "Delete Player"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Player",
+					"request": {
+						"url": "http://localhost:8082/player/1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"player\": {\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"andy\",\n\t\t\"lastName\": \"melchert\",\n\t\t\"handicap\": 45,\n\t\t\"frontNine\": 14.0,\n\t\t\"backNine\": 16.0,\n\t\t\"teePreference\": \"Blue\"\n\t}\n}"
+						},
+						"description": "Update Player"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Team",
+			"description": "",
+			"item": [
+				{
+					"name": "GetAllTeams",
+					"request": {
+						"url": "http://localhost:8082/getAllTeams",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add team",
+					"request": {
+						"url": "http://localhost:8082/team/-1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"team\":{\n\t\t\"teamNumber\" : 1,\n\t\t\"teamMemberIds\" : [\n\t\t\t1,2\n\t\t\t]\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"url": "http://localhost:8082/team/1",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Course",
+			"description": "",
+			"item": [
+				{
+					"name": "Testing",
+					"description": "",
+					"item": [
+						{
+							"name": "Add New Course",
+							"request": {
+								"url": "http://localhost:8082/course/-1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"White\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Update Course",
+							"request": {
+								"url": "http://localhost:8082/course/1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLakeAgain\",\n\t\t\"tee\" : \"Blue\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 7\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Course",
+							"request": {
+								"url": "http://localhost:8082/course/1",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "GetCourse",
+							"request": {
+								"url": "http://localhost:8082/course/1",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"White\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "GetAllCourses",
+							"request": {
+								"url": "http://localhost:8082/getAllCourses",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create Data",
+					"description": "",
+					"item": [
+						{
+							"name": "Add New Course - White",
+							"request": {
+								"url": "http://localhost:8082/course/-1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"White\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 7\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 13\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 3,\n\t\t\t\t\"handicapIndex\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 4,\n\t\t\t\t\"handicapIndex\": 11\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 5,\n\t\t\t\t\"handicapIndex\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 6,\n\t\t\t\t\"handicapIndex\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 7,\n\t\t\t\t\"handicapIndex\": 17\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 8,\n\t\t\t\t\"handicapIndex\": 9\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 9,\n\t\t\t\t\"handicapIndex\": 15\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 10,\n\t\t\t\t\"handicapIndex\": 4\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 11,\n\t\t\t\t\"handicapIndex\": 14\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 12,\n\t\t\t\t\"handicapIndex\": 8\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 13,\n\t\t\t\t\"handicapIndex\": 16\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 14,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 15,\n\t\t\t\t\"handicapIndex\": 18\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 16,\n\t\t\t\t\"handicapIndex\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 17,\n\t\t\t\t\"handicapIndex\": 10\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 18,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Add New Course - Blue",
+							"request": {
+								"url": "http://localhost:8082/course/-1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"Blue\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 7\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 13\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 3,\n\t\t\t\t\"handicapIndex\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 4,\n\t\t\t\t\"handicapIndex\": 11\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 5,\n\t\t\t\t\"handicapIndex\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 6,\n\t\t\t\t\"handicapIndex\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 7,\n\t\t\t\t\"handicapIndex\": 17\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 8,\n\t\t\t\t\"handicapIndex\": 9\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 9,\n\t\t\t\t\"handicapIndex\": 15\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 10,\n\t\t\t\t\"handicapIndex\": 4\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 11,\n\t\t\t\t\"handicapIndex\": 14\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 12,\n\t\t\t\t\"handicapIndex\": 8\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 13,\n\t\t\t\t\"handicapIndex\": 16\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 14,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 15,\n\t\t\t\t\"handicapIndex\": 18\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 16,\n\t\t\t\t\"handicapIndex\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 17,\n\t\t\t\t\"handicapIndex\": 10\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 18,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Add New Course - Gold",
+							"request": {
+								"url": "http://localhost:8082/course/-1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"Gold\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 9\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 3,\n\t\t\t\t\"handicapIndex\": 17\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 4,\n\t\t\t\t\"handicapIndex\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 5,\n\t\t\t\t\"handicapIndex\": 13\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 6,\n\t\t\t\t\"handicapIndex\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 7,\n\t\t\t\t\"handicapIndex\": 15\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 8,\n\t\t\t\t\"handicapIndex\": 11\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 9,\n\t\t\t\t\"handicapIndex\": 7\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 10,\n\t\t\t\t\"handicapIndex\": 10\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 11,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 12,\n\t\t\t\t\"handicapIndex\": 4\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 13,\n\t\t\t\t\"handicapIndex\": 18\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 14,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 15,\n\t\t\t\t\"handicapIndex\": 14\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 16,\n\t\t\t\t\"handicapIndex\": 16\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 17,\n\t\t\t\t\"handicapIndex\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 18,\n\t\t\t\t\"handicapIndex\": 8\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Add New Course - Red",
+							"request": {
+								"url": "http://localhost:8082/course/-1",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"course\":{\n\t\t\"name\" : \"RoseLake\",\n\t\t\"tee\" : \"Red\",\n\t\t\"holes\" : [\n\t\t\t{\n\t\t\t\t\"number\": 1,\n\t\t\t\t\"handicapIndex\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 2,\n\t\t\t\t\"handicapIndex\": 9\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 3,\n\t\t\t\t\"handicapIndex\": 17\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 4,\n\t\t\t\t\"handicapIndex\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 5,\n\t\t\t\t\"handicapIndex\": 13\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 6,\n\t\t\t\t\"handicapIndex\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 7,\n\t\t\t\t\"handicapIndex\": 15\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 8,\n\t\t\t\t\"handicapIndex\": 11\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 9,\n\t\t\t\t\"handicapIndex\": 7\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 10,\n\t\t\t\t\"handicapIndex\": 10\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 11,\n\t\t\t\t\"handicapIndex\": 6\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 12,\n\t\t\t\t\"handicapIndex\": 4\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 13,\n\t\t\t\t\"handicapIndex\": 18\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 14,\n\t\t\t\t\"handicapIndex\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 15,\n\t\t\t\t\"handicapIndex\": 14\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 16,\n\t\t\t\t\"handicapIndex\": 16\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 17,\n\t\t\t\t\"handicapIndex\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"number\": 18,\n\t\t\t\t\"handicapIndex\": 8\n\t\t\t}\n\t\t]\n\t}\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}
