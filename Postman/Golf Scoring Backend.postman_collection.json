@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Golf Scoring Backend",
-		"_postman_id": "5dd286fc-1e62-6af8-d358-5961fb109ae5",
+		"_postman_id": "3401abc6-be2a-2826-eb64-a93fa6b968b0",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -17,7 +17,10 @@
 						"url": "http://localhost:8082/getAllPlayers",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -48,7 +51,10 @@
 						"url": "http://localhost:8082/player/1",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Get player"
 					},
 					"response": []
@@ -59,7 +65,10 @@
 						"url": "http://localhost:8082/player/1",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Delete Player"
 					},
 					"response": []
@@ -96,7 +105,10 @@
 						"url": "http://localhost:8082/getAllTeams",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -127,7 +139,10 @@
 						"url": "http://localhost:8082/team/1",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -228,7 +243,10 @@
 								"url": "http://localhost:8082/getAllCourses",
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"description": ""
 							},
 							"response": []
