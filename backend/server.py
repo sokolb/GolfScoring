@@ -175,13 +175,13 @@ def getAllTeams():
 @app.route('/course/<course_id>', methods = ['GET', 'POST', 'DELETE'])
 def course(course_id):
     if request.method == 'GET':
-        cur.execute("SELECT id, name, tee FROM course WHERE id = " + course_id)
+        cur.execute("SELECT id, name, tee FROM course WHERE id = ?", (course_id,))
         courseData = cur.fetchone()
         if courseData is None:
             retval = Response(response="Course not found with id " + course_id, status=204, mimetype="application/text")
         else:
             holes =[]
-            cur.execute("SELECT id, number, handicapIndex FROM hole WHERE course_id = " + course_id)
+            cur.execute("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?", (course_id,))
             holeData = cur.fetchall()
             for row in holeData:
                 holes.append(Hole(row[0], row[1], row[2]))
@@ -194,19 +194,19 @@ def course(course_id):
         data = request.get_json()['course']
         data_tuple = (data['name'], data['tee'])
         if course_id == "-1":
-            sql = f"INSERT INTO course(name, tee) VALUES (?, ?)"
+            sql = "INSERT INTO course(name, tee) VALUES (?, ?)"
             cur.execute(sql, data_tuple)
             con.commit()
             course_id = str(cur.lastrowid)
 
         else:
-            sql = f'''UPDATE course SET name = ?, 
+            sql = '''UPDATE course SET name = ?, 
                 tee = ?
-                WHERE id = ''' + course_id
-            cur.execute(sql, data_tuple)
+                WHERE id = ?'''
+            cur.execute(sql, data_tuple + (course_id,))
             con.commit()
-            sql = f"DELETE from hole WHERE course_id = {course_id}"
-            cur.execute(sql)
+            sql = "DELETE from hole WHERE course_id = ?"
+            cur.execute(sql, (course_id,))
             con.commit() 
 
         for hole in data['holes']:
@@ -219,8 +219,8 @@ def course(course_id):
         return retval
 
     if request.method == 'DELETE':
-        cur.execute("DELETE FROM course WHERE id = " + course_id)
-        cur.execute("DELETE FROM hole WHERE course_id = " + course_id)
+        cur.execute("DELETE FROM course WHERE id = ?", (course_id,))
+        cur.execute("DELETE FROM hole WHERE course_id = ?", (course_id,))
         con.commit()
         retval = Response(response="Success", status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
@@ -241,7 +241,7 @@ def getAllCourses():
     else:
         for course in courseData:
             holes = []
-            cur.execute(f"SELECT id, number, handicapIndex FROM hole WHERE course_id = {course[0]}")
+            cur.execute("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?", (course[0],))
             holeData = cur.fetchall()
             for hole in holeData:
                 holes.append(Hole(hole[0], hole[1], hole[2]))
