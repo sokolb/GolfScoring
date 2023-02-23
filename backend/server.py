@@ -98,13 +98,13 @@ def getAllPlayers():
 @app.route('/team/<team_id>', methods = ['GET', 'POST', 'DELETE'])
 def team(team_id):
     if request.method == 'GET':
-        cur.execute("SELECT id, teamNumber FROM team WHERE id = " + team_id)
+        cur.execute("SELECT id, teamNumber FROM team WHERE id = ?", (team_id,))
         teamData = cur.fetchone()
         if teamData is None:
             retval = Response(response="Team not found with id " + team_id, status=204, mimetype="application/text")
         else:
-            teamMembers =[]
-            cur.execute("SELECT player_id FROM team_member WHERE team_id = "+ team_id)
+            teamMembers = []
+            cur.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team_id,))
             teamMemberData = cur.fetchall()
             for row in teamMemberData:
                 teamMembers.append(row[0])
@@ -116,18 +116,17 @@ def team(team_id):
     if request.method == 'POST':
         data = request.get_json()['team']
         if team_id == "-1":
-            sql = f"INSERT INTO team(teamNumber) VALUES ({data['teamNumber']})"
-            cur.execute(sql)
+            sql = "INSERT INTO team(teamNumber) VALUES (?)"
+            cur.execute(sql, (data['teamNumber'],))
             con.commit()
             team_id = str(cur.lastrowid)
 
         else:
-            sql = f'''UPDATE team SET teamNumber = {data['teamNumber']} 
-                WHERE id = ''' + team_id
-            cur.execute(sql)
+            sql = "UPDATE team SET teamNumber = ? WHERE id = ?"
+            cur.execute(sql, (data['teamNumber'], team_id))
             con.commit()
-            sql = f"DELETE from team_member WHERE team_id = {team_id}"
-            cur.execute(sql)
+            sql = "DELETE from team_member WHERE team_id = ?"
+            cur.execute(sql, (team_id,))
             con.commit() 
 
         for player_id in data['teamMemberIds']:
@@ -140,8 +139,8 @@ def team(team_id):
         return retval
 
     if request.method == 'DELETE':
-        cur.execute("DELETE FROM team WHERE id = " + team_id)
-        cur.execute("DELETE FROM team_member WHERE team_id = " + team_id)
+        cur.execute("DELETE FROM team WHERE id = ?", (team_id,))
+        cur.execute("DELETE FROM team_member WHERE team_id = ?", (team_id,))
         con.commit()
         retval = Response(response="Success", status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
