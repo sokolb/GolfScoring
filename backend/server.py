@@ -39,7 +39,7 @@ con.commit()
 @app.route('/player/<player_id>', methods = ['GET', 'POST', 'DELETE'])
 def player(player_id):
     if request.method == 'GET':
-        cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player WHERE id = " + player_id)
+        cur.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player WHERE id = ?", (player_id,))
         data = cur.fetchone()
         if data is None:
             retval = Response(response="Player not found with id " + player_id, status=204, mimetype="application/text")
@@ -60,15 +60,15 @@ def player(player_id):
             sql = '''UPDATE player SET GHIN = ?, firstName = ?, 
                 lastName = ?, handicap = ?, frontNine = ?, backNine = ?, 
                 teePreference = ? 
-                WHERE id = ''' + player_id
-            cur.execute(sql, data_tuple)
+                WHERE id = ?'''
+            cur.execute(sql, data_tuple + (player_id,))
         con.commit()
         retval = Response(response=player_id, status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
         return retval
 
     if request.method == 'DELETE':
-        cur.execute("DELETE FROM player WHERE id = " + player_id)
+        cur.execute("DELETE FROM player WHERE id = ?", (player_id,))
         con.commit()
         retval = Response(response="Success", status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
