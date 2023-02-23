@@ -161,7 +161,7 @@ def getAllTeams():
     else:
         for team in teamsData:
             teamMembers = []
-            cur.execute(f"SELECT player_id FROM team_member WHERE team_id = {team[0]}")
+            cur.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team[0],))
             teamMembersData = cur.fetchall()
             for teamMember in teamMembersData:
                 teamMembers.append(teamMember[0])
