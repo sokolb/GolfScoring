@@ -5,6 +5,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import Players from "../Pages/Players";
 import Teams from "../Pages/Teams";
+import Matches from "../Pages/Matches";
 
 export class App extends Component {
   render() {
@@ -21,6 +22,7 @@ export class App extends Component {
         {this.props.golf.loggedInUser === undefined && <Login />}
         {this.props.golf.currentPage === "Players" && <Players />}
         {this.props.golf.currentPage === "Teams" && <Teams />}
+        {this.props.golf.currentPage === "Matches" && <Matches />}
       </div>
     );
   }

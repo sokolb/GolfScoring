@@ -1,6 +1,7 @@
 import { shallow } from "enzyme";
 import Login from "../Login/Login";
 import NavBar from "../NavBar/Navbar";
+import Matches from "../Pages/Matches";
 import Players from "../Pages/Players";
 import Teams from "../Pages/Teams";
 import { App } from "./App";
@@ -52,6 +53,7 @@ describe("App tests", () => {
   test.each([
     ["Players", Players],
     ["Teams", Teams],
+    ["Matches", Matches]
   ])(
     "Displays %s component when store is set to that page",
     (pageName, pageObject) => {
