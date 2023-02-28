@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { removeTeam } from "../../Actions/GolfActions";
+import CommonMethods from "../../Commons/commonMethods";
 
 export class Team extends Component {
     getTeamMemberNames() {
-        return this.props.players
-            .filter((player) => this.props.team.teamMemberIds.includes(player.id))
-            .map((player) => player.firstName + " " + player.lastName)
-            .join(" | ");
+        return CommonMethods.getTeamMemberNames(this.props.team, this.props.players);
     }
 
     render() {

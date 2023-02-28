@@ -63,13 +63,15 @@ describe("Teams Tests", () => {
             },
             addTeam: jest.fn(),
             getTeams: jest.fn(),
+            getPlayers: jest.fn(),
         };
     });
 
-    it("Calls GetTeams when rendered", () => {
+    it("Calls GetTeams and GetPlayers when rendered", () => {
         const wrapper = shallow(<Teams {...props} />);
 
         expect(props.getTeams).toHaveBeenCalled();
+        expect(props.getPlayers).toHaveBeenCalled();
     });
 
     it("Renders correct number of teams", () => {

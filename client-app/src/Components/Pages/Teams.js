@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTeams, addTeam } from "../../Actions/GolfActions";
+import { getTeams, addTeam, getPlayers } from "../../Actions/GolfActions";
 import Team from "./Team";
 
 export class Teams extends Component {
@@ -15,7 +15,7 @@ export class Teams extends Component {
     }
 
     componentDidMount() {
-        // this.props.getTeams("Teams_Testing.json");
+        this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
@@ -113,6 +113,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const actionCreators = { getTeams, addTeam };
+const actionCreators = { getTeams, addTeam, getPlayers };
 
 export default connect(mapStateToProps, actionCreators)(Teams);
