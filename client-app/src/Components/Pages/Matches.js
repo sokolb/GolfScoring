@@ -25,6 +25,25 @@ export class Matches extends Component {
         this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
+    getTeamOptions() {
+        var teampOptions = [];
+        const emptyOption = <option key="teamEmpty" value=""></option>;
+
+        if (this.props.golf.teams !== undefined) {
+            teampOptions = this.props.golf.teams.map((t) => {
+                return (
+                    <option key={t.teamNumber} value={t.teamNumber}>
+                        {this.getTeamNumberAndNames(t)}
+                    </option>
+                );
+            });
+        }
+
+        var options = [emptyOption, ...teampOptions];
+
+        return options;
+    }
+
     getTeamNumberAndNames(team) {
         return team.teamNumber + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
     }
@@ -43,28 +62,10 @@ export class Matches extends Component {
                     <input name="date" type="date" value={this.state.selectedDate} onChange={this.handleDateChange} />
                     <br />
                     <label>Team 1:</label>
-                    <select name="team1">
-                        {this.props.golf.teams !== undefined &&
-                            this.props.golf.teams.map((t) => {
-                                return (
-                                    <option key={t.teamNumber} value={t.teamNumber}>
-                                        {this.getTeamNumberAndNames(t)}
-                                    </option>
-                                );
-                            })}
-                    </select>
+                    <select name="team1">{this.getTeamOptions()}</select>
                     <br />
                     <label>Team 2:</label>
-                    <select name="team2">
-                        {this.props.golf.teams !== undefined &&
-                            this.props.golf.teams.map((t) => {
-                                return (
-                                    <option key={t.teamNumber} value={t.teamNumber}>
-                                        {this.getTeamNumberAndNames(t)}
-                                    </option>
-                                );
-                            })}
-                    </select>
+                    <select name="team2">{this.getTeamOptions()}</select>
                     <br />
                     <label>Front/Back:</label>
                     <select name="frontBackNine">
