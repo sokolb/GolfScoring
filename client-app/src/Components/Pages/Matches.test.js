@@ -82,15 +82,21 @@ describe("Matches tests", () => {
 
         var team1 = wrapper.find({ name: "team1" });
         expect(team1.props().children.length).toEqual(3);
-        expect(team1.props().children[0].props.value).toEqual("");
+        expect(team1.props().children[0].props.children).toEqual("Select a team");
+        expect(team1.props().children[0].props.value).toEqual(-1);
         expect(team1.props().children[1].props.children).toEqual("1: Brian Sokoloski | Bob Smith");
+        expect(team1.props().children[1].props.value).toEqual(1);
         expect(team1.props().children[2].props.children).toEqual("2: Mary Johnson | Jane Doe");
+        expect(team1.props().children[2].props.value).toEqual(2);
 
         var team2 = wrapper.find({ name: "team2" });
         expect(team2.props().children.length).toEqual(3);
-        expect(team1.props().children[0].props.value).toEqual("");
+        expect(team2.props().children[0].props.children).toEqual("Select a team");
+        expect(team2.props().children[0].props.value).toEqual(-1);
         expect(team2.props().children[1].props.children).toEqual("1: Brian Sokoloski | Bob Smith");
+        expect(team2.props().children[1].props.value).toEqual(1);
         expect(team2.props().children[2].props.children).toEqual("2: Mary Johnson | Jane Doe");
+        expect(team2.props().children[2].props.value).toEqual(2);
     });
 
     it("renders date input field with today's date as the default value", () => {
