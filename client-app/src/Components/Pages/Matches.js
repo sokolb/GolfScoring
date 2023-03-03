@@ -4,6 +4,22 @@ import { getTeams, getPlayers } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
 
 export class Matches extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedDate: new Date().toISOString().split("T")[0],
+        };
+
+        this.handleDateChange = this.handleDateChange.bind(this);
+    }
+
+    handleDateChange(event) {
+        this.setState({
+            selectedDate: event.target.value,
+        });
+    }
+
     componentDidMount() {
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
@@ -24,7 +40,7 @@ export class Matches extends Component {
                     <h2>Create Match</h2>
                     <br />
                     <label>Date:</label>
-                    <input name="date" type="date" />
+                    <input name="date" type="date" value={this.state.selectedDate} onChange={this.handleDateChange} />
                     <br />
                     <label>Team 1:</label>
                     <select name="team1">

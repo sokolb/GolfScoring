@@ -90,4 +90,24 @@ describe("Matches tests", () => {
         expect(team2.props().children[0].props.children).toEqual("1: Brian Sokoloski | Bob Smith");
         expect(team2.props().children[1].props.children).toEqual("2: Mary Johnson | Jane Doe");
     });
+
+    it("renders date input field with today's date as the default value", () => {
+        const wrapper = shallow(<Matches {...props} />);
+        const today = new Date().toISOString().split("T")[0];
+
+        var date = wrapper.find({ name: "date" });
+
+        expect(date.prop("value")).toEqual(today);
+    });
+
+    it("date change updates date input box", () => {
+        const wrapper = shallow(<Matches {...props} />);
+        const newDate = new Date("2022-03-10").toISOString().split("T")[0];
+
+        var date = wrapper.find({ name: "date" });
+        date.simulate("change", { target: { value: newDate } });
+        date = wrapper.find({ name: "date" });
+
+        expect(date.prop("value")).toEqual(newDate);
+    });
 });
