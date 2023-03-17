@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { getTeams, getPlayers } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
@@ -11,29 +11,42 @@ export class Matches extends Component {
             selectedDate: new Date().toISOString().split("T")[0],
             selectedTeam1: -1,
             selectedTeam2: -1,
+            frontBackNine: "frontNine",
+            errorMessage: "",
         };
 
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleTeam1Change = this.handleTeam1Change.bind(this);
         this.handleTeam2Change = this.handleTeam2Change.bind(this);
+        this.handleFronBackNineChange = this.handleFronBackNineChange.bind(this);
     }
 
     handleDateChange(event) {
         this.setState({
             selectedDate: event.target.value,
         });
+        this.resetErrorMessage();
     }
 
     handleTeam1Change(event) {
         this.setState({
-            selectedTeam1: event.target.value,
+            selectedTeam1: parseInt(event.target.value, 10),
         });
+        this.resetErrorMessage();
     }
 
     handleTeam2Change(event) {
         this.setState({
-            selectedTeam2: event.target.value,
+            selectedTeam2: parseInt(event.target.value, 10),
         });
+        this.resetErrorMessage();
+    }
+
+    handleFronBackNineChange(event) {
+        this.setState({
+            frontBackNine: event.target.value,
+        });
+        this.resetErrorMessage();
     }
 
     componentDidMount() {
@@ -68,7 +81,29 @@ export class Matches extends Component {
         return team.teamNumber + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
     }
 
-    handleSubmitClick = () => {};
+    handleSubmitClick = () => {
+        if (this.state.selectedTeam1 === -1 || this.state.selectedTeam2 === -1) {
+            this.setState({
+                errorMessage: "Please select 2 teams",
+            });
+            return;
+        }
+
+        if (this.state.selectedTeam1 === this.state.selectedTeam2) {
+            this.setState({
+                errorMessage: "Please select 2 different teams",
+            });
+            return;
+        }
+
+        this.resetErrorMessage();
+    };
+
+    resetErrorMessage() {
+        this.setState({
+            errorMessage: "",
+        });
+    }
 
     render() {
         return (
@@ -92,12 +127,18 @@ export class Matches extends Component {
                     </select>
                     <br />
                     <label>Front/Back:</label>
-                    <select name="frontBackNine">
+                    <select name="frontBackNine" onChange={this.handleFronBackNineChange}>
                         <option value="frontNine">Front Nine</option>
                         <option value="backNine">Back Nine</option>
                     </select>
                     <br />
-                    <button name="createScoreCard">Create Score Card</button>
+                    <button name="createScoreCard" onClick={this.handleSubmitClick}>
+                        Create Score Card
+                    </button>
+                    <br />
+                    <label name="errorMessage" style={{ color: "red" }}>
+                        {this.state.errorMessage}
+                    </label>
                 </div>
             </div>
         );

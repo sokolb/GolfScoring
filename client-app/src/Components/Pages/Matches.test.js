@@ -118,4 +118,63 @@ describe("Matches tests", () => {
 
         expect(date.prop("value")).toEqual(newDate);
     });
+
+    describe("Matches tests", () => {
+        test.each([
+            [-1, 1, "Please select 2 teams"],
+            [1, -1, "Please select 2 teams"],
+            [1, 2, ""],
+        ])("Submit button validates selected players, team1 %s, team2 %s, errorMessage %s", (team1, team2, errorMessage) => {
+            const wrapper = shallow(<Matches {...props} />);
+
+            var team1SelectBox = wrapper.find({ name: "team1" });
+            team1SelectBox.simulate("change", { target: { value: team1 } });
+            var team2SelectBox = wrapper.find({ name: "team2" });
+            team2SelectBox.simulate("change", { target: { value: team2 } });
+
+            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+            createScoreCardButton.simulate("click");
+
+            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+
+            expect(errorMessageLabel.prop("children")).toEqual(errorMessage);
+        });
+
+        it("error message is shown when same team selected", () => {
+            const wrapper = shallow(<Matches {...props} />);
+
+            var team1SelectBox = wrapper.find({ name: "team1" });
+            team1SelectBox.simulate("change", { target: { value: 1 } });
+            var team2SelectBox = wrapper.find({ name: "team2" });
+            team2SelectBox.simulate("change", { target: { value: 1 } });
+
+            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+            createScoreCardButton.simulate("click");
+
+            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+
+            expect(errorMessageLabel.prop("children")).toEqual("Please select 2 different teams");
+        });
+
+        test.each([
+            ["date", new Date().toISOString().split("T")[0]],
+            ["team1", 1],
+            ["team2", 1],
+            ["frontBackNine", "frontNine"],
+        ])("Changing element: %s clears out errorMessage for changeValue: %s", (elementName, changeValue) => {
+            const wrapper = shallow(<Matches {...props} />);
+
+            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+            createScoreCardButton.simulate("click"); //This sets an errorMessage
+            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+
+            expect(errorMessageLabel.prop("children").length).not.toEqual(0);
+
+            var targetElement = wrapper.find({ name: elementName });
+            targetElement.simulate("change", { target: { value: changeValue } });
+
+            errorMessageLabel = wrapper.find({ name: "errorMessage" });
+            expect(errorMessageLabel.prop("children").length).toEqual(0);
+        });
+    });
 });
