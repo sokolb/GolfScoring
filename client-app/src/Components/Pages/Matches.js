@@ -113,9 +113,6 @@ export class Matches extends Component {
                 <div>
                     <h2>Create Match</h2>
                     <br />
-                    <label>Date:</label>
-                    <input name="date" type="date" value={this.state.selectedDate} onChange={this.handleDateChange} />
-                    <br />
                     <label>Team 1:</label>
                     <select name="team1" value={this.state.team1Selected} onChange={this.handleTeam1Change}>
                         {this.getTeamOptions()}
