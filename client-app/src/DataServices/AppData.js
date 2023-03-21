@@ -34,5 +34,9 @@ class AppData {
             team,
         });
     }
+
+    getCourses(fileName) {
+        return Axios.get(fileName);
+    }
 }
 export default new AppData();

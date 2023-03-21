@@ -1,7 +1,7 @@
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import { addPlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam } from "./GolfActions.js";
+import { addPlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses } from "./GolfActions.js";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
@@ -380,6 +380,219 @@ describe("Actions tests", () => {
             await removeTeam(id)(dispatch);
 
             expect(dispatch).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("Courses", () => {
+        it("getCourses dispatches SET_COURSES on successfull API call", async () => {
+            const dispatch = jest.fn();
+            var filename = "test.json";
+
+            var responseData = [
+                {
+                    holes: [
+                        {
+                            handicapIndex: 7,
+                            id: 1,
+                            number: 1,
+                        },
+                        {
+                            handicapIndex: 13,
+                            id: 2,
+                            number: 2,
+                        },
+                        {
+                            handicapIndex: 3,
+                            id: 3,
+                            number: 3,
+                        },
+                        {
+                            handicapIndex: 11,
+                            id: 4,
+                            number: 4,
+                        },
+                        {
+                            handicapIndex: 5,
+                            id: 5,
+                            number: 5,
+                        },
+                        {
+                            handicapIndex: 1,
+                            id: 6,
+                            number: 6,
+                        },
+                        {
+                            handicapIndex: 17,
+                            id: 7,
+                            number: 7,
+                        },
+                        {
+                            handicapIndex: 9,
+                            id: 8,
+                            number: 8,
+                        },
+                        {
+                            handicapIndex: 15,
+                            id: 9,
+                            number: 9,
+                        },
+                        {
+                            handicapIndex: 4,
+                            id: 10,
+                            number: 10,
+                        },
+                        {
+                            handicapIndex: 14,
+                            id: 11,
+                            number: 11,
+                        },
+                        {
+                            handicapIndex: 8,
+                            id: 12,
+                            number: 12,
+                        },
+                        {
+                            handicapIndex: 16,
+                            id: 13,
+                            number: 13,
+                        },
+                        {
+                            handicapIndex: 6,
+                            id: 14,
+                            number: 14,
+                        },
+                        {
+                            handicapIndex: 18,
+                            id: 15,
+                            number: 15,
+                        },
+                        {
+                            handicapIndex: 12,
+                            id: 16,
+                            number: 16,
+                        },
+                        {
+                            handicapIndex: 10,
+                            id: 17,
+                            number: 17,
+                        },
+                        {
+                            handicapIndex: 2,
+                            id: 18,
+                            number: 18,
+                        },
+                    ],
+                    id: 1,
+                    name: "RoseLake",
+                    tee: "White",
+                },
+                {
+                    holes: [
+                        {
+                            handicapIndex: 7,
+                            id: 19,
+                            number: 1,
+                        },
+                        {
+                            handicapIndex: 13,
+                            id: 20,
+                            number: 2,
+                        },
+                        {
+                            handicapIndex: 3,
+                            id: 21,
+                            number: 3,
+                        },
+                        {
+                            handicapIndex: 11,
+                            id: 22,
+                            number: 4,
+                        },
+                        {
+                            handicapIndex: 5,
+                            id: 23,
+                            number: 5,
+                        },
+                        {
+                            handicapIndex: 1,
+                            id: 24,
+                            number: 6,
+                        },
+                        {
+                            handicapIndex: 17,
+                            id: 25,
+                            number: 7,
+                        },
+                        {
+                            handicapIndex: 9,
+                            id: 26,
+                            number: 8,
+                        },
+                        {
+                            handicapIndex: 15,
+                            id: 27,
+                            number: 9,
+                        },
+                        {
+                            handicapIndex: 4,
+                            id: 28,
+                            number: 10,
+                        },
+                        {
+                            handicapIndex: 14,
+                            id: 29,
+                            number: 11,
+                        },
+                        {
+                            handicapIndex: 8,
+                            id: 30,
+                            number: 12,
+                        },
+                        {
+                            handicapIndex: 16,
+                            id: 31,
+                            number: 13,
+                        },
+                        {
+                            handicapIndex: 6,
+                            id: 32,
+                            number: 14,
+                        },
+                        {
+                            handicapIndex: 18,
+                            id: 33,
+                            number: 15,
+                        },
+                        {
+                            handicapIndex: 12,
+                            id: 34,
+                            number: 16,
+                        },
+                        {
+                            handicapIndex: 10,
+                            id: 35,
+                            number: 17,
+                        },
+                        {
+                            handicapIndex: 2,
+                            id: 36,
+                            number: 18,
+                        },
+                    ],
+                    id: 2,
+                    name: "RoseLake",
+                    tee: "Blue",
+                },
+            ];
+
+            AppData.getCourses.mockReturnValue(Promise.resolve({ data: responseData }));
+
+            await getCourses(filename)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                courses: responseData,
+                type: actionTypes.SET_COURSES,
+            });
         });
     });
 });

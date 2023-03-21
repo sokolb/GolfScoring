@@ -85,4 +85,13 @@ describe("AppData", () => {
             expect(Axios.post).toHaveBeenCalledWith(url, additionalData);
         });
     });
+
+    describe("Courses", () => {
+        test.each([["testCoursesFile.json"], ["http://someurl/getAllCourses"]])("getCourses is called with correct parameter of %s", async (target) => {
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.getCourses(target);
+
+            expect(Axios.get).toHaveBeenCalledWith(target);
+        });
+    });
 });

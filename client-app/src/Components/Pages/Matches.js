@@ -1,7 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTeams, getPlayers } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
+import Scorecard from "./Scorecard";
 
 export class Matches extends Component {
     constructor(props) {
@@ -136,6 +137,9 @@ export class Matches extends Component {
                     <label name="errorMessage" style={{ color: "red" }}>
                         {this.state.errorMessage}
                     </label>
+                </div>
+                <div>
+                    <Scorecard />
                 </div>
             </div>
         );

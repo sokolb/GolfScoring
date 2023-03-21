@@ -5,5 +5,6 @@ export default {
     currentPage: "home",
     players: [],
     teams: [],
+    courses: [],
     errorMessage: "",
 };

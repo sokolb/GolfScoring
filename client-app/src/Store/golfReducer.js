@@ -65,6 +65,11 @@ export default (state = initialState, action) => {
                 ...state,
                 teams,
             };
+        case actionTypes.SET_COURSES:
+            return {
+                ...state,
+                courses: action.courses,
+            };
         default:
             return state;
     }

@@ -38,6 +38,202 @@ var team2 = {
     teamMemberIds: ["333323f4-b36c-4288-a827-ed0b00bc6653", "4444559a-ae1b-44d1-9c8b-d7f3f8b9e44a"],
 };
 
+var course1 = {
+    holes: [
+        {
+            handicapIndex: 7,
+            id: 1,
+            number: 1,
+        },
+        {
+            handicapIndex: 13,
+            id: 2,
+            number: 2,
+        },
+        {
+            handicapIndex: 3,
+            id: 3,
+            number: 3,
+        },
+        {
+            handicapIndex: 11,
+            id: 4,
+            number: 4,
+        },
+        {
+            handicapIndex: 5,
+            id: 5,
+            number: 5,
+        },
+        {
+            handicapIndex: 1,
+            id: 6,
+            number: 6,
+        },
+        {
+            handicapIndex: 17,
+            id: 7,
+            number: 7,
+        },
+        {
+            handicapIndex: 9,
+            id: 8,
+            number: 8,
+        },
+        {
+            handicapIndex: 15,
+            id: 9,
+            number: 9,
+        },
+        {
+            handicapIndex: 4,
+            id: 10,
+            number: 10,
+        },
+        {
+            handicapIndex: 14,
+            id: 11,
+            number: 11,
+        },
+        {
+            handicapIndex: 8,
+            id: 12,
+            number: 12,
+        },
+        {
+            handicapIndex: 16,
+            id: 13,
+            number: 13,
+        },
+        {
+            handicapIndex: 6,
+            id: 14,
+            number: 14,
+        },
+        {
+            handicapIndex: 18,
+            id: 15,
+            number: 15,
+        },
+        {
+            handicapIndex: 12,
+            id: 16,
+            number: 16,
+        },
+        {
+            handicapIndex: 10,
+            id: 17,
+            number: 17,
+        },
+        {
+            handicapIndex: 2,
+            id: 18,
+            number: 18,
+        },
+    ],
+    id: 1,
+    name: "RoseLake",
+    tee: "White",
+};
+
+var course2 = {
+    holes: [
+        {
+            handicapIndex: 7,
+            id: 19,
+            number: 1,
+        },
+        {
+            handicapIndex: 13,
+            id: 20,
+            number: 2,
+        },
+        {
+            handicapIndex: 3,
+            id: 21,
+            number: 3,
+        },
+        {
+            handicapIndex: 11,
+            id: 22,
+            number: 4,
+        },
+        {
+            handicapIndex: 5,
+            id: 23,
+            number: 5,
+        },
+        {
+            handicapIndex: 1,
+            id: 24,
+            number: 6,
+        },
+        {
+            handicapIndex: 17,
+            id: 25,
+            number: 7,
+        },
+        {
+            handicapIndex: 9,
+            id: 26,
+            number: 8,
+        },
+        {
+            handicapIndex: 15,
+            id: 27,
+            number: 9,
+        },
+        {
+            handicapIndex: 4,
+            id: 28,
+            number: 10,
+        },
+        {
+            handicapIndex: 14,
+            id: 29,
+            number: 11,
+        },
+        {
+            handicapIndex: 8,
+            id: 30,
+            number: 12,
+        },
+        {
+            handicapIndex: 16,
+            id: 31,
+            number: 13,
+        },
+        {
+            handicapIndex: 6,
+            id: 32,
+            number: 14,
+        },
+        {
+            handicapIndex: 18,
+            id: 33,
+            number: 15,
+        },
+        {
+            handicapIndex: 12,
+            id: 34,
+            number: 16,
+        },
+        {
+            handicapIndex: 10,
+            id: 35,
+            number: 17,
+        },
+        {
+            handicapIndex: 2,
+            id: 36,
+            number: 18,
+        },
+    ],
+    id: 2,
+    name: "RoseLake",
+    tee: "Blue",
+};
+
 describe("Golf Reducer tests", () => {
     beforeEach(() => {
         initialState = JSON.parse(JSON.stringify(originalInitialState));
@@ -178,6 +374,15 @@ describe("Golf Reducer tests", () => {
                     teamMemberIds,
                 })
             ).toEqual(targetState);
+        });
+    });
+
+    describe("Courses", () => {
+        it("should match the state when SET_COURSES is dispatched", () => {
+            var courses = [course1, course2];
+            targetState.courses = courses;
+
+            expect(reducer(initialState, { type: actionTypes.SET_COURSES, courses: courses })).toEqual(targetState);
         });
     });
 

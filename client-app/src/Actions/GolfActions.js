@@ -39,11 +39,9 @@ export const addPlayer = (firstName, lastName, GHIN, teePreference, user_token) 
     var backNine = "-1";
     await GhinDataService.getUserHandicap(GHIN, user_token)
         .then(async (response) => {
-            console.log(response.data);
             var teeSetIndex = response.data.tee_sets.findIndex(function (item, i) {
                 return item.name === teePreference;
             });
-            console.log("teeSetIndex: " + teeSetIndex);
 
             var handicapIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
                 return item.tee_set_side === "All 18";
@@ -176,4 +174,21 @@ const addTeamCreator = (id, teamNumber, teamMemberIds) => ({
     teamNumber,
     teamMemberIds,
     type: actionTypes.ADD_TEAM,
+});
+
+export const getCourses = (fileName) => async (dispatch) => {
+    await AppData.getCourses(fileName)
+        .then((response) => {
+            dispatch(setCoursesCreator(response.data));
+        })
+        .catch((error) => {
+            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+                console.log(error.response);
+            }
+        });
+};
+
+const setCoursesCreator = (courses) => ({
+    courses,
+    type: actionTypes.SET_COURSES,
 });
