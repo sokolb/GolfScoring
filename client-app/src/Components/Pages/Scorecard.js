@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTeams, getPlayers, getCourses } from "../../Actions/GolfActions";
-import CommonMethods from "../../Commons/commonMethods";
+
+const today = new Date();
+const formattedTodayDate = today.toLocaleDateString("en-US");
 
 export class Scorecard extends Component {
     componentDidMount() {
@@ -14,10 +16,9 @@ export class Scorecard extends Component {
                 <h1>Scorecard</h1>
                 <br />
                 <div>
-                    <label>Date: </label>
-                    <label name="date">today's date</label>
+                    <label name="dateToday">Date: {formattedTodayDate}</label>
                     <br />
-                    <label name="frontBackNine">Front/Back Nine</label>
+                    <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
                     <br />
                     <table name="scoreCardTable"></table>
                 </div>

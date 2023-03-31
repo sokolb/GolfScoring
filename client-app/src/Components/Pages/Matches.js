@@ -139,7 +139,7 @@ export class Matches extends Component {
                     </label>
                 </div>
                 <div>
-                    <Scorecard />
+                    <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />
                 </div>
             </div>
         );

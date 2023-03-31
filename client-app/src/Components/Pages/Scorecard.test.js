@@ -52,6 +52,7 @@ describe("Scorecard tests", () => {
             getTeams: jest.fn(),
             getPlayers: jest.fn(),
             getCourses: jest.fn(),
+            frontBackNine: "frontNine",
         };
     });
 
@@ -71,5 +72,27 @@ describe("Scorecard tests", () => {
         const wrapper = shallow(<Scorecard {...props} />);
 
         expect(props.getCourses).toHaveBeenCalled();
+    });
+
+    test.each([
+        ["frontNine", "Front Nine"],
+        ["backNine", "Back Nine"],
+    ])("renders %s nine from props", (frontOrBack, textValue) => {
+        props.frontBackNine = frontOrBack;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var frontBackNine = wrapper.find({ name: "frontBackNine" });
+
+        expect(frontBackNine.text()).toEqual(textValue);
+    });
+
+    it("renders todays date", () => {
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        const today = new Date();
+        const formattedTodayDate = today.toLocaleDateString("en-US");
+        var date = wrapper.find({ name: "dateToday" });
+
+        expect(date.text()).toEqual("Date: " + formattedTodayDate);
     });
 });

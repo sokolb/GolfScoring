@@ -1,5 +1,6 @@
 import { shallow } from "enzyme";
 import { Matches } from "./Matches";
+import Scorecard from "./Scorecard";
 
 var props;
 
@@ -97,61 +98,76 @@ describe("Matches tests", () => {
         expect(team2.props().children[2].props.value).toEqual(2);
     });
 
-    describe("Matches tests", () => {
-        test.each([
-            [-1, 1, "Please select 2 teams"],
-            [1, -1, "Please select 2 teams"],
-            [1, 2, ""],
-        ])("Submit button validates selected players, team1 %s, team2 %s, errorMessage %s", (team1, team2, errorMessage) => {
-            const wrapper = shallow(<Matches {...props} />);
+    test.each([
+        [-1, 1, "Please select 2 teams"],
+        [1, -1, "Please select 2 teams"],
+        [1, 2, ""],
+    ])("Submit button validates selected players, team1 %s, team2 %s, errorMessage %s", (team1, team2, errorMessage) => {
+        const wrapper = shallow(<Matches {...props} />);
 
-            var team1SelectBox = wrapper.find({ name: "team1" });
-            team1SelectBox.simulate("change", { target: { value: team1 } });
-            var team2SelectBox = wrapper.find({ name: "team2" });
-            team2SelectBox.simulate("change", { target: { value: team2 } });
+        var team1SelectBox = wrapper.find({ name: "team1" });
+        team1SelectBox.simulate("change", { target: { value: team1 } });
+        var team2SelectBox = wrapper.find({ name: "team2" });
+        team2SelectBox.simulate("change", { target: { value: team2 } });
 
-            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
-            createScoreCardButton.simulate("click");
+        var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+        createScoreCardButton.simulate("click");
 
-            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+        var errorMessageLabel = wrapper.find({ name: "errorMessage" });
 
-            expect(errorMessageLabel.prop("children")).toEqual(errorMessage);
-        });
+        expect(errorMessageLabel.prop("children")).toEqual(errorMessage);
+    });
 
-        it("error message is shown when same team selected", () => {
-            const wrapper = shallow(<Matches {...props} />);
+    it("error message is shown when same team selected", () => {
+        const wrapper = shallow(<Matches {...props} />);
 
-            var team1SelectBox = wrapper.find({ name: "team1" });
-            team1SelectBox.simulate("change", { target: { value: 1 } });
-            var team2SelectBox = wrapper.find({ name: "team2" });
-            team2SelectBox.simulate("change", { target: { value: 1 } });
+        var team1SelectBox = wrapper.find({ name: "team1" });
+        team1SelectBox.simulate("change", { target: { value: 1 } });
+        var team2SelectBox = wrapper.find({ name: "team2" });
+        team2SelectBox.simulate("change", { target: { value: 1 } });
 
-            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
-            createScoreCardButton.simulate("click");
+        var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+        createScoreCardButton.simulate("click");
 
-            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+        var errorMessageLabel = wrapper.find({ name: "errorMessage" });
 
-            expect(errorMessageLabel.prop("children")).toEqual("Please select 2 different teams");
-        });
+        expect(errorMessageLabel.prop("children")).toEqual("Please select 2 different teams");
+    });
 
-        test.each([
-            ["team1", 1],
-            ["team2", 1],
-            ["frontBackNine", "frontNine"],
-        ])("Changing element: %s clears out errorMessage for changeValue: %s", (elementName, changeValue) => {
-            const wrapper = shallow(<Matches {...props} />);
+    test.each([
+        ["team1", 1],
+        ["team2", 1],
+        ["frontBackNine", "frontNine"],
+    ])("Changing element: %s clears out errorMessage for changeValue: %s", (elementName, changeValue) => {
+        const wrapper = shallow(<Matches {...props} />);
 
-            var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
-            createScoreCardButton.simulate("click"); //This sets an errorMessage
-            var errorMessageLabel = wrapper.find({ name: "errorMessage" });
+        var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+        createScoreCardButton.simulate("click"); //This sets an errorMessage
+        var errorMessageLabel = wrapper.find({ name: "errorMessage" });
 
-            expect(errorMessageLabel.prop("children").length).not.toEqual(0);
+        expect(errorMessageLabel.prop("children").length).not.toEqual(0);
 
-            var targetElement = wrapper.find({ name: elementName });
-            targetElement.simulate("change", { target: { value: changeValue } });
+        var targetElement = wrapper.find({ name: elementName });
+        targetElement.simulate("change", { target: { value: changeValue } });
 
-            errorMessageLabel = wrapper.find({ name: "errorMessage" });
-            expect(errorMessageLabel.prop("children").length).toEqual(0);
-        });
+        errorMessageLabel = wrapper.find({ name: "errorMessage" });
+        expect(errorMessageLabel.prop("children").length).toEqual(0);
+    });
+
+    it("Scorecard is rendered with correct props on button click", () => {
+        const wrapper = shallow(<Matches {...props} />);
+
+        var team1SelectBox = wrapper.find({ name: "team1" });
+        team1SelectBox.simulate("change", { target: { value: 1 } });
+        var team2SelectBox = wrapper.find({ name: "team2" });
+        team2SelectBox.simulate("change", { target: { value: 2 } });
+
+        var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+        createScoreCardButton.simulate("click");
+
+        var scorecard = wrapper.find(Scorecard);
+        expect(scorecard.props().frontBackNine).toEqual("frontNine");
+        expect(scorecard.props().team1Id).toEqual(1);
+        expect(scorecard.props().team2Id).toEqual(2);
     });
 });
