@@ -59,7 +59,7 @@ describe("Scorecard tests", () => {
     it("renders correct components", () => {
         const wrapper = shallow(<Scorecard {...props} />);
 
-        var date = wrapper.find({ name: "date" });
+        var date = wrapper.find({ name: "dateToday" });
         var frontBackNine = wrapper.find({ name: "frontBackNine" });
         var scoreCardTable = wrapper.find({ name: "scoreCardTable" });
 
