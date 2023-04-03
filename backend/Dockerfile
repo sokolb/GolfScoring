@@ -13,8 +13,8 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application code to the container
 COPY . .
 
-# Expose port 5000 to the host
-EXPOSE 5000
+# Expose port 8082 to the host
+EXPOSE 8082
 
 # Start the application
-CMD ["python", "app.py"]
+CMD ["python", "server.py"]
