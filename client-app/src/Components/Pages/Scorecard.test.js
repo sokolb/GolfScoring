@@ -24,7 +24,7 @@ describe("Scorecard tests", () => {
                         GHIN: 1234,
                         firstName: "Brian",
                         lastName: "Sokoloski",
-                        handicap: 11,
+                        handicap: 18,
                     },
                     {
                         id: 2,
@@ -53,6 +53,8 @@ describe("Scorecard tests", () => {
             getPlayers: jest.fn(),
             getCourses: jest.fn(),
             frontBackNine: "frontNine",
+            team1Id: 1,
+            team2Id: 2,
         };
     });
 
@@ -94,5 +96,19 @@ describe("Scorecard tests", () => {
         var date = wrapper.find({ name: "dateToday" });
 
         expect(date.text()).toEqual("Date: " + formattedTodayDate);
+    });
+
+    it("renders correct A and B players", () => {
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var team1A = wrapper.find({ name: "team1A" });
+        var team1B = wrapper.find({ name: "team1B" });
+        var team2A = wrapper.find({ name: "team2A" });
+        var team2B = wrapper.find({ name: "team2B" });
+
+        expect(team1A.text()).toEqual("Bob Smith");
+        expect(team1B.text()).toEqual("Brian Sokoloski");
+        expect(team2A.text()).toEqual("Mary Johnson");
+        expect(team2B.text()).toEqual("Jane Doe");
     });
 });
