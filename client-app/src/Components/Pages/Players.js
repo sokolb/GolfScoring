@@ -47,6 +47,11 @@ export class Players extends Component {
 
     handleSubmitClick = () => {
         this.props.addPlayer(this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.props.golf.userToken);
+        this.setState({
+            firstName: "",
+            lastName: "",
+            GHIN: "",
+        });
     };
 
     submitButtonDisabled() {
@@ -73,13 +78,13 @@ export class Players extends Component {
                     <h2>Add Player</h2>
                     <br />
                     <label>First Name:</label>
-                    <input name="firstName" onChange={this.handleFirstNameChange} />
+                    <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
                     <br />
                     <label>Last Name:</label>
-                    <input name="lastName" onChange={this.handleLastNameChange} />
+                    <input name="lastName" onChange={this.handleLastNameChange} value={this.state.lastName} />
                     <br />
                     <label>GHIN:</label>
-                    <input name="GHIN" onChange={this.handleGHINChange} />
+                    <input name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
                     <br />
                     <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange}>
                         {tees.map((tee) => {
