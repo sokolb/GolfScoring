@@ -27,6 +27,7 @@ describe("Scorecard tests", () => {
                         handicap: 18,
                         frontNine: 9,
                         backNine: 9,
+                        teePreference: "White",
                     },
                     {
                         id: 2,
@@ -36,6 +37,7 @@ describe("Scorecard tests", () => {
                         handicap: 1,
                         frontNine: 0,
                         backNine: 1,
+                        teePreference: "Blue",
                     },
                     {
                         id: 3,
@@ -45,6 +47,7 @@ describe("Scorecard tests", () => {
                         handicap: 12,
                         frontNine: 6,
                         backNine: 6,
+                        teePreference: "Red",
                     },
                     {
                         id: 4,
@@ -54,6 +57,7 @@ describe("Scorecard tests", () => {
                         handicap: 17,
                         frontNine: 8,
                         backNine: 9,
+                        teePreference: "Gold",
                     },
                 ],
             },
@@ -108,7 +112,7 @@ describe("Scorecard tests", () => {
         expect(date.text()).toEqual("Date: " + formattedTodayDate);
     });
 
-    it("renders correct A and B players", () => {
+    it("renders correct A and B players with tees", () => {
         const wrapper = shallow(<Scorecard {...props} />);
 
         var team1A = wrapper.find({ name: "team1A" });
@@ -116,10 +120,19 @@ describe("Scorecard tests", () => {
         var team2A = wrapper.find({ name: "team2A" });
         var team2B = wrapper.find({ name: "team2B" });
 
+        var team1ATees = wrapper.find({ name: "team1ATees" });
+        var team1BTees = wrapper.find({ name: "team1BTees" });
+        var team2ATees = wrapper.find({ name: "team2ATees" });
+        var team2BTees = wrapper.find({ name: "team2BTees" });
+
         expect(team1A.text()).toEqual("Bob Smith");
+        expect(team1ATees.text()).toEqual("Blue");
         expect(team1B.text()).toEqual("Brian Sokoloski");
+        expect(team1BTees.text()).toEqual("White");
         expect(team2A.text()).toEqual("Mary Johnson");
+        expect(team2ATees.text()).toEqual("Red");
         expect(team2B.text()).toEqual("Jane Doe");
+        expect(team2BTees.text()).toEqual("Gold");
     });
 
     test.each([

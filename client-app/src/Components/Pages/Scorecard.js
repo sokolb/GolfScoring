@@ -102,6 +102,7 @@ export class Scorecard extends Component {
                                 <th>
                                     <label name="frontBackNineHandicap">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"} Handicap</label>
                                 </th>
+                                <th>Tees</th>
                                 <th>Strokes Received</th>
                             </tr>
                         </thead>
@@ -114,6 +115,9 @@ export class Scorecard extends Component {
                                     <label name="team1AHandicap">{this.getPlayerHandicap(this.state.team1A)}</label>
                                 </td>
                                 <td>
+                                    <label name="team1ATees">{this.state.team1A.teePreference}</label>
+                                </td>
+                                <td>
                                     <label name="team1AStrokes">{this.state.team1AStrokes}</label>
                                 </td>
                             </tr>
@@ -123,6 +127,9 @@ export class Scorecard extends Component {
                                 </td>
                                 <td>
                                     <label name="team1BHandicap">{this.getPlayerHandicap(this.state.team1B)}</label>
+                                </td>
+                                <td>
+                                    <label name="team1BTees">{this.state.team1B.teePreference}</label>
                                 </td>
                                 <td name="team1BStrokes">{this.state.team1BStrokes}</td>
                             </tr>
@@ -134,6 +141,9 @@ export class Scorecard extends Component {
                                 <td>
                                     <label name="team2AHandicap">{this.getPlayerHandicap(this.state.team2A)}</label>
                                 </td>
+                                <td>
+                                    <label name="team2ATees">{this.state.team2A.teePreference}</label>
+                                </td>
                                 <td name="team2AStrokes">{this.state.team2AStrokes}</td>
                             </tr>
                             <tr>
@@ -142,6 +152,9 @@ export class Scorecard extends Component {
                                 </td>
                                 <td>
                                     <label name="team2BHandicap">{this.getPlayerHandicap(this.state.team2B)}</label>
+                                </td>
+                                <td>
+                                    <label name="team2BTees">{this.state.team2B.teePreference}</label>
                                 </td>
                                 <td name="team2BStrokes">{this.state.team2BStrokes}</td>
                             </tr>
