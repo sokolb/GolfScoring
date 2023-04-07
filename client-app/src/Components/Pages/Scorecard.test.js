@@ -25,13 +25,17 @@ describe("Scorecard tests", () => {
                         firstName: "Brian",
                         lastName: "Sokoloski",
                         handicap: 18,
+                        frontNine: 9,
+                        backNine: 9,
                     },
                     {
                         id: 2,
                         GHIN: 4321,
                         firstName: "Bob",
                         lastName: "Smith",
-                        handicap: 12,
+                        handicap: 1,
+                        frontNine: 0,
+                        backNine: 1,
                     },
                     {
                         id: 3,
@@ -39,6 +43,8 @@ describe("Scorecard tests", () => {
                         firstName: "Mary",
                         lastName: "Johnson",
                         handicap: 12,
+                        frontNine: 6,
+                        backNine: 6,
                     },
                     {
                         id: 4,
@@ -46,6 +52,8 @@ describe("Scorecard tests", () => {
                         firstName: "Jane",
                         lastName: "Doe",
                         handicap: 17,
+                        frontNine: 8,
+                        backNine: 9,
                     },
                 ],
             },
@@ -84,8 +92,10 @@ describe("Scorecard tests", () => {
         const wrapper = shallow(<Scorecard {...props} />);
 
         var frontBackNine = wrapper.find({ name: "frontBackNine" });
+        var frontBackNineHandicap = wrapper.find({ name: "frontBackNineHandicap" });
 
         expect(frontBackNine.text()).toEqual(textValue);
+        expect(frontBackNineHandicap.text()).toEqual(textValue + " Handicap");
     });
 
     it("renders todays date", () => {
@@ -110,5 +120,41 @@ describe("Scorecard tests", () => {
         expect(team1B.text()).toEqual("Brian Sokoloski");
         expect(team2A.text()).toEqual("Mary Johnson");
         expect(team2B.text()).toEqual("Jane Doe");
+    });
+
+    test.each([
+        ["frontNine", "0", "9", "6", "8"],
+        ["backNine", "1", "9", "6", "9"],
+    ])("renders correct handicap for players on %s", (frontOrBack, team1AHandicap, team1BHandicap, team2AHandicap, team2BHandicap) => {
+        props.frontBackNine = frontOrBack;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var team1AHandicapLabel = wrapper.find({ name: "team1AHandicap" });
+        var team1BHandicapLabel = wrapper.find({ name: "team1BHandicap" });
+        var team2AHandicapLabel = wrapper.find({ name: "team2AHandicap" });
+        var team2BHandicapLabel = wrapper.find({ name: "team2BHandicap" });
+
+        expect(team1AHandicapLabel.text()).toEqual(team1AHandicap);
+        expect(team1BHandicapLabel.text()).toEqual(team1BHandicap);
+        expect(team2AHandicapLabel.text()).toEqual(team2AHandicap);
+        expect(team2BHandicapLabel.text()).toEqual(team2BHandicap);
+    });
+
+    test.each([
+        ["frontNine", "0", "1", "6", "0"],
+        ["backNine", "0", "0", "5", "0"],
+    ])("renders correct strokes for players on %s", (frontOrBack, team1AStrokes, team1BStrokes, team2AStrokes, team2BStrokes) => {
+        props.frontBackNine = frontOrBack;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var team1AStrokesLabel = wrapper.find({ name: "team1AStrokes" });
+        var team1BStrokesLabel = wrapper.find({ name: "team1BStrokes" });
+        var team2AStrokesLabel = wrapper.find({ name: "team2AStrokes" });
+        var team2BStrokesLabel = wrapper.find({ name: "team2BStrokes" });
+
+        expect(team1AStrokesLabel.text()).toEqual(team1AStrokes);
+        expect(team1BStrokesLabel.text()).toEqual(team1BStrokes);
+        expect(team2AStrokesLabel.text()).toEqual(team2AStrokes);
+        expect(team2BStrokesLabel.text()).toEqual(team2BStrokes);
     });
 });
