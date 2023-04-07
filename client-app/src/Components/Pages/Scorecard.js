@@ -85,6 +85,11 @@ export class Scorecard extends Component {
         return this.props.frontBackNine === "frontNine" ? player.frontNine : player.backNine;
     }
 
+    getHoleNumberByPosition(position) {
+        var holeOffset = this.props.frontBackNine === "frontNine" ? 0 : 9;
+        return this.props.golf.courses[0].holes[holeOffset + position].number;
+    }
+
     render() {
         return (
             <div>
@@ -96,7 +101,37 @@ export class Scorecard extends Component {
                     <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
                     <br />
                     <table name="scoreCardTable" visible="true" border="1">
-                        <thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Hole #</td>
+                                <td name="hole1">{this.getHoleNumberByPosition(0)}</td>
+                                <td name="hole2">{this.getHoleNumberByPosition(1)}</td>
+                                <td name="hole3">{this.getHoleNumberByPosition(2)}</td>
+                                <td name="hole4">{this.getHoleNumberByPosition(3)}</td>
+                                <td name="hole5">{this.getHoleNumberByPosition(4)}</td>
+                                <td name="hole6">{this.getHoleNumberByPosition(5)}</td>
+                                <td name="hole7">{this.getHoleNumberByPosition(6)}</td>
+                                <td name="hole8">{this.getHoleNumberByPosition(7)}</td>
+                                <td name="hole9">{this.getHoleNumberByPosition(8)}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Hole Handicap Index</td>
+                                <td name="hole1Handicap"></td>
+                                <td name="hole2Handicap"></td>
+                                <td name="hole3Handicap"></td>
+                                <td name="hole4Handicap"></td>
+                                <td name="hole5Handicap"></td>
+                                <td name="hole6Handicap"></td>
+                                <td name="hole7Handicap"></td>
+                                <td name="hole8Handicap"></td>
+                                <td name="hole9Handicap"></td>
+                            </tr>
                             <tr>
                                 <th>Player</th>
                                 <th>
@@ -105,8 +140,6 @@ export class Scorecard extends Component {
                                 <th>Tees</th>
                                 <th>Strokes Received</th>
                             </tr>
-                        </thead>
-                        <tbody>
                             <tr>
                                 <td>
                                     <label name="team1A">{this.state.team1A.firstName + " " + this.state.team1A.lastName}</label>
