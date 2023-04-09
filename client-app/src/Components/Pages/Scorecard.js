@@ -22,6 +22,7 @@ export class Scorecard extends Component {
     }
 
     componentDidMount() {
+        console.log("about to call getAllCourses");
         this.props.getCourses("http://localhost:8082/getAllCourses");
 
         if (this.props.team1Id > -1 && this.props.team2Id > -1) {
@@ -86,6 +87,9 @@ export class Scorecard extends Component {
     }
 
     getHoleNumberByPosition(position) {
+        if (this.props.golf.courses.length === 0) {
+            return "";
+        }
         var holeOffset = this.props.frontBackNine === "frontNine" ? 0 : 9;
         return this.props.golf.courses[0].holes[holeOffset + position].number;
     }
