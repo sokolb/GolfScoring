@@ -587,4 +587,18 @@ describe("Scorecard tests", () => {
         expect(hole8.text()).toEqual(props.golf.courses[0].holes[holeOffset + 7].number.toString());
         expect(hole9.text()).toEqual(props.golf.courses[0].holes[holeOffset + 8].number.toString());
     });
+
+    it("renders HoleHandicap rows correctly", () => {
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var holesBlue = wrapper.find({ name: "holesHandicapBlue" });
+        var holesWhite = wrapper.find({ name: "holesHandicapWhite" });
+        var holesGold = wrapper.find({ name: "holesHandicapGold" });
+        var holesRed = wrapper.find({ name: "holesHandicapRed" });
+
+        expect(holesBlue.props().course).toEqual(props.golf.courses[1]);
+        expect(holesWhite.props().course).toEqual(props.golf.courses[0]);
+        expect(holesGold.props().course).toEqual(props.golf.courses[2]);
+        expect(holesRed.props().course).toEqual(props.golf.courses[3]);
+    });
 });

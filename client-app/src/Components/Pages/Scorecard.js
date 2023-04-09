@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTeams, getPlayers, getCourses } from "../../Actions/GolfActions";
+import HoleHandicaps from "./HoleHandicaps";
 
 const today = new Date();
 const formattedTodayDate = today.toLocaleDateString("en-US");
@@ -18,11 +19,11 @@ export class Scorecard extends Component {
             team1BStrokes: 0,
             team2AStrokes: 0,
             team2BStrokes: 0,
+            courses: [],
         };
     }
 
     componentDidMount() {
-        console.log("about to call getAllCourses");
         this.props.getCourses("http://localhost:8082/getAllCourses");
 
         if (this.props.team1Id > -1 && this.props.team2Id > -1) {
@@ -41,11 +42,32 @@ export class Scorecard extends Component {
     }
 
     findAndSetAandBPlayers() {
+        var team1A = this.findAPlayer(this.props.team1Id);
+        var team1B = this.findBPlayer(this.props.team1Id);
+        var team2A = this.findAPlayer(this.props.team2Id);
+        var team2B = this.findBPlayer(this.props.team2Id);
         this.setState({
-            team1A: this.findAPlayer(this.props.team1Id),
-            team1B: this.findBPlayer(this.props.team1Id),
-            team2A: this.findAPlayer(this.props.team2Id),
-            team2B: this.findBPlayer(this.props.team2Id),
+            team1A: team1A,
+            team1B: team1B,
+            team2A: team2A,
+            team2B: team2B,
+        });
+
+        var courses = [];
+        if (!courses.includes(team1A.teePreference)) {
+            courses.push(team1A.teePreference);
+        }
+        if (!courses.includes(team1B.teePreference)) {
+            courses.push(team1B.teePreference);
+        }
+        if (!courses.includes(team2A.teePreference)) {
+            courses.push(team2A.teePreference);
+        }
+        if (!courses.includes(team2B.teePreference)) {
+            courses.push(team2B.teePreference);
+        }
+        this.setState({
+            courses: courses,
         });
     }
 
@@ -94,6 +116,11 @@ export class Scorecard extends Component {
         return this.props.golf.courses[0].holes[holeOffset + position].number;
     }
 
+    getCourseByName(courseName) {
+        var course = this.props.golf.courses.find((course) => course.tee === courseName);
+        return course;
+    }
+
     render() {
         return (
             <div>
@@ -121,21 +148,9 @@ export class Scorecard extends Component {
                                 <td name="hole8">{this.getHoleNumberByPosition(7)}</td>
                                 <td name="hole9">{this.getHoleNumberByPosition(8)}</td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>Hole Handicap Index</td>
-                                <td name="hole1Handicap"></td>
-                                <td name="hole2Handicap"></td>
-                                <td name="hole3Handicap"></td>
-                                <td name="hole4Handicap"></td>
-                                <td name="hole5Handicap"></td>
-                                <td name="hole6Handicap"></td>
-                                <td name="hole7Handicap"></td>
-                                <td name="hole8Handicap"></td>
-                                <td name="hole9Handicap"></td>
-                            </tr>
+                            {this.state.courses.map((course) => {
+                                return <HoleHandicaps name={"holesHandicap" + course} key={"holesHandicap" + course} course={this.getCourseByName(course)} frontBackNine={this.props.frontBackNine} />;
+                            })}
                             <tr>
                                 <th>Player</th>
                                 <th>
