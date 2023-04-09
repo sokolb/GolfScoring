@@ -138,9 +138,7 @@ export class Matches extends Component {
                         {this.state.errorMessage}
                     </label>
                 </div>
-                <div>
-                    <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />
-                </div>
+                <div>{this.state.selectedTeam1 > -1 && this.state.selectedTeam2 > -1 && <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />} </div>
             </div>
         );
     }
