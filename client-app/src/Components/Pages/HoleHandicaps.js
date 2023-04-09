@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { getTeams, getPlayers, getCourses } from "../../Actions/GolfActions";
 
 export class HoleHandicaps extends Component {
     getHoleHandicapByPosition(position) {
+        if (this.props.frontBackNine === undefined || this.props.course === undefined) {
+            return "";
+        }
         var holeOffset = this.props.frontBackNine === "frontNine" ? 0 : 9;
         return this.props.course.holes[holeOffset + position].handicapIndex;
     }
@@ -37,12 +38,4 @@ export class HoleHandicaps extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        golf: state.golf,
-    };
-};
-
-const actionCreators = { getTeams, getPlayers, getCourses };
-
-export default connect(mapStateToProps, actionCreators)(HoleHandicaps);
+export default HoleHandicaps;

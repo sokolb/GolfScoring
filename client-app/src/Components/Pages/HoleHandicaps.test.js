@@ -1,5 +1,5 @@
 import { shallow } from "enzyme";
-import { HoleHandicaps } from "./HoleHandicaps";
+import HoleHandicaps from "./HoleHandicaps";
 
 var props;
 
