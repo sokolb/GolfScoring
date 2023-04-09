@@ -27,7 +27,7 @@ export class Scorecard extends Component {
         this.props.getCourses("http://localhost:8082/getAllCourses");
 
         if (this.props.team1Id > -1 && this.props.team2Id > -1) {
-            this.calculateScorecard();
+            this.setScorecardData();
         }
     }
 
@@ -37,11 +37,7 @@ export class Scorecard extends Component {
         }
     }
 
-    calculateScorecard() {
-        this.findAndSetAandBPlayers();
-    }
-
-    findAndSetAandBPlayers() {
+    setScorecardData() {
         var team1A = this.findAPlayer(this.props.team1Id);
         var team1B = this.findBPlayer(this.props.team1Id);
         var team2A = this.findAPlayer(this.props.team2Id);
