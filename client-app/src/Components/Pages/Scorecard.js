@@ -117,6 +117,23 @@ export class Scorecard extends Component {
         return course;
     }
 
+    playerGetsStroke(player, strokes, holeNumber) {
+        var course = this.getCourseByName(player.teePreference);
+        if (course === undefined) {
+            return "";
+        }
+        var holes = this.props.frontBackNine === "frontNine" ? [...course.holes].slice(0, 9) : [...course.holes].slice(9, 18);
+        holes.sort(function (a, b) {
+            return a.handicapIndex - b.handicapIndex;
+        });
+
+        var index = holes.findIndex(function (hole) {
+            return hole.number === holeNumber;
+        });
+
+        return index !== -1 && index < strokes ? "S" : "";
+    }
+
     render() {
         return (
             <div>
@@ -168,6 +185,15 @@ export class Scorecard extends Component {
                                 <td>
                                     <label name="team1AStrokes">{this.state.team1AStrokes}</label>
                                 </td>
+                                <td name="t1AS1">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(0))}</td>
+                                <td name="t1AS2">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(1))}</td>
+                                <td name="t1AS3">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(2))}</td>
+                                <td name="t1AS4">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(3))}</td>
+                                <td name="t1AS5">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(4))}</td>
+                                <td name="t1AS6">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(5))}</td>
+                                <td name="t1AS7">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(6))}</td>
+                                <td name="t1AS8">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(7))}</td>
+                                <td name="t1AS9">{this.playerGetsStroke(this.state.team1A, this.state.team1AStrokes, this.getHoleNumberByPosition(8))}</td>
                             </tr>
                             <tr>
                                 <td>
@@ -180,6 +206,15 @@ export class Scorecard extends Component {
                                     <label name="team1BTees">{this.state.team1B.teePreference}</label>
                                 </td>
                                 <td name="team1BStrokes">{this.state.team1BStrokes}</td>
+                                <td name="t1BS1">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(0))}</td>
+                                <td name="t1BS2">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(1))}</td>
+                                <td name="t1BS3">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(2))}</td>
+                                <td name="t1BS4">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(3))}</td>
+                                <td name="t1BS5">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(4))}</td>
+                                <td name="t1BS6">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(5))}</td>
+                                <td name="t1BS7">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(6))}</td>
+                                <td name="t1BS8">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(7))}</td>
+                                <td name="t1BS9">{this.playerGetsStroke(this.state.team1B, this.state.team1BStrokes, this.getHoleNumberByPosition(8))}</td>
                             </tr>
                             <tr></tr>
                             <tr>
@@ -193,6 +228,15 @@ export class Scorecard extends Component {
                                     <label name="team2ATees">{this.state.team2A.teePreference}</label>
                                 </td>
                                 <td name="team2AStrokes">{this.state.team2AStrokes}</td>
+                                <td name="t2AS1">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(0))}</td>
+                                <td name="t2AS2">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(1))}</td>
+                                <td name="t2AS3">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(2))}</td>
+                                <td name="t2AS4">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(3))}</td>
+                                <td name="t2AS5">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(4))}</td>
+                                <td name="t2AS6">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(5))}</td>
+                                <td name="t2AS7">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(6))}</td>
+                                <td name="t2AS8">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(7))}</td>
+                                <td name="t2AS9">{this.playerGetsStroke(this.state.team2A, this.state.team2AStrokes, this.getHoleNumberByPosition(8))}</td>
                             </tr>
                             <tr>
                                 <td>
@@ -205,6 +249,15 @@ export class Scorecard extends Component {
                                     <label name="team2BTees">{this.state.team2B.teePreference}</label>
                                 </td>
                                 <td name="team2BStrokes">{this.state.team2BStrokes}</td>
+                                <td name="t2BS1">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(0))}</td>
+                                <td name="t2BS2">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(1))}</td>
+                                <td name="t2BS3">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(2))}</td>
+                                <td name="t2BS4">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(3))}</td>
+                                <td name="t2BS5">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(4))}</td>
+                                <td name="t2BS6">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(5))}</td>
+                                <td name="t2BS7">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(6))}</td>
+                                <td name="t2BS8">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(7))}</td>
+                                <td name="t2BS9">{this.playerGetsStroke(this.state.team2B, this.state.team2BStrokes, this.getHoleNumberByPosition(8))}</td>
                             </tr>
                         </tbody>
                     </table>
