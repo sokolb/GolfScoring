@@ -473,6 +473,7 @@ describe("Scorecard tests", () => {
     });
 
     it("populate course called on load", () => {
+        // eslint-disable-next-line no-unused-vars
         const wrapper = shallow(<Scorecard {...props} />);
 
         expect(props.getCourses).toHaveBeenCalled();
