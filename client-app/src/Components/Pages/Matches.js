@@ -14,6 +14,7 @@ export class Matches extends Component {
             selectedTeam2: -1,
             frontBackNine: "frontNine",
             errorMessage: "",
+            showScorecard: false,
         };
 
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -26,28 +27,28 @@ export class Matches extends Component {
         this.setState({
             selectedDate: event.target.value,
         });
-        this.resetErrorMessage();
+        this.resetForm();
     }
 
     handleTeam1Change(event) {
         this.setState({
             selectedTeam1: parseInt(event.target.value, 10),
         });
-        this.resetErrorMessage();
+        this.resetForm();
     }
 
     handleTeam2Change(event) {
         this.setState({
             selectedTeam2: parseInt(event.target.value, 10),
         });
-        this.resetErrorMessage();
+        this.resetForm();
     }
 
     handleFronBackNineChange(event) {
         this.setState({
             frontBackNine: event.target.value,
         });
-        this.resetErrorMessage();
+        this.resetForm();
     }
 
     componentDidMount() {
@@ -83,6 +84,8 @@ export class Matches extends Component {
     }
 
     handleSubmitClick = () => {
+        this.resetForm();
+
         if (this.state.selectedTeam1 === -1 || this.state.selectedTeam2 === -1) {
             this.setState({
                 errorMessage: "Please select 2 teams",
@@ -97,11 +100,14 @@ export class Matches extends Component {
             return;
         }
 
-        this.resetErrorMessage();
+        this.setState({
+            showScorecard: true,
+        });
     };
 
-    resetErrorMessage() {
+    resetForm() {
         this.setState({
+            showScorecard: false,
             errorMessage: "",
         });
     }
@@ -138,7 +144,7 @@ export class Matches extends Component {
                         {this.state.errorMessage}
                     </label>
                 </div>
-                <div>{this.state.selectedTeam1 > -1 && this.state.selectedTeam2 > -1 && <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />} </div>
+                <div>{this.state.showScorecard && <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />} </div>
             </div>
         );
     }
