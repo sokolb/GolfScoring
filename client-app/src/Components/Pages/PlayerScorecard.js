@@ -1,0 +1,62 @@
+import React, { Component } from "react";
+
+export class PlayerScorecard extends Component {
+    getPlayerHandicap() {
+        return this.props.frontBackNine === "frontNine" ? this.props.player.frontNine : this.props.player.backNine;
+    }
+
+    playerGetsStroke(holeNumber) {
+        if (this.props.course === undefined) {
+            return "";
+        }
+        
+        var holes = this.props.frontBackNine === "frontNine" ? [...this.props.course.holes].slice(0, 9) : [...this.props.course.holes].slice(9, 18);
+        holes.sort(function (a, b) {
+            return a.handicapIndex - b.handicapIndex;
+        });
+
+        var index = holes.findIndex(function (hole) {
+            return hole.number === holeNumber;
+        });
+
+        return index !== -1 && index < this.props.strokes ? "S" : "";
+    }
+
+    getHoleNumberByPosition(position) {
+        if (this.props.course === undefined) {
+            return "";
+        }
+        var holeOffset = this.props.frontBackNine === "frontNine" ? 0 : 9;
+        return this.props.course.holes[holeOffset + position].number;
+    }
+
+    render() {
+        return (
+            <tr>
+                <td>
+                    <label name="name">{this.props.player.firstName + " " + this.props.player.lastName}</label>
+                </td>
+                <td>
+                    <label name="handicap">{this.getPlayerHandicap()}</label>
+                </td>
+                <td>
+                    <label name="tee">{this.props.player.teePreference}</label>
+                </td>
+                <td>
+                    <label name="strokes">{this.props.strokes}</label>
+                </td>
+                <td name="stroke1">{this.playerGetsStroke(this.getHoleNumberByPosition(0))}</td>
+                <td name="stroke2">{this.playerGetsStroke(this.getHoleNumberByPosition(1))}</td>
+                <td name="stroke3">{this.playerGetsStroke(this.getHoleNumberByPosition(2))}</td>
+                <td name="stroke4">{this.playerGetsStroke(this.getHoleNumberByPosition(3))}</td>
+                <td name="stroke5">{this.playerGetsStroke(this.getHoleNumberByPosition(4))}</td>
+                <td name="stroke6">{this.playerGetsStroke(this.getHoleNumberByPosition(5))}</td>
+                <td name="stroke7">{this.playerGetsStroke(this.getHoleNumberByPosition(6))}</td>
+                <td name="stroke8">{this.playerGetsStroke(this.getHoleNumberByPosition(7))}</td>
+                <td name="stroke9">{this.playerGetsStroke(this.getHoleNumberByPosition(8))}</td>
+            </tr>
+        );
+    }
+}
+
+export default PlayerScorecard;

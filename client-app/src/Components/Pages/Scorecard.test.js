@@ -503,65 +503,6 @@ describe("Scorecard tests", () => {
         expect(date.text()).toEqual("Date: " + formattedTodayDate);
     });
 
-    it("renders correct A and B players with tees", () => {
-        const wrapper = shallow(<Scorecard {...props} />);
-
-        var team1A = wrapper.find({ name: "team1A" });
-        var team1B = wrapper.find({ name: "team1B" });
-        var team2A = wrapper.find({ name: "team2A" });
-        var team2B = wrapper.find({ name: "team2B" });
-
-        var team1ATees = wrapper.find({ name: "team1ATees" });
-        var team1BTees = wrapper.find({ name: "team1BTees" });
-        var team2ATees = wrapper.find({ name: "team2ATees" });
-        var team2BTees = wrapper.find({ name: "team2BTees" });
-
-        expect(team1A.text()).toEqual("Bob Smith");
-        expect(team1ATees.text()).toEqual("Blue");
-        expect(team1B.text()).toEqual("Brian Sokoloski");
-        expect(team1BTees.text()).toEqual("White");
-        expect(team2A.text()).toEqual("Mary Johnson");
-        expect(team2ATees.text()).toEqual("Red");
-        expect(team2B.text()).toEqual("Jane Doe");
-        expect(team2BTees.text()).toEqual("Gold");
-    });
-
-    test.each([
-        ["frontNine", "0", "9", "6", "8"],
-        ["backNine", "1", "9", "6", "9"],
-    ])("renders correct handicap for players on %s", (frontOrBack, team1AHandicap, team1BHandicap, team2AHandicap, team2BHandicap) => {
-        props.frontBackNine = frontOrBack;
-        const wrapper = shallow(<Scorecard {...props} />);
-
-        var team1AHandicapLabel = wrapper.find({ name: "team1AHandicap" });
-        var team1BHandicapLabel = wrapper.find({ name: "team1BHandicap" });
-        var team2AHandicapLabel = wrapper.find({ name: "team2AHandicap" });
-        var team2BHandicapLabel = wrapper.find({ name: "team2BHandicap" });
-
-        expect(team1AHandicapLabel.text()).toEqual(team1AHandicap);
-        expect(team1BHandicapLabel.text()).toEqual(team1BHandicap);
-        expect(team2AHandicapLabel.text()).toEqual(team2AHandicap);
-        expect(team2BHandicapLabel.text()).toEqual(team2BHandicap);
-    });
-
-    test.each([
-        ["frontNine", "0", "1", "6", "0"],
-        ["backNine", "0", "0", "5", "0"],
-    ])("renders correct strokes for players on %s", (frontOrBack, team1AStrokes, team1BStrokes, team2AStrokes, team2BStrokes) => {
-        props.frontBackNine = frontOrBack;
-        const wrapper = shallow(<Scorecard {...props} />);
-
-        var team1AStrokesLabel = wrapper.find({ name: "team1AStrokes" });
-        var team1BStrokesLabel = wrapper.find({ name: "team1BStrokes" });
-        var team2AStrokesLabel = wrapper.find({ name: "team2AStrokes" });
-        var team2BStrokesLabel = wrapper.find({ name: "team2BStrokes" });
-
-        expect(team1AStrokesLabel.text()).toEqual(team1AStrokes);
-        expect(team1BStrokesLabel.text()).toEqual(team1BStrokes);
-        expect(team2AStrokesLabel.text()).toEqual(team2AStrokes);
-        expect(team2BStrokesLabel.text()).toEqual(team2BStrokes);
-    });
-
     test.each([["frontNine"], ["backNine"]])("renders correct holes for  %s", (frontOrBack) => {
         props.frontBackNine = frontOrBack;
         const wrapper = shallow(<Scorecard {...props} />);
@@ -603,165 +544,32 @@ describe("Scorecard tests", () => {
         expect(holesRed.props().course).toEqual(props.golf.courses[3]);
     });
 
-    it("renders strokes correctly for frontNine", () => {
-        props.frontBackNine = "frontNine";
+    it("renders playerStrokes row correctly", () => {
         const wrapper = shallow(<Scorecard {...props} />);
 
-        var t1AS1 = wrapper.find({ name: "t1AS1" });
-        var t1AS2 = wrapper.find({ name: "t1AS2" });
-        var t1AS3 = wrapper.find({ name: "t1AS3" });
-        var t1AS4 = wrapper.find({ name: "t1AS4" });
-        var t1AS5 = wrapper.find({ name: "t1AS5" });
-        var t1AS6 = wrapper.find({ name: "t1AS6" });
-        var t1AS7 = wrapper.find({ name: "t1AS7" });
-        var t1AS8 = wrapper.find({ name: "t1AS8" });
-        var t1AS9 = wrapper.find({ name: "t1AS9" });
-        expect(t1AS1.text()).toEqual("");
-        expect(t1AS2.text()).toEqual("");
-        expect(t1AS3.text()).toEqual("");
-        expect(t1AS4.text()).toEqual("");
-        expect(t1AS5.text()).toEqual("");
-        expect(t1AS6.text()).toEqual("");
-        expect(t1AS7.text()).toEqual("");
-        expect(t1AS8.text()).toEqual("");
-        expect(t1AS9.text()).toEqual("");
+        var player1A = wrapper.find({ name: "player1A" });
+        var player1B = wrapper.find({ name: "player1B" });
+        var player2A = wrapper.find({ name: "player2A" });
+        var player2B = wrapper.find({ name: "player2B" });
 
-        var t1BS1 = wrapper.find({ name: "t1BS1" });
-        var t1BS2 = wrapper.find({ name: "t1BS2" });
-        var t1BS3 = wrapper.find({ name: "t1BS3" });
-        var t1BS4 = wrapper.find({ name: "t1BS4" });
-        var t1BS5 = wrapper.find({ name: "t1BS5" });
-        var t1BS6 = wrapper.find({ name: "t1BS6" });
-        var t1BS7 = wrapper.find({ name: "t1BS7" });
-        var t1BS8 = wrapper.find({ name: "t1BS8" });
-        var t1BS9 = wrapper.find({ name: "t1BS9" });
-        expect(t1BS1.text()).toEqual("");
-        expect(t1BS2.text()).toEqual("");
-        expect(t1BS3.text()).toEqual("");
-        expect(t1BS4.text()).toEqual("");
-        expect(t1BS5.text()).toEqual("");
-        expect(t1BS6.text()).toEqual("S");
-        expect(t1BS7.text()).toEqual("");
-        expect(t1BS8.text()).toEqual("");
-        expect(t1BS9.text()).toEqual("");
+        expect(player1A.props().course).toEqual(props.golf.courses[1]);
+        expect(player1A.props().player).toEqual(props.golf.players[1]);
+        expect(player1A.props().frontBackNine).toEqual(props.frontBackNine);
+        expect(player1A.props().strokes).toEqual(0);
 
-        var t2AS1 = wrapper.find({ name: "t2AS1" });
-        var t2AS2 = wrapper.find({ name: "t2AS2" });
-        var t2AS3 = wrapper.find({ name: "t2AS3" });
-        var t2AS4 = wrapper.find({ name: "t2AS4" });
-        var t2AS5 = wrapper.find({ name: "t2AS5" });
-        var t2AS6 = wrapper.find({ name: "t2AS6" });
-        var t2AS7 = wrapper.find({ name: "t2AS7" });
-        var t2AS8 = wrapper.find({ name: "t2AS8" });
-        var t2AS9 = wrapper.find({ name: "t2AS9" });
-        expect(t2AS1.text()).toEqual("S");
-        expect(t2AS2.text()).toEqual("S");
-        expect(t2AS3.text()).toEqual("");
-        expect(t2AS4.text()).toEqual("S");
-        expect(t2AS5.text()).toEqual("");
-        expect(t2AS6.text()).toEqual("S");
-        expect(t2AS7.text()).toEqual("");
-        expect(t2AS8.text()).toEqual("S");
-        expect(t2AS9.text()).toEqual("S");
+        expect(player1B.props().course).toEqual(props.golf.courses[0]);
+        expect(player1B.props().player).toEqual(props.golf.players[0]);
+        expect(player1B.props().frontBackNine).toEqual(props.frontBackNine);
+        expect(player1B.props().strokes).toEqual(1);
 
-        var t2BS1 = wrapper.find({ name: "t2BS1" });
-        var t2BS2 = wrapper.find({ name: "t2BS2" });
-        var t2BS3 = wrapper.find({ name: "t2BS3" });
-        var t2BS4 = wrapper.find({ name: "t2BS4" });
-        var t2BS5 = wrapper.find({ name: "t2BS5" });
-        var t2BS6 = wrapper.find({ name: "t2BS6" });
-        var t2BS7 = wrapper.find({ name: "t2BS7" });
-        var t2BS8 = wrapper.find({ name: "t2BS8" });
-        var t2BS9 = wrapper.find({ name: "t2BS9" });
-        expect(t2BS1.text()).toEqual("");
-        expect(t2BS2.text()).toEqual("");
-        expect(t2BS3.text()).toEqual("");
-        expect(t2BS4.text()).toEqual("");
-        expect(t2BS5.text()).toEqual("");
-        expect(t2BS6.text()).toEqual("");
-        expect(t2BS7.text()).toEqual("");
-        expect(t2BS8.text()).toEqual("");
-        expect(t2BS9.text()).toEqual("");
-    });
+        expect(player2A.props().course).toEqual(props.golf.courses[3]);
+        expect(player2A.props().player).toEqual(props.golf.players[2]);
+        expect(player2A.props().frontBackNine).toEqual(props.frontBackNine);
+        expect(player2A.props().strokes).toEqual(6);
 
-    it("renders strokes correctly for backNine", () => {
-        props.frontBackNine = "backNine";
-        const wrapper = shallow(<Scorecard {...props} />);
-
-        var t1AS1 = wrapper.find({ name: "t1AS1" });
-        var t1AS2 = wrapper.find({ name: "t1AS2" });
-        var t1AS3 = wrapper.find({ name: "t1AS3" });
-        var t1AS4 = wrapper.find({ name: "t1AS4" });
-        var t1AS5 = wrapper.find({ name: "t1AS5" });
-        var t1AS6 = wrapper.find({ name: "t1AS6" });
-        var t1AS7 = wrapper.find({ name: "t1AS7" });
-        var t1AS8 = wrapper.find({ name: "t1AS8" });
-        var t1AS9 = wrapper.find({ name: "t1AS9" });
-        expect(t1AS1.text()).toEqual("");
-        expect(t1AS2.text()).toEqual("");
-        expect(t1AS3.text()).toEqual("");
-        expect(t1AS4.text()).toEqual("");
-        expect(t1AS5.text()).toEqual("");
-        expect(t1AS6.text()).toEqual("");
-        expect(t1AS7.text()).toEqual("");
-        expect(t1AS8.text()).toEqual("");
-        expect(t1AS9.text()).toEqual("");
-
-        var t1BS1 = wrapper.find({ name: "t1BS1" });
-        var t1BS2 = wrapper.find({ name: "t1BS2" });
-        var t1BS3 = wrapper.find({ name: "t1BS3" });
-        var t1BS4 = wrapper.find({ name: "t1BS4" });
-        var t1BS5 = wrapper.find({ name: "t1BS5" });
-        var t1BS6 = wrapper.find({ name: "t1BS6" });
-        var t1BS7 = wrapper.find({ name: "t1BS7" });
-        var t1BS8 = wrapper.find({ name: "t1BS8" });
-        var t1BS9 = wrapper.find({ name: "t1BS9" });
-        expect(t1BS1.text()).toEqual("");
-        expect(t1BS2.text()).toEqual("");
-        expect(t1BS3.text()).toEqual("");
-        expect(t1BS4.text()).toEqual("");
-        expect(t1BS5.text()).toEqual("");
-        expect(t1BS6.text()).toEqual("");
-        expect(t1BS7.text()).toEqual("");
-        expect(t1BS8.text()).toEqual("");
-        expect(t1BS9.text()).toEqual("");
-
-        var t2AS1 = wrapper.find({ name: "t2AS1" });
-        var t2AS2 = wrapper.find({ name: "t2AS2" });
-        var t2AS3 = wrapper.find({ name: "t2AS3" });
-        var t2AS4 = wrapper.find({ name: "t2AS4" });
-        var t2AS5 = wrapper.find({ name: "t2AS5" });
-        var t2AS6 = wrapper.find({ name: "t2AS6" });
-        var t2AS7 = wrapper.find({ name: "t2AS7" });
-        var t2AS8 = wrapper.find({ name: "t2AS8" });
-        var t2AS9 = wrapper.find({ name: "t2AS9" });
-        expect(t2AS1.text()).toEqual("S");
-        expect(t2AS2.text()).toEqual("S");
-        expect(t2AS3.text()).toEqual("S");
-        expect(t2AS4.text()).toEqual("");
-        expect(t2AS5.text()).toEqual("S");
-        expect(t2AS6.text()).toEqual("");
-        expect(t2AS7.text()).toEqual("");
-        expect(t2AS8.text()).toEqual("");
-        expect(t2AS9.text()).toEqual("S");
-
-        var t2BS1 = wrapper.find({ name: "t2BS1" });
-        var t2BS2 = wrapper.find({ name: "t2BS2" });
-        var t2BS3 = wrapper.find({ name: "t2BS3" });
-        var t2BS4 = wrapper.find({ name: "t2BS4" });
-        var t2BS5 = wrapper.find({ name: "t2BS5" });
-        var t2BS6 = wrapper.find({ name: "t2BS6" });
-        var t2BS7 = wrapper.find({ name: "t2BS7" });
-        var t2BS8 = wrapper.find({ name: "t2BS8" });
-        var t2BS9 = wrapper.find({ name: "t2BS9" });
-        expect(t2BS1.text()).toEqual("");
-        expect(t2BS2.text()).toEqual("");
-        expect(t2BS3.text()).toEqual("");
-        expect(t2BS4.text()).toEqual("");
-        expect(t2BS5.text()).toEqual("");
-        expect(t2BS6.text()).toEqual("");
-        expect(t2BS7.text()).toEqual("");
-        expect(t2BS8.text()).toEqual("");
-        expect(t2BS9.text()).toEqual("");
+        expect(player2B.props().course).toEqual(props.golf.courses[2]);
+        expect(player2B.props().player).toEqual(props.golf.players[3]);
+        expect(player2B.props().frontBackNine).toEqual(props.frontBackNine);
+        expect(player2B.props().strokes).toEqual(0);
     });
 });
