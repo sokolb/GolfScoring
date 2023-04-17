@@ -5,11 +5,11 @@ export class PlayerScorecard extends Component {
         return this.props.frontBackNine === "frontNine" ? this.props.player.frontNine : this.props.player.backNine;
     }
 
-    playerGetsStroke(holeNumber) {
+    playerGetsStroke(holeNumber, strokes) {
         if (this.props.course === undefined) {
             return "";
         }
-        
+
         var holes = this.props.frontBackNine === "frontNine" ? [...this.props.course.holes].slice(0, 9) : [...this.props.course.holes].slice(9, 18);
         holes.sort(function (a, b) {
             return a.handicapIndex - b.handicapIndex;
@@ -19,7 +19,13 @@ export class PlayerScorecard extends Component {
             return hole.number === holeNumber;
         });
 
-        return index !== -1 && index < this.props.strokes ? "S" : "";
+        var retval = index !== -1 && index < strokes ? "S" : "";
+
+        if (strokes > 9) {
+            retval += this.playerGetsStroke(holeNumber, strokes - 9);
+        }
+
+        return retval;
     }
 
     getHoleNumberByPosition(position) {
@@ -45,15 +51,15 @@ export class PlayerScorecard extends Component {
                 <td>
                     <label name="strokes">{this.props.strokes}</label>
                 </td>
-                <td name="stroke1">{this.playerGetsStroke(this.getHoleNumberByPosition(0))}</td>
-                <td name="stroke2">{this.playerGetsStroke(this.getHoleNumberByPosition(1))}</td>
-                <td name="stroke3">{this.playerGetsStroke(this.getHoleNumberByPosition(2))}</td>
-                <td name="stroke4">{this.playerGetsStroke(this.getHoleNumberByPosition(3))}</td>
-                <td name="stroke5">{this.playerGetsStroke(this.getHoleNumberByPosition(4))}</td>
-                <td name="stroke6">{this.playerGetsStroke(this.getHoleNumberByPosition(5))}</td>
-                <td name="stroke7">{this.playerGetsStroke(this.getHoleNumberByPosition(6))}</td>
-                <td name="stroke8">{this.playerGetsStroke(this.getHoleNumberByPosition(7))}</td>
-                <td name="stroke9">{this.playerGetsStroke(this.getHoleNumberByPosition(8))}</td>
+                <td name="stroke1">{this.playerGetsStroke(this.getHoleNumberByPosition(0), this.props.strokes)}</td>
+                <td name="stroke2">{this.playerGetsStroke(this.getHoleNumberByPosition(1), this.props.strokes)}</td>
+                <td name="stroke3">{this.playerGetsStroke(this.getHoleNumberByPosition(2), this.props.strokes)}</td>
+                <td name="stroke4">{this.playerGetsStroke(this.getHoleNumberByPosition(3), this.props.strokes)}</td>
+                <td name="stroke5">{this.playerGetsStroke(this.getHoleNumberByPosition(4), this.props.strokes)}</td>
+                <td name="stroke6">{this.playerGetsStroke(this.getHoleNumberByPosition(5), this.props.strokes)}</td>
+                <td name="stroke7">{this.playerGetsStroke(this.getHoleNumberByPosition(6), this.props.strokes)}</td>
+                <td name="stroke8">{this.playerGetsStroke(this.getHoleNumberByPosition(7), this.props.strokes)}</td>
+                <td name="stroke9">{this.playerGetsStroke(this.getHoleNumberByPosition(8), this.props.strokes)}</td>
             </tr>
         );
     }

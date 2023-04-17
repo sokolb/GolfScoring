@@ -566,6 +566,8 @@ describe("Scorecard tests", () => {
         [player2, courseBlue, 1, "", "", "", "", "", "S", "", "", ""],
         [player3, courseGold, 7, "S", "S", "", "S", "S", "S", "", "S", "S"],
         [player4, courseRed, 2, "S", "", "", "", "", "S", "", "", ""],
+        [player4, courseRed, 12, "SS", "S", "S", "SS", "S", "SS", "S", "S", "S"],
+        [player3, courseGold, 24, "SSS", "SSS", "SS", "SSS", "SS", "SSS", "SS", "SSS", "SSS"],
     ])("renders strokes correctly for frontNine for %s", (player, course, strokes, h1, h2, h3, h4, h5, h6, h7, h8, h9) => {
         props.frontBackNine = "frontNine";
         props.course = course;
@@ -598,6 +600,8 @@ describe("Scorecard tests", () => {
         [player2, courseBlue, 3, "S", "", "", "", "S", "", "", "", "S"],
         [player3, courseGold, 3, "", "S", "S", "", "S", "", "", "", ""],
         [player4, courseRed, 9, "S", "S", "S", "S", "S", "S", "S", "S", "S"],
+        [player1, courseWhite, 12, "SS", "S", "S", "S", "SS", "S", "S", "S", "SS"],
+        [player2, courseBlue, 20, "SSS", "SS", "SS", "SS", "SS", "SS", "SS", "SS", "SSS"],
     ])("renders strokes correctly for backNine for %s", (player, course, strokes, h1, h2, h3, h4, h5, h6, h7, h8, h9) => {
         props.frontBackNine = "backNine";
         props.course = course;
