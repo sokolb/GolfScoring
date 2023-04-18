@@ -118,12 +118,33 @@ export class Scorecard extends Component {
         return course;
     }
 
+    handlePrint = () => {
+        const content = document.getElementByName("scorecard").innerHTML;
+        const printWindow = window.open("", "Print");
+        printWindow.document.write(content);
+        printWindow.document.close();
+
+        // Add landscape orientation rule to printWindow document
+        const style = printWindow.document.createElement("style");
+        style.textContent = "@page { size: landscape; }";
+        printWindow.document.head.appendChild(style);
+
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+
     render() {
         return (
             <div>
-                <h1>Scorecard</h1>
                 <br />
-                <div>
+                <br />
+                <br />
+                <button name="print" onClick={this.handlePrint} style={{ width: "200px", fontSize: "16px", fontWeight: "bold" }}>
+                    Print Scorecard
+                </button>
+                <br />
+                <div name="scorecard">
                     <label name="dateToday">Date: {formattedTodayDate}</label>
                     <br />
                     <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
