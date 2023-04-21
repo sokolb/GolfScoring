@@ -54,6 +54,12 @@ export class Players extends Component {
         });
     };
 
+    handleRefreshAllHandicapsClick = () => {
+        this.props.golf.players.forEach(player => {
+            this.props.addOrUpdatePlayer(player.id, player.firstName, player.lastName, player.GHIN, player.teePreference, this.props.golf.userToken);
+        });
+    };
+
     submitButtonDisabled() {
         return this.state.firstName === "" || this.state.lastName === "" || this.state.GHIN === "" || this.playerExistsWithGHIN(this.state.GHIN);
     }
@@ -76,6 +82,8 @@ export class Players extends Component {
                 <br />
                 <div>
                     <h2>Add Player</h2>
+                    <br />
+                    <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>Refresh All Handicaps</button>
                     <br />
                     <label>First Name:</label>
                     <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />

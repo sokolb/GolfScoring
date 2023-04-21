@@ -10,12 +10,14 @@ describe("Players Tests", () => {
             golf: {
                 userToken: "abc123",
                 players: [
-                    { GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2 },
+                    { id: 3, GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2, teePreference: "White" },
                     {
+                        id: 17,
                         GHIN: "243332",
                         firstName: "Sally",
                         lastName: "Jones",
                         handicap: 3,
+                        teePreference: "Red",
                     },
                 ],
             },
@@ -31,14 +33,16 @@ describe("Players Tests", () => {
         var lastName = wrapper.find({ name: "lastName" });
         var GHIN = wrapper.find({ name: "GHIN" });
         var submit = wrapper.find({ name: "submit" });
+        var refreshAllHandicaps = wrapper.find({ name: "refreshAllHandicaps" });
 
         expect(firstName.length).toEqual(1);
         expect(lastName.length).toEqual(1);
         expect(GHIN.length).toEqual(1);
         expect(submit.length).toEqual(1);
+        expect(refreshAllHandicaps.length).toEqual(1);
     });
 
-    it("Submit click calls addPlayer", () => {
+    it("Submit click calls addOrUpdatePlayer", () => {
         var firstName = "brian";
         var lastName = "Johnson";
         var GHIN = "110492312";
@@ -62,6 +66,19 @@ describe("Players Tests", () => {
         submitButton.simulate("click");
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, props.golf.userToken);
+    });
+
+    it("refreshAllHandicaps click calls addOrUpdatePlayer per player", () => {
+        var player1 = props.golf.players[0];
+        var player2 = props.golf.players[1];
+        const wrapper = shallow(<Players {...props} />);
+
+        const refreshAllHandicaps = wrapper.find({ name: "refreshAllHandicaps" });
+        refreshAllHandicaps.simulate("click");
+
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(2);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player1.id, player1.firstName, player1.lastName, player1.GHIN, player1.teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, props.golf.userToken);
     });
 
     function createEvent(value) {
