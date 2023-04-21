@@ -33,7 +33,7 @@ const setCurrentPageCreator = (pageName) => ({
     type: actionTypes.SET_CURRENT_PAGE,
 });
 
-export const addPlayer = (firstName, lastName, GHIN, teePreference, user_token) => async (dispatch) => {
+export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, user_token) => async (dispatch) => {
     var handicap = "-1";
     var frontNine = "-1";
     var backNine = "-1";
@@ -64,6 +64,7 @@ export const addPlayer = (firstName, lastName, GHIN, teePreference, user_token) 
 
     if (handicap !== "-1" && frontNine !== "-1" && backNine !== "-1") {
         var player = {
+            id,
             GHIN,
             firstName,
             lastName,
@@ -72,9 +73,15 @@ export const addPlayer = (firstName, lastName, GHIN, teePreference, user_token) 
             frontNine,
             backNine,
         };
-        await AppData.addPlayer(player).then((response) => {
-            dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
-        });
+        if (id === -1) {
+            await AppData.addPlayer(player).then((response) => {
+                dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
+            });
+        } else {
+            await AppData.updatePlayer(player).then((response) => {
+                dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
+            });
+        }
     }
 };
 
@@ -88,6 +95,18 @@ const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference
     frontNine,
     backNine,
     type: actionTypes.ADD_PLAYER,
+});
+
+const updatePlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine) => ({
+    id,
+    firstName,
+    lastName,
+    GHIN,
+    handicap,
+    teePreference,
+    frontNine,
+    backNine,
+    type: actionTypes.UPDATE_PLAYER,
 });
 
 export const removePlayer = (id) => async (dispatch) => {

@@ -18,6 +18,15 @@ class AppData {
         });
     }
 
+    updatePlayer(player) {
+        return Axios.post("http://localhost:8082/player/" + player.id, {
+            headers: {
+                "content-type": "application/json",
+            },
+            player,
+        });
+    }
+
     getTeams(fileName) {
         return Axios.get(fileName);
     }

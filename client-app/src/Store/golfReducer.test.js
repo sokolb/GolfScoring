@@ -300,6 +300,77 @@ describe("Golf Reducer tests", () => {
             ).toEqual("");
         });
 
+        it("should match the state when UPDATE_PLAYER is dispatched", () => {
+            var id = "4";
+            player1.id = id;
+
+            //Add Player
+            reducer(initialState, {
+                type: actionTypes.ADD_PLAYER,
+                id: id,
+                firstName: player1.firstName,
+                lastName: player1.lastName,
+                GHIN: player1.GHIN,
+                handicap: player1.handicap,
+                teePreference: player1.teePreference,
+                frontNine: player1.frontNine,
+                backNine: player1.backNine,
+            });
+
+            //Update Player
+            var newHandicap = 22;
+            player1.handicap = newHandicap;
+            targetState.players[0] = player1;
+            expect(
+                reducer(initialState, {
+                    type: actionTypes.UPDATE_PLAYER,
+                    id: id,
+                    firstName: player1.firstName,
+                    lastName: player1.lastName,
+                    GHIN: player1.GHIN,
+                    handicap: newHandicap,
+                    teePreference: player1.teePreference,
+                    frontNine: player1.frontNine,
+                    backNine: player1.backNine,
+                })
+            ).toEqual(targetState);
+        });
+
+        it("UPDATE_PLAYER should clear out any previous error message", () => {
+            initialState.errorMessage = "Previous error message";
+
+            var playerId = 2;
+            targetState.players[0] = player1;
+            targetState.errorMessage = "";
+
+            //Add Player
+            reducer(initialState, {
+                type: actionTypes.ADD_PLAYER,
+                id: playerId,
+                firstName: player1.firstName,
+                lastName: player1.lastName,
+                GHIN: player1.GHIN,
+                handicap: player1.handicap,
+                teePreference: player1.teePreference,
+                frontNine: player1.frontNine,
+                backNine: player1.backNine,
+            });
+
+            expect(
+                reducer(initialState, {
+                    type: actionTypes.UPDATE_PLAYER,
+                    id: playerId,
+                    firstName: player1.firstName,
+                    lastName: player1.lastName,
+                    GHIN: player1.GHIN,
+                    handicap: player1.handicap,
+                    teePreference: player1.teePreference,
+                    frontNine: player1.frontNine,
+                    backNine: player1.backNine,
+                }).errorMessage
+            ).toEqual("");
+        });
+
         it("should match state when REMOVE_PLAYER is dispatched", () => {
             player1.id = "4444";
             player2.id = "1234";

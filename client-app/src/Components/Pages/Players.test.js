@@ -19,7 +19,7 @@ describe("Players Tests", () => {
                     },
                 ],
             },
-            addPlayer: jest.fn(),
+            addOrUpdatePlayer: jest.fn(),
             getPlayers: jest.fn(),
         };
     });
@@ -61,7 +61,7 @@ describe("Players Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addPlayer).toHaveBeenCalledWith(firstName, lastName, GHIN, teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, props.golf.userToken);
     });
 
     function createEvent(value) {

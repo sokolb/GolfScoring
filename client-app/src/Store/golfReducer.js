@@ -32,7 +32,27 @@ export default (state = initialState, action) => {
                 players: players,
                 errorMessage: "",
             };
+        case actionTypes.UPDATE_PLAYER:
+            var existingPlayers = state.players;
 
+            const existingPlayer = {
+                id: action.id,
+                firstName: action.firstName,
+                lastName: action.lastName,
+                GHIN: action.GHIN,
+                handicap: action.handicap,
+                teePreference: action.teePreference,
+                frontNine: action.frontNine,
+                backNine: action.backNine,
+            };
+            const index = existingPlayers.findIndex((p) => p.id === existingPlayer.id);
+            existingPlayers[index] = existingPlayer;
+
+            return {
+                ...state,
+                players: existingPlayers,
+                errorMessage: "",
+            };
         case actionTypes.REMOVE_PLAYER:
             var newPlayersArray = state.players.filter((player) => player.id !== action.id);
             return { ...state, players: newPlayersArray };

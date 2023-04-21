@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addPlayer, getPlayers } from "../../Actions/GolfActions";
+import { addOrUpdatePlayer, getPlayers } from "../../Actions/GolfActions";
 import Player from "./Player";
 
 const tees = ["Blue", "White", "Gold", "Red"];
@@ -46,7 +46,7 @@ export class Players extends Component {
     }
 
     handleSubmitClick = () => {
-        this.props.addPlayer(this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.props.golf.userToken);
+        this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.props.golf.userToken);
         this.setState({
             firstName: "",
             lastName: "",
@@ -142,7 +142,7 @@ const mapStateToProps = (state) => {
 };
 
 const actionCreators = {
-    addPlayer,
+    addOrUpdatePlayer,
     getPlayers,
 };
 

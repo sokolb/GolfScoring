@@ -46,6 +46,28 @@ describe("AppData", () => {
 
             expect(Axios.post).toHaveBeenCalledWith(url, additionalData);
         });
+
+        it("updatePlayer calls API with correct values", async () => {
+            var player = {
+                id: 4,
+                GHIN: 1111,
+                firstName: "Brian",
+                lastName: "Sokoloski",
+                handicap: 11.2,
+            };
+            var url = "http://localhost:8082/player/" + player.id;
+            var additionalData = {
+                headers: {
+                    "content-type": "application/json",
+                },
+                player,
+            };
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.updatePlayer(player);
+
+            expect(Axios.post).toHaveBeenCalledWith(url, additionalData);
+        });
     });
 
     describe("Teams", () => {
