@@ -149,22 +149,41 @@ export class Scorecard extends Component {
                     <br />
                     <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
                     <br />
-                    <table name="scoreCardTable" visible="true" border="1">
+                    <table name="scoreCardTable" visible="true" border="1" style={{ width: "100%", textAlign: "center" }}>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>Hole #</td>
-                                <td name="hole1">{this.getHoleNumberByPosition(0)}</td>
-                                <td name="hole2">{this.getHoleNumberByPosition(1)}</td>
-                                <td name="hole3">{this.getHoleNumberByPosition(2)}</td>
-                                <td name="hole4">{this.getHoleNumberByPosition(3)}</td>
-                                <td name="hole5">{this.getHoleNumberByPosition(4)}</td>
-                                <td name="hole6">{this.getHoleNumberByPosition(5)}</td>
-                                <td name="hole7">{this.getHoleNumberByPosition(6)}</td>
-                                <td name="hole8">{this.getHoleNumberByPosition(7)}</td>
-                                <td name="hole9">{this.getHoleNumberByPosition(8)}</td>
+                            <tr style={{ fontWeight: "bold" }}>
+                                <td style={{ width: "18%" }}></td>
+                                <td style={{ width: "7%" }}></td>
+                                <td colspan="2" style={{ width: "10%" }}>
+                                    Hole #
+                                </td>
+                                <td name="hole1" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(0)}
+                                </td>
+                                <td name="hole2" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(1)}
+                                </td>
+                                <td name="hole3" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(2)}
+                                </td>
+                                <td name="hole4" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(3)}
+                                </td>
+                                <td name="hole5" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(4)}
+                                </td>
+                                <td name="hole6" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(5)}
+                                </td>
+                                <td name="hole7" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(6)}
+                                </td>
+                                <td name="hole8" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(7)}
+                                </td>
+                                <td name="hole9" style={{ width: "7%" }}>
+                                    {this.getHoleNumberByPosition(8)}
+                                </td>
                             </tr>
                             {this.state.courses.map((course) => {
                                 return <HoleHandicaps name={"holesHandicap" + course} key={"holesHandicap" + course} course={this.getCourseByName(course)} frontBackNine={this.props.frontBackNine} />;

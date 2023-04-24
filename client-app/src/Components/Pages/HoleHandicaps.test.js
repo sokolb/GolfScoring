@@ -112,7 +112,7 @@ describe("Scorecard tests", () => {
 
         var tee = wrapper.find({ name: "tee" });
 
-        expect(tee.text()).toEqual("Hole Handicap Index " + props.course.tee);
+        expect(tee.text()).toEqual(props.course.tee + " tee index");
     });
 
     it("renders correct components for front nine", () => {

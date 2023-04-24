@@ -22,8 +22,9 @@ export class HoleHandicaps extends Component {
             <tr>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td name="tee">{"Hole Handicap Index " + this.getTeeName()}</td>
+                <td name="tee" colspan="2">
+                    {this.getTeeName() + " tee index"}
+                </td>
                 <td name="hole1Handicap">{this.getHoleHandicapByPosition(0)}</td>
                 <td name="hole2Handicap">{this.getHoleHandicapByPosition(1)}</td>
                 <td name="hole3Handicap">{this.getHoleHandicapByPosition(2)}</td>

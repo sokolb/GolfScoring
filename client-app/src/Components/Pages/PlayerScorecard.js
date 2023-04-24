@@ -38,7 +38,7 @@ export class PlayerScorecard extends Component {
 
     render() {
         return (
-            <tr>
+            <tr style={{ height: "40px" }}>
                 <td>
                     <label name="name">{this.props.player.firstName + " " + this.props.player.lastName}</label>
                 </td>
@@ -51,15 +51,33 @@ export class PlayerScorecard extends Component {
                 <td>
                     <label name="strokes">{this.props.strokes}</label>
                 </td>
-                <td name="stroke1">{this.playerGetsStroke(this.getHoleNumberByPosition(0), this.props.strokes)}</td>
-                <td name="stroke2">{this.playerGetsStroke(this.getHoleNumberByPosition(1), this.props.strokes)}</td>
-                <td name="stroke3">{this.playerGetsStroke(this.getHoleNumberByPosition(2), this.props.strokes)}</td>
-                <td name="stroke4">{this.playerGetsStroke(this.getHoleNumberByPosition(3), this.props.strokes)}</td>
-                <td name="stroke5">{this.playerGetsStroke(this.getHoleNumberByPosition(4), this.props.strokes)}</td>
-                <td name="stroke6">{this.playerGetsStroke(this.getHoleNumberByPosition(5), this.props.strokes)}</td>
-                <td name="stroke7">{this.playerGetsStroke(this.getHoleNumberByPosition(6), this.props.strokes)}</td>
-                <td name="stroke8">{this.playerGetsStroke(this.getHoleNumberByPosition(7), this.props.strokes)}</td>
-                <td name="stroke9">{this.playerGetsStroke(this.getHoleNumberByPosition(8), this.props.strokes)}</td>
+                <td name="stroke1" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(0), this.props.strokes)}
+                </td>
+                <td name="stroke2" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(1), this.props.strokes)}
+                </td>
+                <td name="stroke3" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(2), this.props.strokes)}
+                </td>
+                <td name="stroke4" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(3), this.props.strokes)}
+                </td>
+                <td name="stroke5" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(4), this.props.strokes)}
+                </td>
+                <td name="stroke6" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(5), this.props.strokes)}
+                </td>
+                <td name="stroke7" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(6), this.props.strokes)}
+                </td>
+                <td name="stroke8" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(7), this.props.strokes)}
+                </td>
+                <td name="stroke9" style={{ textAlign: "right", verticalAlign: "top" }}>
+                    {this.playerGetsStroke(this.getHoleNumberByPosition(8), this.props.strokes)}
+                </td>
             </tr>
         );
     }
