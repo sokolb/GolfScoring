@@ -467,7 +467,7 @@ describe("Scorecard tests", () => {
         var frontBackNine = wrapper.find({ name: "frontBackNine" });
         var scoreCardTable = wrapper.find({ name: "scoreCardTable" });
         var print = wrapper.find({ name: "print" });
-        var scorecard = wrapper.find({ name: "scorecard" });
+        var scorecard = wrapper.find({ id: "scorecard" });
 
         expect(date.length).toEqual(1);
         expect(frontBackNine.length).toEqual(1);

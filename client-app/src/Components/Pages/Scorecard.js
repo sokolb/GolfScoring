@@ -119,7 +119,7 @@ export class Scorecard extends Component {
     }
 
     handlePrint = () => {
-        const content = document.getElementByName("scorecard").innerHTML;
+        const content = document.getElementById("scorecard").innerHTML;
         const printWindow = window.open("", "Print");
         printWindow.document.write(content);
         printWindow.document.close();
@@ -144,7 +144,7 @@ export class Scorecard extends Component {
                     Print Scorecard
                 </button>
                 <br />
-                <div name="scorecard">
+                <div id="scorecard">
                     <label name="dateToday">Date: {formattedTodayDate}</label>
                     <br />
                     <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
