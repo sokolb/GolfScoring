@@ -115,8 +115,6 @@ export class Matches extends Component {
     render() {
         return (
             <div>
-                <h1>Matches</h1>
-                <br />
                 <div>
                     <h2>Create Match</h2>
                     <br />

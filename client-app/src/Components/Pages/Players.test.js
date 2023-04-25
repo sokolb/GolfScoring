@@ -8,6 +8,7 @@ describe("Players Tests", () => {
     beforeEach(() => {
         props = {
             golf: {
+                loggedInUser: "bob.jones@abc.com",
                 userToken: "abc123",
                 players: [
                     { id: 3, GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2, teePreference: "White" },
@@ -40,6 +41,15 @@ describe("Players Tests", () => {
         expect(GHIN.length).toEqual(1);
         expect(submit.length).toEqual(1);
         expect(refreshAllHandicaps.length).toEqual(1);
+    });
+
+    it("Hides add new player boxes when user is not logged in", () => {
+        props.golf.loggedInUser = undefined;
+        const wrapper = shallow(<Players {...props} />);
+
+        var addPlayer = wrapper.find({ name: "addPlayer" });
+
+        expect(addPlayer.length).toEqual(0);
     });
 
     it("Submit click calls addOrUpdatePlayer", () => {
@@ -101,6 +111,20 @@ describe("Players Tests", () => {
         expect(allPlayers.length).toEqual(2);
     });
 
+    test.each([
+        ["bobby.t@yahoo.com", true],
+        [undefined, false],
+    ])("Renders players with correct delete button on user logged in: %s", (user, showDeleteButton) => {
+        props.golf.loggedInUser = user;
+        const wrapper = shallow(<Players {...props} />);
+
+        const allPlayers = wrapper.find(Player);
+
+        allPlayers.forEach((player) => {
+            expect(player.prop("showDeleteButton")).toEqual(showDeleteButton);
+        });
+    });
+
     it("Renders error message when it is present", () => {
         props.golf.errorMessage = "Player not found";
         const wrapper = shallow(<Players {...props} />);
@@ -154,7 +178,7 @@ describe("Players Tests", () => {
         expect(submitButton.props().disabled).toEqual(true);
     });
 
-    describe("Player Selection Box", () => {
+    describe("Tee Preference Selection Box", () => {
         it("Renders select box", () => {
             const wrapper = shallow(<Players {...props} />);
 

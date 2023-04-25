@@ -9,60 +9,42 @@ import { App } from "./App";
 var props;
 
 describe("App tests", () => {
-  beforeEach(() => {
-    props = {
-      golf: {
-        loggedInUser: "brian.sokoloski@gmail.com",
-        currentPage: "home",
-      },
-    };
-  });
+    beforeEach(() => {
+        props = {
+            golf: {
+                loggedInUser: "brian.sokoloski@gmail.com",
+                currentPage: "Matches",
+            },
+        };
+    });
 
-  it("renders correct components when no one is logged in", () => {
-    props.golf.loggedInUser = undefined;
-    const wrapper = shallow(<App {...props} />);
+    it("renders correct components", () => {
+        const wrapper = shallow(<App {...props} />);
 
-    const loginComponent = wrapper.find(Login);
-    expect(loginComponent.length).toEqual(1);
-    const navBar = wrapper.find(NavBar);
-    expect(navBar.length).toEqual(0);
-    const loggedinUser = wrapper.find({ name: "loggedInUser" });
-    expect(loggedinUser.length).toEqual(0);
-  });
+        const navBar = wrapper.find(NavBar);
+        expect(navBar.length).toEqual(1);
+        const loggedinUser = wrapper.find({ name: "loggedInUser" });
+        expect(loggedinUser.length).toEqual(1);
+    });
 
-  it("renders correct components when user is logged in", () => {
-    const wrapper = shallow(<App {...props} />);
+    it("display logged in user", () => {
+        const wrapper = shallow(<App {...props} />);
 
-    const loginComponent = wrapper.find(Login);
-    expect(loginComponent.length).toEqual(0);
-    const navBar = wrapper.find(NavBar);
-    expect(navBar.length).toEqual(1);
-    const loggedinUser = wrapper.find({ name: "loggedInUser" });
-    expect(loggedinUser.length).toEqual(1);
-  });
+        const loggedinUser = wrapper.find({ name: "loggedInUser" });
+        expect(loggedinUser.text()).toEqual("Logged in user: " + props.golf.loggedInUser);
+    });
 
-  it("display logged in user", () => {
-    const wrapper = shallow(<App {...props} />);
+    test.each([
+        ["Players", Players],
+        ["Teams", Teams],
+        ["Matches", Matches],
+        ["Login", Login],
+    ])("Displays %s component when store is set to that page", (pageName, pageObject) => {
+        props.golf.currentPage = pageName;
+        const wrapper = shallow(<App {...props} />);
 
-    const loggedinUser = wrapper.find({ name: "loggedInUser" });
-    expect(loggedinUser.text()).toEqual(
-      "Logged in user: " + props.golf.loggedInUser
-    );
-  });
+        const playersComponent = wrapper.find(pageObject);
 
-  test.each([
-    ["Players", Players],
-    ["Teams", Teams],
-    ["Matches", Matches]
-  ])(
-    "Displays %s component when store is set to that page",
-    (pageName, pageObject) => {
-      props.golf.currentPage = pageName;
-      const wrapper = shallow(<App {...props} />);
-
-      const playersComponent = wrapper.find(pageObject);
-
-      expect(playersComponent.length).toEqual(1);
-    }
-  );
+        expect(playersComponent.length).toEqual(1);
+    });
 });

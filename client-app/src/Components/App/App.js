@@ -8,30 +8,28 @@ import Teams from "../Pages/Teams";
 import Matches from "../Pages/Matches";
 
 export class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        {this.props.golf.loggedInUser !== undefined && (
-          <div>
-            <label name="loggedInUser">
-              {"Logged in user: " + this.props.golf.loggedInUser}
-            </label>
-            <NavBar />
-          </div>
-        )}
-        {this.props.golf.loggedInUser === undefined && <Login />}
-        {this.props.golf.currentPage === "Players" && <Players />}
-        {this.props.golf.currentPage === "Teams" && <Teams />}
-        {this.props.golf.currentPage === "Matches" && <Matches />}
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                {this.props.golf.loggedInUser !== undefined && (
+                    <div>
+                        <label name="loggedInUser">{"Logged in user: " + this.props.golf.loggedInUser}</label>
+                    </div>
+                )}
+                <NavBar />
+                {this.props.golf.currentPage === "Login" && <Login />}
+                {this.props.golf.currentPage === "Players" && <Players />}
+                {this.props.golf.currentPage === "Teams" && <Teams />}
+                {this.props.golf.currentPage === "Matches" && <Matches />}
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    golf: state.golf,
-  };
+    return {
+        golf: state.golf,
+    };
 };
 
 const actionCreators = {};

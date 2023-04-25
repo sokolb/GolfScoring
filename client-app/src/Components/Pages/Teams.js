@@ -58,27 +58,27 @@ export class Teams extends Component {
     render() {
         return (
             <div>
-                <h1>Teams</h1>
-                <br />
-                <div>
-                    <h2>Add Team</h2>
-                    <br />
-                    <select name="playersSelectionBox" multiple={true} onChange={this.handleSelectionBoxChange}>
-                        {this.props.golf.players
-                            .filter((player) => !this.props.golf.teams.some((team) => team.teamMemberIds.includes(player.id)))
-                            .map((player) => {
-                                return (
-                                    <option key={player.id} value={player.id}>
-                                        {player.firstName + " " + player.lastName}
-                                    </option>
-                                );
-                            })}
-                    </select>
-                    <br />
-                    <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
-                        Submit
-                    </button>
-                </div>
+                {this.props.golf.loggedInUser !== undefined && (
+                    <div name="addTeam">
+                        <h2>Add Team</h2>
+                        <br />
+                        <select name="playersSelectionBox" multiple={true} onChange={this.handleSelectionBoxChange}>
+                            {this.props.golf.players
+                                .filter((player) => !this.props.golf.teams.some((team) => team.teamMemberIds.includes(player.id)))
+                                .map((player) => {
+                                    return (
+                                        <option key={player.id} value={player.id}>
+                                            {player.firstName + " " + player.lastName}
+                                        </option>
+                                    );
+                                })}
+                        </select>
+                        <br />
+                        <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
+                            Submit
+                        </button>
+                    </div>
+                )}
                 <div style={{ textAlign: "center" }}>
                     <h2>Team List</h2>
                     <table
@@ -97,7 +97,7 @@ export class Teams extends Component {
                             </tr>
                             {this.props.golf.teams !== undefined &&
                                 this.props.golf.teams.map((t) => {
-                                    return <Team key={t.teamNumber} team={t} />;
+                                    return <Team key={t.teamNumber} team={t} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
                                 })}
                         </tbody>
                     </table>

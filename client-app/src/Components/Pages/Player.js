@@ -25,9 +25,11 @@ export class Player extends Component {
                     <label name="backNine">{this.props.player.backNine}</label>
                 </td>
                 <td>
-                    <button name="delete" class="section-to-not-print" onClick={() => this.props.removePlayer(this.props.player.id)}>
-                        Delete
-                    </button>
+                    {this.props.showDeleteButton && (
+                        <button name="delete" class="section-to-not-print" onClick={() => this.props.removePlayer(this.props.player.id)}>
+                            Delete
+                        </button>
+                    )}
                 </td>
             </tr>
         );

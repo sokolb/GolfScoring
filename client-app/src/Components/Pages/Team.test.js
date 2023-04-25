@@ -25,7 +25,6 @@ describe("Team Tests", () => {
                     lastName: "Smith",
                     handicap: 12,
                 },
-                ,
                 {
                     id: "0c6b559a-ae1b-44d1-2222-d7f3f8b1111",
                     GHIN: 5567,
@@ -34,6 +33,7 @@ describe("Team Tests", () => {
                     handicap: 12,
                 },
             ],
+            showDeleteButton: true,
             removeTeam: jest.fn(),
         };
     });
@@ -73,5 +73,14 @@ describe("Team Tests", () => {
         deleteButton.simulate("click");
 
         expect(props.removeTeam).toHaveBeenCalledWith(props.team.id);
+    });
+
+    it("Hides delete button when showDeleteButton is false", () => {
+        props.showDeleteButton = false;
+        const wrapper = shallow(<Team {...props} />);
+
+        var btnDelete = wrapper.find({ name: "delete" });
+
+        expect(btnDelete.length).toEqual(0);
     });
 });

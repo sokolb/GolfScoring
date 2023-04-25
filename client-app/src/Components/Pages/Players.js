@@ -55,7 +55,7 @@ export class Players extends Component {
     };
 
     handleRefreshAllHandicapsClick = () => {
-        this.props.golf.players.forEach(player => {
+        this.props.golf.players.forEach((player) => {
             this.props.addOrUpdatePlayer(player.id, player.firstName, player.lastName, player.GHIN, player.teePreference, this.props.golf.userToken);
         });
     };
@@ -78,36 +78,39 @@ export class Players extends Component {
     render() {
         return (
             <div>
-                <h1>Players</h1>
-                <br />
-                <div>
-                    <h2>Add Player</h2>
-                    <br />
-                    <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>Refresh All Handicaps</button>
-                    <br />
-                    <label>First Name:</label>
-                    <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
-                    <br />
-                    <label>Last Name:</label>
-                    <input name="lastName" onChange={this.handleLastNameChange} value={this.state.lastName} />
-                    <br />
-                    <label>GHIN:</label>
-                    <input name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
-                    <br />
-                    <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange}>
-                        {tees.map((tee) => {
-                            return (
-                                <option key={tee} value={tee}>
-                                    {tee}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <br />
-                    <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
-                        Submit
-                    </button>
-                </div>
+                {this.props.golf.loggedInUser !== undefined && (
+                    <div name="addPlayer">
+                        <h2>Add Player</h2>
+                        <br />
+                        <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
+                            Refresh All Handicaps
+                        </button>
+                        <br />
+                        <label>First Name:</label>
+                        <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
+                        <br />
+                        <label>Last Name:</label>
+                        <input name="lastName" onChange={this.handleLastNameChange} value={this.state.lastName} />
+                        <br />
+                        <label>GHIN:</label>
+                        <input name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
+                        <br />
+                        <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange}>
+                            {tees.map((tee) => {
+                                return (
+                                    <option key={tee} value={tee}>
+                                        {tee}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                        <br />
+                        <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
+                            Submit
+                        </button>
+                    </div>
+                )}
+
                 {this.props.golf.errorMessage !== undefined && this.props.golf.errorMessage.length > 0 && (
                     <label name="lblError" style={{ color: "red" }}>
                         {this.props.golf.errorMessage}
@@ -134,7 +137,7 @@ export class Players extends Component {
                         </tr>
                         {this.props.golf.players !== undefined &&
                             this.props.golf.players.map((p) => {
-                                return <Player key={p.GHIN} player={p} />;
+                                return <Player key={p.GHIN} player={p} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
                             })}
                     </table>
                 </div>

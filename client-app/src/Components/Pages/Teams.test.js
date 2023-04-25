@@ -60,6 +60,7 @@ describe("Teams Tests", () => {
                         handicap: 12,
                     },
                 ],
+                loggedInUser: "stacy@hotmail.com",
             },
             addTeam: jest.fn(),
             getTeams: jest.fn(),
@@ -180,6 +181,29 @@ describe("Teams Tests", () => {
         submitButton.simulate("click");
 
         expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds);
+    });
+
+    it("Hides add new player boxes when user is not logged in", () => {
+        props.golf.loggedInUser = undefined;
+        const wrapper = shallow(<Teams {...props} />);
+
+        var addTeam = wrapper.find({ name: "addTeam" });
+
+        expect(addTeam.length).toEqual(0);
+    });
+
+    test.each([
+        ["bobby.t@yahoo.com", true],
+        [undefined, false],
+    ])("Renders teams with correct delete button on user logged in: %s", (user, showDeleteButton) => {
+        props.golf.loggedInUser = user;
+        const wrapper = shallow(<Teams {...props} />);
+
+        const allTeams = wrapper.find(Team);
+
+        allTeams.forEach((team) => {
+            expect(team.prop("showDeleteButton")).toEqual(showDeleteButton);
+        });
     });
 
     function createEvent(value) {

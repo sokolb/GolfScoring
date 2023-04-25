@@ -16,6 +16,7 @@ describe("Player Tests", () => {
                 frontNine: 5,
                 backNine: 6,
             },
+            showDeleteButton: true,
             removePlayer: jest.fn(),
         };
     });
@@ -65,5 +66,14 @@ describe("Player Tests", () => {
         deleteButton.simulate("click");
 
         expect(props.removePlayer).toHaveBeenCalledWith(props.player.id);
+    });
+
+    it("Hides delete button when showDeleteButton is false", () => {
+        props.showDeleteButton = false;
+        const wrapper = shallow(<Player {...props} />);
+
+        var btnDelete = wrapper.find({ name: "delete" });
+
+        expect(btnDelete.length).toEqual(0);
     });
 });

@@ -18,9 +18,11 @@ export class Team extends Component {
                     <label name="teamMembers">{this.getTeamMemberNames()}</label>
                 </td>
                 <td>
-                    <button name="delete" onClick={() => this.props.removeTeam(this.props.team.id)}>
-                        Delete
-                    </button>
+                    {this.props.showDeleteButton && (
+                        <button name="delete" onClick={() => this.props.removeTeam(this.props.team.id)}>
+                            Delete
+                        </button>
+                    )}
                 </td>
             </tr>
         );

@@ -2,7 +2,7 @@
 export default {
     loggedInUser: undefined,
     userToken: undefined,
-    currentPage: "home",
+    currentPage: "Matches",
     players: [],
     teams: [],
     courses: [],
