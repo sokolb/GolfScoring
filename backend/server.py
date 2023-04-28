@@ -13,7 +13,7 @@ from sqlalchemy.pool import QueuePool
 app = Flask(__name__)
 CORS(app)
 
-engine = create_engine('sqlite:///league.db?check_same_thread=False', poolclass=QueuePool, pool_size=20, max_overflow=100, pool_timeout=30)
+engine = create_engine('sqlite:///data/league.db?check_same_thread=False', poolclass=QueuePool, pool_size=20, max_overflow=100, pool_timeout=30)
 con = engine.connect()
 
 # con.execute("drop table player")
