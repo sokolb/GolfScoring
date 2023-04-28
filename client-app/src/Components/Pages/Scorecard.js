@@ -202,6 +202,10 @@ export class Scorecard extends Component {
                             <PlayerScorecard name="player2B" player={this.state.team2B} course={this.getCourseByName(this.state.team2B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2BStrokes} />
                         </tbody>
                     </table>
+                    <br />
+                    <label name="notes" hidden={this.state.courses.length === 1}>
+                        The player receiving strokes will get strokes from their tees. For example, if a person playing from the gold tees receives 2 strokes, they will get strokes on the gold's 2 hardest handicapped holes (lowest handicap index). Likewise, if a person playing from the white tees gets 4 strokes, they will receive strokes on the white's 4 hardest handicapped holes (lowest handicap index).
+                    </label>
                 </div>
             </div>
         );

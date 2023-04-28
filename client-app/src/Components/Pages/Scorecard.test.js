@@ -1,5 +1,6 @@
 import { shallow } from "enzyme";
 import { Scorecard } from "./Scorecard";
+import HoleHandicaps from "./HoleHandicaps";
 
 var props;
 
@@ -575,5 +576,20 @@ describe("Scorecard tests", () => {
         expect(player2B.props().player).toEqual(props.golf.players[3]);
         expect(player2B.props().frontBackNine).toEqual(props.frontBackNine);
         expect(player2B.props().strokes).toEqual(0);
+    });
+
+    test.each([
+        ["White", "White", "White", "White", true],
+        ["Blue", "Gold", "White", "White", false],
+    ])("renders notes correctly based on courses shown", (t1APref, t1BPref, t2APref, t2BPref, hidden) => {
+        props.golf.players[0].teePreference = t1APref;
+        props.golf.players[1].teePreference = t1BPref;
+        props.golf.players[2].teePreference = t2APref;
+        props.golf.players[3].teePreference = t2BPref;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var notes = wrapper.find({ name: "notes" });
+
+        expect(notes.prop("hidden")).toEqual(hidden);
     });
 });
