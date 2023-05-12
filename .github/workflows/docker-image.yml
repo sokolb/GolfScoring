@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Dockerhub Login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build the Backend Docker image
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/golfbackend:latest
+      working-directory: ${{ github.workspace }}/backend
+    - name: Build the Frontend Docker image
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/golffrontend:latest
+      working-directory: ${{ github.workspace }}/client-app
+    - name: Push Backend Docker image
+      run: docker push ${{ secrets.DOCKER_USER }}/golfbackend:latest
+    - name: Push Frontend Docker image
+      run: docker push ${{ secrets.DOCKER_USER }}/golffrontend:latest
