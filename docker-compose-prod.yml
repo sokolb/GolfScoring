@@ -1,0 +1,15 @@
+version: "3"
+services:
+    frontend:
+        image: briansokoloski/golffrontend:v1
+        ports:
+            - "3000:3000"
+
+    backend:
+        image: briansokoloski/golfbackend:v1
+        ports:
+            - "8082:8082"
+        volumes:
+            - ${DATABASE_LOCATION}:/app/data
+volumes:
+    backend-data:
