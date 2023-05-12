@@ -1,12 +1,12 @@
 version: "3"
 services:
     frontend:
-        image: briansokoloski/golffrontend:v1
+        image: briansokoloski/golffrontend:latest
         ports:
             - "3000:3000"
 
     backend:
-        image: briansokoloski/golfbackend:v1
+        image: briansokoloski/golfbackend:latest
         ports:
             - "8082:8082"
         volumes:
