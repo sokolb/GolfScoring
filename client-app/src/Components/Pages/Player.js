@@ -16,6 +16,9 @@ export class Player extends Component {
                     <label name="GHIN">{this.props.player.GHIN}</label>
                 </td>
                 <td>
+                    <label name="handicapIndex">{this.props.player.handicap}</label>
+                </td>
+                <td>
                     <label name="teePreference">{this.props.player.teePreference}</label>
                 </td>
                 <td>

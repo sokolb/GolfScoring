@@ -34,6 +34,20 @@ class GhinDataService {
         });
     }
 
+    getUserHandicap(GHIN, user_token) {
+        return Axios({
+            method: "GET",
+            url: `https://api2.ghin.com/api/v1/golfers.json?status=Active&from_ghin=true&per_page=25&page=1&golfer_id=${GHIN}&includeLowHandicapIndex=true&source=GHINcom`,
+            headers: {
+                "content-type": "application/json",
+                Authorization: `Bearer ${user_token}`,
+            },
+            data: {
+                golfer_id: GHIN,
+            },
+        });
+    }
+
     formatDate(date) {
         var d = new Date(date),
             month = "" + (d.getMonth() + 1),

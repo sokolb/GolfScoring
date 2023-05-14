@@ -118,6 +118,7 @@ export class Players extends Component {
                 )}
                 <div class="section-to-print" style={{ textAlign: "center" }}>
                     <h2>Player List</h2>
+                    <label>*Course adjusted handicap based on tee preference</label>
                     <table
                         style={{
                             textAlign: "left",
@@ -130,15 +131,28 @@ export class Players extends Component {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>GHIN</th>
+                            <th>Handicap Index</th>
                             <th>Tee</th>
-                            <th>Front Nine</th>
-                            <th>Back Nine</th>
+                            <th>Front Nine*</th>
+                            <th>Back Nine*</th>
                             <th></th>
                         </tr>
                         {this.props.golf.players !== undefined &&
-                            this.props.golf.players.map((p) => {
-                                return <Player key={p.GHIN} player={p} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
-                            })}
+                            this.props.golf.players
+                                .sort((a, b) => {
+                                    if (a.handicap === "NH" && b.handicap === "NH") {
+                                        return 0;
+                                    } else if (a.handicap === "NH") {
+                                        return 1;
+                                    } else if (b.handicap === "NH") {
+                                        return -1;
+                                    } else {
+                                        return a.handicap - b.handicap;
+                                    }
+                                })
+                                .map((p) => {
+                                    return <Player key={p.GHIN} player={p} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
+                                })}
                     </table>
                 </div>
             </div>

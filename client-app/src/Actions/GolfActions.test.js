@@ -81,7 +81,7 @@ describe("Actions tests", () => {
     });
 
     describe("Players", () => {
-        var responseData = {
+        var responseDataCourseHandicap = {
             data: {
                 tee_sets: [
                     {
@@ -126,7 +126,47 @@ describe("Actions tests", () => {
             },
         };
 
-        it("addOrUpdatePlayer calls getUserCourseHandicap", async () => {
+        var responseDataUserHandicapIndex = {
+            data: {
+                golfers: [
+                    {
+                        first_name: "Brian",
+                        last_name: "Sokoloski",
+                        gender: "M",
+                        email: "b*****@g*****.com",
+                        phone_number: "",
+                        suffix: null,
+                        prefix: null,
+                        middle_name: "",
+                        status: "Active",
+                        ghin: "5884935",
+                        handicap_index: "10.1",
+                        association_id: 45,
+                        association_name: "Minnesota Golf Association",
+                        club_name: "Rose Lake Golf Club",
+                        club_id: 20160,
+                        state: "MN",
+                        country: "United States",
+                        low_hi: "10.1",
+                        soft_cap: "false",
+                        hard_cap: "false",
+                        entitlement: false,
+                        club_affiliation_id: 3986026,
+                        is_home_club: true,
+                        rev_date: "2023-05-11",
+                        hi_value: 10.1,
+                        hi_display: "10.1",
+                        message_club_authorized: null,
+                        low_hi_value: 10.1,
+                        low_hi_display: "10.1",
+                        low_hi_date: "2023-05-11",
+                        has_digital_profile: true,
+                    },
+                ],
+            },
+        };
+
+        it("addOrUpdatePlayer calls getUserHandicap and getUserCourseHandicap", async () => {
             const dispatch = jest.fn();
             var firstName = "Brian";
             var lastName = "Smith";
@@ -134,11 +174,13 @@ describe("Actions tests", () => {
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
 
-            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
+            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
             await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
 
+            expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
             expect(GhinDataService.getUserCourseHandicap).toHaveBeenCalledWith(GHIN, user_token);
         });
 
@@ -155,13 +197,14 @@ describe("Actions tests", () => {
                 GHIN,
                 firstName,
                 lastName,
-                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                handicap: responseDataUserHandicapIndex.data.golfers[0].handicap_index,
                 teePreference,
-                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
-                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
+                frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
             };
 
-            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
+            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
             await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
@@ -178,7 +221,8 @@ describe("Actions tests", () => {
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
 
-            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
+            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
 
             var responseFromApi = {
                 data: id,
@@ -192,10 +236,10 @@ describe("Actions tests", () => {
                 firstName,
                 lastName,
                 GHIN,
-                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                handicap: responseDataUserHandicapIndex.data.golfers[0].handicap_index,
                 teePreference,
-                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
-                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
+                frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
                 type: actionTypes.ADD_PLAYER,
             });
         });
@@ -214,13 +258,14 @@ describe("Actions tests", () => {
                 GHIN,
                 firstName,
                 lastName,
-                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                handicap: responseDataUserHandicapIndex.data.golfers[0].handicap_index,
                 teePreference,
-                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
-                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
+                frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
             };
 
-            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
+            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.updatePlayer.mockReturnValue(Promise.resolve(""));
 
             await addOrUpdatePlayer(playerId, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
@@ -238,7 +283,8 @@ describe("Actions tests", () => {
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
 
-            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseData));
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
+            GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
 
             var responseFromApi = {
                 data: id,
@@ -252,10 +298,10 @@ describe("Actions tests", () => {
                 firstName,
                 lastName,
                 GHIN,
-                handicap: responseData.data.tee_sets[1].ratings[0].course_handicap,
+                handicap: responseDataUserHandicapIndex.data.golfers[0].handicap_index,
                 teePreference,
-                frontNine: responseData.data.tee_sets[1].ratings[2].course_handicap,
-                backNine: responseData.data.tee_sets[1].ratings[1].course_handicap,
+                frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
+                backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
                 type: actionTypes.UPDATE_PLAYER,
             });
         });
@@ -311,6 +357,7 @@ describe("Actions tests", () => {
                 },
             };
 
+            GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.reject(responseData));
 
             await addOrUpdatePlayer(firstName, lastName, GHIN, user_token)(dispatch);

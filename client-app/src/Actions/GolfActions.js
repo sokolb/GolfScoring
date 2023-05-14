@@ -34,20 +34,27 @@ const setCurrentPageCreator = (pageName) => ({
 });
 
 export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, user_token) => async (dispatch) => {
-    var handicap = "-1";
+    var handicapIndex = "-1";
     var frontNine = "-1";
     var backNine = "-1";
+    await GhinDataService.getUserHandicap(GHIN, user_token)
+        .then(async (response) => {
+            handicapIndex = response.data.golfers[0].handicap_index;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
     await GhinDataService.getUserCourseHandicap(GHIN, user_token)
         .then(async (response) => {
-            console.log(response);
             var teeSetIndex = response.data.tee_sets.findIndex(function (item, i) {
                 return item.name === teePreference;
             });
 
-            var handicapIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
-                return item.tee_set_side === "All 18";
-            });
-            handicap = response.data.tee_sets[teeSetIndex].ratings[handicapIndex].course_handicap;
+            // var courseHandicapIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
+            //     return item.tee_set_side === "All 18";
+            // });
+            // handicapIndex = response.data.tee_sets[teeSetIndex].ratings[courseHandicapIndex].course_handicap;
 
             var frontNineIndex = response.data.tee_sets[teeSetIndex].ratings.findIndex(function (item, i) {
                 return item.tee_set_side === "F9";
@@ -63,24 +70,24 @@ export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, 
             dispatch(setErrorMessageCreator(error.response.data.errors.golfer_id[0]));
         });
 
-    if (handicap !== "-1" && frontNine !== "-1" && backNine !== "-1") {
+    if (handicapIndex !== "-1" && frontNine !== "-1" && backNine !== "-1") {
         var player = {
             id,
             GHIN,
             firstName,
             lastName,
-            handicap,
+            handicap: handicapIndex,
             teePreference,
             frontNine,
             backNine,
         };
         if (id === -1) {
             await AppData.addPlayer(player).then((response) => {
-                dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
+                dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine));
             });
         } else {
             await AppData.updatePlayer(player).then((response) => {
-                dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine));
+                dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine));
             });
         }
     }

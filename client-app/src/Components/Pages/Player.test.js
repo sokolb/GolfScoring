@@ -12,7 +12,7 @@ describe("Player Tests", () => {
                 firstName: "Test name",
                 lastName: "Test last name",
                 teePreference: "White",
-                handicap: 11,
+                handicap: 11.2,
                 frontNine: 5,
                 backNine: 6,
             },
@@ -27,6 +27,7 @@ describe("Player Tests", () => {
         const firstName = wrapper.find({ name: "firstName" });
         const lastName = wrapper.find({ name: "lastName" });
         const GHIN = wrapper.find({ name: "GHIN" });
+        const handicapIndex = wrapper.find({ name: "handicapIndex" });
         const teePreference = wrapper.find({ name: "teePreference" });
         const frontNine = wrapper.find({ name: "frontNine" });
         const backNine = wrapper.find({ name: "backNine" });
@@ -35,6 +36,7 @@ describe("Player Tests", () => {
         expect(firstName.length).toEqual(1);
         expect(lastName.length).toEqual(1);
         expect(GHIN.length).toEqual(1);
+        expect(handicapIndex.length).toEqual(1);
         expect(teePreference.length).toEqual(1);
         expect(frontNine.length).toEqual(1);
         expect(backNine.length).toEqual(1);
@@ -47,6 +49,7 @@ describe("Player Tests", () => {
         const firstName = wrapper.find({ name: "firstName" });
         const lastName = wrapper.find({ name: "lastName" });
         const GHIN = wrapper.find({ name: "GHIN" });
+        const handicapIndex = wrapper.find({ name: "handicapIndex" });
         const teePreference = wrapper.find({ name: "teePreference" });
         const frontNine = wrapper.find({ name: "frontNine" });
         const backNine = wrapper.find({ name: "backNine" });
@@ -54,6 +57,7 @@ describe("Player Tests", () => {
         expect(firstName.text()).toEqual(props.player.firstName);
         expect(lastName.text()).toEqual(props.player.lastName);
         expect(GHIN.text()).toEqual(props.player.GHIN.toString());
+        expect(handicapIndex.text()).toEqual(props.player.handicap.toString());
         expect(teePreference.text()).toEqual(props.player.teePreference.toString());
         expect(frontNine.text()).toEqual(props.player.frontNine.toString());
         expect(backNine.text()).toEqual(props.player.backNine.toString());
