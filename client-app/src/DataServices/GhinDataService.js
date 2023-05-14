@@ -19,7 +19,7 @@ class GhinDataService {
         });
     }
 
-    getUserHandicap(GHIN, user_token) {
+    getUserCourseHandicap(GHIN, user_token) {
         var formattedDate = this.formatDate(new Date());
         return Axios({
             method: "GET",

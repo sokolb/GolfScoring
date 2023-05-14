@@ -33,7 +33,7 @@ describe("GhinDataService", () => {
         expect(Axios).toHaveBeenCalledWith(callData);
     });
 
-    it("getUserHandicap fetches data successfully from the API", async () => {
+    it("getUserCourseHandicap fetches data successfully from the API", async () => {
         var GHIN = "1112321";
         var user_token = "axafsdfasdf";
 
@@ -53,7 +53,7 @@ describe("GhinDataService", () => {
         };
 
         Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
-        await GhinDataService.getUserHandicap(GHIN, user_token);
+        await GhinDataService.getUserCourseHandicap(GHIN, user_token);
 
         expect(Axios).toHaveBeenCalledWith(callData);
     });

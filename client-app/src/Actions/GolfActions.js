@@ -37,8 +37,9 @@ export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, 
     var handicap = "-1";
     var frontNine = "-1";
     var backNine = "-1";
-    await GhinDataService.getUserHandicap(GHIN, user_token)
+    await GhinDataService.getUserCourseHandicap(GHIN, user_token)
         .then(async (response) => {
+            console.log(response);
             var teeSetIndex = response.data.tee_sets.findIndex(function (item, i) {
                 return item.name === teePreference;
             });
