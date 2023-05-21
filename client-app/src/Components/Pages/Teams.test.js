@@ -101,11 +101,11 @@ describe("Teams Tests", () => {
 
             expect(playerSelectionBox.props().children.length).toEqual(3);
 
-            expect(playerSelectionBox.props().children[0].key).toEqual("1");
-            expect(playerSelectionBox.props().children[0].props.children).toEqual("Brian Sokoloski");
+            expect(playerSelectionBox.props().children[0].key).toEqual("2");
+            expect(playerSelectionBox.props().children[0].props.children).toEqual("Bob Smith");
 
-            expect(playerSelectionBox.props().children[1].key).toEqual("2");
-            expect(playerSelectionBox.props().children[1].props.children).toEqual("Bob Smith");
+            expect(playerSelectionBox.props().children[1].key).toEqual("1");
+            expect(playerSelectionBox.props().children[1].props.children).toEqual("Brian Sokoloski");
 
             expect(playerSelectionBox.props().children[2].key).toEqual("3");
             expect(playerSelectionBox.props().children[2].props.children).toEqual("Mary Johnson");

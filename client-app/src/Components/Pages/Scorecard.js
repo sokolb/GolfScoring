@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getTeams, getPlayers, getCourses } from "../../Actions/GolfActions";
 import HoleHandicaps from "./HoleHandicaps";
 import PlayerScorecard from "./PlayerScorecard";
+import TeamTotals from "./TeamTotals";
 
 const today = new Date();
 const formattedTodayDate = today.toLocaleDateString("en-US");
@@ -200,6 +201,10 @@ export class Scorecard extends Component {
                             <PlayerScorecard name="player1B" player={this.state.team1B} course={this.getCourseByName(this.state.team1B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team1BStrokes} />
                             <PlayerScorecard name="player2A" player={this.state.team2A} course={this.getCourseByName(this.state.team2A.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2AStrokes} />
                             <PlayerScorecard name="player2B" player={this.state.team2B} course={this.getCourseByName(this.state.team2B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2BStrokes} />
+                            <tr></tr>
+                            <tr></tr>
+                            <TeamTotals name="team1Points" player1={this.findAPlayer(this.props.team1Id)} player2={this.findBPlayer(this.props.team1Id)} />
+                            <TeamTotals name="team2Points" player1={this.findAPlayer(this.props.team2Id)} player2={this.findBPlayer(this.props.team2Id)} />
                         </tbody>
                     </table>
                     <br />

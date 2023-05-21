@@ -592,4 +592,16 @@ describe("Scorecard tests", () => {
 
         expect(notes.prop("hidden")).toEqual(hidden);
     });
+
+    it("renders team points for each team", () => {
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var team1Points = wrapper.find({ name: "team1Points" });
+        var team2Points = wrapper.find({ name: "team2Points" });
+
+        expect(team1Points.props().player1).toEqual(props.golf.players[1]);
+        expect(team1Points.props().player2).toEqual(props.golf.players[0]);
+        expect(team2Points.props().player1).toEqual(props.golf.players[2]);
+        expect(team2Points.props().player2).toEqual(props.golf.players[3]);
+    });
 });
