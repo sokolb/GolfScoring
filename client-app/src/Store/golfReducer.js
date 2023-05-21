@@ -26,6 +26,7 @@ export default (state = initialState, action) => {
                 teePreference: action.teePreference,
                 frontNine: action.frontNine,
                 backNine: action.backNine,
+                autoUpdateGHIN: action.autoUpdateGHIN,
             });
             return {
                 ...state,
@@ -44,6 +45,7 @@ export default (state = initialState, action) => {
                 teePreference: action.teePreference,
                 frontNine: action.frontNine,
                 backNine: action.backNine,
+                autoUpdateGHIN: action.autoUpdateGHIN,
             };
             const index = existingPlayers.findIndex((p) => p.id === existingPlayer.id);
             existingPlayers[index] = existingPlayer;

@@ -33,7 +33,7 @@ const setCurrentPageCreator = (pageName) => ({
     type: actionTypes.SET_CURRENT_PAGE,
 });
 
-export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, user_token) => async (dispatch) => {
+export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, updateGHIN, user_token) => async (dispatch) => {
     var handicapIndex = "-1";
     var frontNine = "-1";
     var backNine = "-1";
@@ -80,20 +80,21 @@ export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, 
             teePreference,
             frontNine,
             backNine,
+            autoUpdateGHIN: updateGHIN,
         };
         if (id === -1) {
             await AppData.addPlayer(player).then((response) => {
-                dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine));
+                dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
             });
         } else {
             await AppData.updatePlayer(player).then((response) => {
-                dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine));
+                dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
             });
         }
     }
 };
 
-const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine) => ({
+const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine, autoUpdateGHIN) => ({
     id,
     firstName,
     lastName,
@@ -102,10 +103,11 @@ const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference
     teePreference,
     frontNine,
     backNine,
+    autoUpdateGHIN,
     type: actionTypes.ADD_PLAYER,
 });
 
-const updatePlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine) => ({
+const updatePlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine, autoUpdateGHIN) => ({
     id,
     firstName,
     lastName,
@@ -114,6 +116,7 @@ const updatePlayerCreator = (id, firstName, lastName, GHIN, handicap, teePrefere
     teePreference,
     frontNine,
     backNine,
+    autoUpdateGHIN,
     type: actionTypes.UPDATE_PLAYER,
 });
 

@@ -35,12 +35,14 @@ describe("Players Tests", () => {
         var GHIN = wrapper.find({ name: "GHIN" });
         var submit = wrapper.find({ name: "submit" });
         var refreshAllHandicaps = wrapper.find({ name: "refreshAllHandicaps" });
+        var autoUpdateGHIN = wrapper.find({ name: "autoUpdateGHIN" });
 
         expect(firstName.length).toEqual(1);
         expect(lastName.length).toEqual(1);
         expect(GHIN.length).toEqual(1);
         expect(submit.length).toEqual(1);
         expect(refreshAllHandicaps.length).toEqual(1);
+        expect(autoUpdateGHIN.length).toEqual(1);
     });
 
     it("Hides add new player boxes when user is not logged in", () => {
@@ -57,6 +59,7 @@ describe("Players Tests", () => {
         var lastName = "Johnson";
         var GHIN = "110492312";
         var teePreference = "Gold";
+        var autoUpdate = true;
 
         const wrapper = shallow(<Players {...props} />);
 
@@ -72,10 +75,13 @@ describe("Players Tests", () => {
         });
         teePreferenceSelectionBox.simulate("change", createEvent(teePreference));
 
+        const autoUpdateGhin = wrapper.find({ name: "autoUpdateGhin" });
+        GHINtextBox.simulate("autoUpdateGhin", createEvent(autoUpdate));
+
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, autoUpdate, props.golf.userToken);
     });
 
     it("refreshAllHandicaps click calls addOrUpdatePlayer per player", () => {

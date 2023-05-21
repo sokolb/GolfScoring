@@ -16,6 +16,7 @@ var player1 = {
     teePreference: "White",
     frontNine: 4,
     backNine: 6,
+    autoUpdateGHIN: false,
 };
 
 var player2 = {
@@ -26,6 +27,7 @@ var player2 = {
     teePreference: "Red",
     fronNine: 10,
     backNine: 12,
+    autoUpdateGHIN: true,
 };
 
 var team1 = {
@@ -279,6 +281,7 @@ describe("Golf Reducer tests", () => {
                     teePreference: player1.teePreference,
                     frontNine: player1.frontNine,
                     backNine: player1.backNine,
+                    autoUpdateGHIN: player1.autoUpdateGHIN,
                 })
             ).toEqual(targetState);
         });
@@ -315,6 +318,7 @@ describe("Golf Reducer tests", () => {
                 teePreference: player1.teePreference,
                 frontNine: player1.frontNine,
                 backNine: player1.backNine,
+                autoUpdateGHIN: player1.autoUpdateGHIN,
             });
 
             //Update Player
@@ -332,6 +336,7 @@ describe("Golf Reducer tests", () => {
                     teePreference: player1.teePreference,
                     frontNine: player1.frontNine,
                     backNine: player1.backNine,
+                    autoUpdateGHIN: player1.autoUpdateGHIN,
                 })
             ).toEqual(targetState);
         });

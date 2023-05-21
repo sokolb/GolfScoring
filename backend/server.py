@@ -35,6 +35,12 @@ con.execute('''CREATE TABLE if not exists course
 con.execute('''CREATE TABLE if not exists hole
             (id INTEGER PRIMARY KEY, number INTEGER, handicapIndex INTEGER, 
             course_id INTEGER)''')
+try:
+    con.execute('''ALTER TABLE player
+            ADD COLUMN autoUpdateGHIN BOOLEAN DEFAULT 1''')
+except Exception as e:
+    print("autoUpdateGHIN already exists")
+
 con.close()
 
 
@@ -42,12 +48,12 @@ con.close()
 def player(player_id):
     con = engine.connect()
     if request.method == 'GET':
-        result = con.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player WHERE id = ?", (player_id,))
+        result = con.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference, autoUpdateGHIN FROM player WHERE id = ?", (player_id,))
         data = result.fetchone()
         if data is None:
             retval = Response(response="Player not found with id " + player_id, status=204, mimetype="application/text")
         else:
-            player = Player(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+            player = Player(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8])
             retval = Response(response=player.toJSON(), status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
         con.close()
@@ -55,15 +61,15 @@ def player(player_id):
 
     if request.method == 'POST':
         data = request.get_json()['player']
-        data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'], data['frontNine'], data['backNine'], data['teePreference'])
+        data_tuple = (data['GHIN'], data['firstName'], data['lastName'], data['handicap'], data['frontNine'], data['backNine'], data['teePreference'], data['autoUpdateGHIN'])
         if player_id == "-1":
-            sql = "INSERT INTO player(GHIN, firstName, lastName, handicap, frontNine, backNine, teePreference) VALUES (?,?,?,?,?,?,?)"
+            sql = "INSERT INTO player(GHIN, firstName, lastName, handicap, frontNine, backNine, teePreference, autoUpdateGHIN) VALUES (?,?,?,?,?,?,?,?)"
             result = con.execute(sql, data_tuple)
             player_id = str(result.lastrowid)
         else:
             sql = '''UPDATE player SET GHIN = ?, firstName = ?, 
                 lastName = ?, handicap = ?, frontNine = ?, backNine = ?, 
-                teePreference = ? 
+                teePreference = ?, autoUpdateGHIN = ?
                 WHERE id = ?'''
             con.execute(sql, data_tuple + (player_id,))
         
@@ -90,12 +96,12 @@ def player(player_id):
 def getAllPlayers():
     conn = engine.connect()
     playersList = []
-    data = conn.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference FROM player")
+    data = conn.execute("SELECT id, firstName, lastName, GHIN, handicap, frontNine, backNine, teePreference, autoUpdateGHIN FROM player")
     if data is None:
         retval = Response(response="no players found", status=204, mimetype="application/text")
     else:
         for playerData in data:
-            player = Player(playerData[0], playerData[1], playerData[2], playerData[3], playerData[4], playerData[5], playerData[6], playerData[7])
+            player = Player(playerData[0], playerData[1], playerData[2], playerData[3], playerData[4], playerData[5], playerData[6], playerData[7], playerData[8])
             playersList.append(player)
         retval = Response(response=json.dumps(playersList, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4), status=200, mimetype="application/json")

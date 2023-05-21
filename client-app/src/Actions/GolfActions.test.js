@@ -173,12 +173,13 @@ describe("Actions tests", () => {
             var GHIN = "1234132";
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
+            var updateGHIN = true;
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
-            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
+            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, updateGHIN, user_token)(dispatch);
 
             expect(GhinDataService.getUserHandicap).toHaveBeenCalledWith(GHIN, user_token);
             expect(GhinDataService.getUserCourseHandicap).toHaveBeenCalledWith(GHIN, user_token);
@@ -191,6 +192,7 @@ describe("Actions tests", () => {
             var GHIN = "1234132";
             var user_token = "asfdsadfasdfdsaasdf";
             var teePreference = "White";
+            var updateGHIN = true;
 
             var player = {
                 id: -1,
@@ -201,13 +203,14 @@ describe("Actions tests", () => {
                 teePreference,
                 frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
                 backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
+                autoUpdateGHIN: updateGHIN,
             };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.addPlayer.mockReturnValue(Promise.resolve(""));
 
-            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
+            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, updateGHIN, user_token)(dispatch);
 
             expect(AppData.addPlayer).toHaveBeenCalledWith(player);
         });
@@ -220,6 +223,7 @@ describe("Actions tests", () => {
             var GHIN = "1234132";
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
+            var updateGHIN = true;
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
@@ -229,7 +233,7 @@ describe("Actions tests", () => {
             };
             AppData.addPlayer.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
+            await addOrUpdatePlayer(-1, firstName, lastName, GHIN, teePreference, updateGHIN, user_token)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id,
@@ -240,6 +244,7 @@ describe("Actions tests", () => {
                 teePreference,
                 frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
                 backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
+                autoUpdateGHIN: updateGHIN,
                 type: actionTypes.ADD_PLAYER,
             });
         });
@@ -252,6 +257,7 @@ describe("Actions tests", () => {
             var GHIN = "1234132";
             var user_token = "asfdsadfasdfdsaasdf";
             var teePreference = "White";
+            var updateGHIN = true;
 
             var player = {
                 id: playerId,
@@ -262,13 +268,14 @@ describe("Actions tests", () => {
                 teePreference,
                 frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
                 backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
+                autoUpdateGHIN: updateGHIN,
             };
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
             AppData.updatePlayer.mockReturnValue(Promise.resolve(""));
 
-            await addOrUpdatePlayer(playerId, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
+            await addOrUpdatePlayer(playerId, firstName, lastName, GHIN, teePreference, updateGHIN, user_token)(dispatch);
 
             expect(AppData.updatePlayer).toHaveBeenCalledWith(player);
         });
@@ -282,6 +289,7 @@ describe("Actions tests", () => {
             var GHIN = "1234132";
             var teePreference = "White";
             var user_token = "asfdsadfasdfdsaasdf";
+            var updateGHIN = true;
 
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.resolve(responseDataCourseHandicap));
@@ -291,7 +299,7 @@ describe("Actions tests", () => {
             };
             AppData.updatePlayer.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addOrUpdatePlayer(playerId, firstName, lastName, GHIN, teePreference, user_token)(dispatch);
+            await addOrUpdatePlayer(playerId, firstName, lastName, GHIN, teePreference, updateGHIN, user_token)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id: playerId,
@@ -302,6 +310,7 @@ describe("Actions tests", () => {
                 teePreference,
                 frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
                 backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
+                autoUpdateGHIN: updateGHIN,
                 type: actionTypes.UPDATE_PLAYER,
             });
         });
@@ -345,6 +354,7 @@ describe("Actions tests", () => {
             var lastName = "Smith";
             var GHIN = "1234132";
             var user_token = "asfdsadfasdfdsaasdf";
+            var updateGHIN = true;
 
             var errorMessage = "Player not found error";
             var responseData = {
@@ -360,7 +370,7 @@ describe("Actions tests", () => {
             GhinDataService.getUserHandicap.mockReturnValue(Promise.resolve(responseDataUserHandicapIndex));
             GhinDataService.getUserCourseHandicap.mockReturnValue(Promise.reject(responseData));
 
-            await addOrUpdatePlayer(firstName, lastName, GHIN, user_token)(dispatch);
+            await addOrUpdatePlayer(firstName, lastName, GHIN, updateGHIN, user_token)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 errorMessage,

@@ -14,12 +14,14 @@ export class Players extends Component {
             lastName: "",
             GHIN: "",
             selectedTeePreference: "White",
+            autoUpdateGHIN: true,
         };
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleGHINChange = this.handleGHINChange.bind(this);
         this.handleTeePreferenceSelectionBoxChange = this.handleTeePreferenceSelectionBoxChange.bind(this);
+        this.handleAutoUpdateGHINChange = this.handleAutoUpdateGHINChange.bind(this);
     }
 
     componentDidMount() {
@@ -45,12 +47,19 @@ export class Players extends Component {
         });
     }
 
+    handleAutoUpdateGHINChange(event) {
+        this.setState({
+            autoUpdateGHIN: event.target.checked,
+        });
+    }
+
     handleSubmitClick = () => {
-        this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.props.golf.userToken);
+        this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.props.golf.userToken);
         this.setState({
             firstName: "",
             lastName: "",
             GHIN: "",
+            autoUpdateGHIN: true,
         });
     };
 
@@ -104,6 +113,9 @@ export class Players extends Component {
                                 );
                             })}
                         </select>
+                        <br />
+                        <label>Auto Update GHIN:</label>
+                        <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} selected={this.state.autoUpdateGHIN}></input>
                         <br />
                         <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                             Submit
