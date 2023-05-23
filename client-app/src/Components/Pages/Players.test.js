@@ -11,7 +11,7 @@ describe("Players Tests", () => {
                 loggedInUser: "bob.jones@abc.com",
                 userToken: "abc123",
                 players: [
-                    { id: 3, GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2, teePreference: "White" },
+                    { id: 3, GHIN: "11221", firstName: "Bob", lastName: "Smith", handicap: 2, teePreference: "White", autoUpdateGHIN: true },
                     {
                         id: 17,
                         GHIN: "243332",
@@ -19,6 +19,7 @@ describe("Players Tests", () => {
                         lastName: "Jones",
                         handicap: 3,
                         teePreference: "Red",
+                        autoUpdateGHIN: true,
                     },
                 ],
             },
@@ -94,6 +95,19 @@ describe("Players Tests", () => {
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(2);
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player1.id, player1.firstName, player1.lastName, player1.GHIN, player1.teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, props.golf.userToken);
+    });
+
+    it("refreshAllHandicaps click calls addOrUpdatePlayer for players with autoUpdate on", () => {
+        var player1 = props.golf.players[0];
+        player1.autoUpdateGHIN = false;
+        var player2 = props.golf.players[1];
+        const wrapper = shallow(<Players {...props} />);
+
+        const refreshAllHandicaps = wrapper.find({ name: "refreshAllHandicaps" });
+        refreshAllHandicaps.simulate("click");
+
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(1);
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, props.golf.userToken);
     });
 

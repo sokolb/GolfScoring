@@ -65,7 +65,9 @@ export class Players extends Component {
 
     handleRefreshAllHandicapsClick = () => {
         this.props.golf.players.forEach((player) => {
-            this.props.addOrUpdatePlayer(player.id, player.firstName, player.lastName, player.GHIN, player.teePreference, this.props.golf.userToken);
+            if (player.autoUpdateGHIN) {
+                this.props.addOrUpdatePlayer(player.id, player.firstName, player.lastName, player.GHIN, player.teePreference, true, this.props.golf.userToken);
+            }
         });
     };
 
