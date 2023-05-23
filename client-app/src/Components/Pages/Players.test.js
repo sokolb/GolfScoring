@@ -94,8 +94,8 @@ describe("Players Tests", () => {
         refreshAllHandicaps.simulate("click");
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(2);
-        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player1.id, player1.firstName, player1.lastName, player1.GHIN, player1.teePreference, props.golf.userToken);
-        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player1.id, player1.firstName, player1.lastName, player1.GHIN, player1.teePreference, true, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, true, props.golf.userToken);
     });
 
     it("refreshAllHandicaps click calls addOrUpdatePlayer for players with autoUpdate on", () => {
@@ -108,7 +108,7 @@ describe("Players Tests", () => {
         refreshAllHandicaps.simulate("click");
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(1);
-        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, props.golf.userToken);
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, true, props.golf.userToken);
     });
 
     function createEvent(value) {

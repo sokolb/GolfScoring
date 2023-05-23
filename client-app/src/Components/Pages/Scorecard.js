@@ -127,7 +127,19 @@ export class Scorecard extends Component {
 
         // Add landscape orientation rule to printWindow document
         const style = printWindow.document.createElement("style");
-        style.textContent = "@page { size: landscape; }";
+        style.textContent = `@page { size: landscape; } 
+        body {
+            transform-origin: left top;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            overflow: visible !important;
+            page-break-after: always;
+          }
+          
+          * {
+            overflow: visible !important;
+          }`;
         printWindow.document.head.appendChild(style);
 
         printWindow.focus();
