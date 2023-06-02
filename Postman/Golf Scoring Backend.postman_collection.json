@@ -40,7 +40,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"player\":{\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"Brian\",\n\t\t\"lastName\": \"Sokoloski\",\n\t\t\"handicap\": 10,\n\t\t\"frontNine\": 4,\n\t\t\"backNine\": 6,\n\t\t\"teePreference\": \"White\"\n\t}\n}"
+							"raw": "{\n\t\"player\":{\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"Brian TEST\",\n\t\t\"lastName\": \"Sokoloski\",\n\t\t\"handicap\": 10,\n\t\t\"frontNine\": 4,\n\t\t\"backNine\": 6,\n\t\t\"teePreference\": \"White\",\n        \"autoUpdateGHIN\": true\n\t}\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8082/player/-1",
@@ -116,10 +116,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"player\": {\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"andy\",\n\t\t\"lastName\": \"melchert\",\n\t\t\"handicap\": 45,\n\t\t\"frontNine\": 14.0,\n\t\t\"backNine\": 16.0,\n\t\t\"teePreference\": \"Blue\"\n\t}\n}"
+							"raw": "{\n\t\"player\": {\n\t\t\"GHIN\" : 2222,\n\t\t\"firstName\": \"andy test\",\n\t\t\"lastName\": \"melchert\",\n\t\t\"handicap\": 45,\n\t\t\"frontNine\": 14.0,\n\t\t\"backNine\": 16.0,\n\t\t\"teePreference\": \"Blue\",\n        \"autoUpdateGHIN\": true\n\t}\n}"
 						},
 						"url": {
-							"raw": "http://localhost:8082/player/1",
+							"raw": "http://localhost:8082/player/172",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -127,7 +127,7 @@
 							"port": "8082",
 							"path": [
 								"player",
-								"1"
+								"172"
 							]
 						},
 						"description": "Update Player"
@@ -472,6 +472,134 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Division",
+			"item": [
+				{
+					"name": "Add New Division",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"division\":{\n\t\t\"name\" : \"Mens Div 1\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/division/-1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"division",
+								"-1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSpecificDivision",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/division/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"division",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllDivisions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/getAllDivisions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"getAllDivisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Divison",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"division\":{\n\t\t\"name\" : \"Womens Div 1\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/division/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"division",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteDivision",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/division/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"division",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
