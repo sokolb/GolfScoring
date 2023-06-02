@@ -62,7 +62,7 @@ export class Teams extends Component {
                     <div name="addTeam">
                         <h2>Add Team</h2>
                         <br />
-                        <select name="playersSelectionBox" multiple={true} onChange={this.handleSelectionBoxChange}>
+                        <select name="playersSelectionBox" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBoxChange}>
                             {this.props.golf.players
                                 .sort((a, b) => {
                                     var firstNameA = a.firstName.toUpperCase();
@@ -75,7 +75,6 @@ export class Teams extends Component {
                                     }
                                     return 0;
                                 })
-                                .filter((player) => !this.props.golf.teams.some((team) => team.teamMemberIds.includes(player.id)))
                                 .map((player) => {
                                     return (
                                         <option key={player.id} value={player.id}>

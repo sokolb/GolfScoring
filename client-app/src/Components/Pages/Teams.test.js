@@ -110,21 +110,6 @@ describe("Teams Tests", () => {
             expect(playerSelectionBox.props().children[2].key).toEqual("3");
             expect(playerSelectionBox.props().children[2].props.children).toEqual("Mary Johnson");
         });
-
-        it("Selection box only renders players that are not on a team", () => {
-            props.golf.teams = [
-                {
-                    teamNumber: 1,
-                    teamMemberIds: [1, 2],
-                },
-            ];
-            const wrapper = shallow(<Teams {...props} />);
-
-            const playerSelectionBox = wrapper.find({ name: "playersSelectionBox" });
-
-            expect(playerSelectionBox.props().children.length).toEqual(1);
-            expect(playerSelectionBox.props().children[0].props.children).toEqual("Mary Johnson");
-        });
     });
 
     it("Submit buttons calls addTeam with correct parameters", () => {
