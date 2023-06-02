@@ -10,3 +10,6 @@ export const SET_TEAMS = "SET_TEAMS";
 export const REMOVE_TEAM = "REMOVE_TEAM";
 export const ADD_TEAM = "ADD_TEAM";
 export const SET_COURSES = "SET_COURSES";
+export const SET_DIVISOINS = "SET_DIVISOINS";
+export const REMOVE_DIVISION = "REMOVE_DIVISION";
+export const ADD_DIVISION = "ADD_DIVISION";

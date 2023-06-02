@@ -92,6 +92,24 @@ export default (state = initialState, action) => {
                 ...state,
                 courses: action.courses,
             };
+        case actionTypes.SET_DIVISOINS:
+            return {
+                ...state,
+                divisions: action.divisions,
+            };
+        case actionTypes.REMOVE_DIVISION:
+            var newDivisionsArray = state.divisions.filter((d) => d.id !== action.id);
+            return { ...state, divisions: newDivisionsArray };
+        case actionTypes.ADD_DIVISION:
+            var divisions = state.divisions;
+            divisions.push({
+                id: action.id,
+                name: action.name,
+            });
+            return {
+                ...state,
+                divisions,
+            };
         default:
             return state;
     }

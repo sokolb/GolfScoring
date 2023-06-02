@@ -6,5 +6,6 @@ export default {
     players: [],
     teams: [],
     courses: [],
+    divisions: [],
     errorMessage: "",
 };

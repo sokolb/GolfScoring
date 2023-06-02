@@ -236,6 +236,14 @@ var course2 = {
     tee: "Blue",
 };
 
+var division1 = {
+    name: "mens Division 1",
+};
+
+var division2 = {
+    name: "mens Division 2",
+};
+
 describe("Golf Reducer tests", () => {
     beforeEach(() => {
         initialState = JSON.parse(JSON.stringify(originalInitialState));
@@ -262,6 +270,18 @@ describe("Golf Reducer tests", () => {
         targetState.currentPage = pageName;
 
         expect(reducer(initialState, { type: actionTypes.SET_CURRENT_PAGE, pageName })).toEqual(targetState);
+    });
+
+    it("should match the state when SET_ERROR_MESSAGE is dispatched", () => {
+        var errorMessage = "play missing error message";
+        targetState.errorMessage = errorMessage;
+
+        expect(
+            reducer(initialState, {
+                type: actionTypes.SET_ERROR_MESSAGE,
+                errorMessage: errorMessage,
+            })
+        ).toEqual(targetState);
     });
 
     describe("Player", () => {
@@ -462,15 +482,48 @@ describe("Golf Reducer tests", () => {
         });
     });
 
-    it("should match the state when SET_ERROR_MESSAGE is dispatched", () => {
-        var errorMessage = "play missing error message";
-        targetState.errorMessage = errorMessage;
+    describe("Division", () => {
+        it("should match the state when SET_DIVISION is dispatched", () => {
+            var divisions = [division1, division2];
+            targetState.divisions = divisions;
 
-        expect(
-            reducer(initialState, {
-                type: actionTypes.SET_ERROR_MESSAGE,
-                errorMessage: errorMessage,
-            })
-        ).toEqual(targetState);
+            expect(reducer(initialState, { type: actionTypes.SET_DIVISOINS, divisions: divisions })).toEqual(targetState);
+        });
+
+        it("should match state when REMOVE_DIVSION is dispatched", () => {
+            var id1 = "66666";
+            var id2 = "asdfs12323";
+            division1.id = id1;
+            division2.id = id2;
+            initialState.divisions[0] = division1;
+            initialState.divisions[1] = division2;
+
+            targetState.divisions = [division1];
+
+            expect(
+                reducer(initialState, {
+                    type: actionTypes.REMOVE_DIVISION,
+                    id: id2,
+                })
+            ).toEqual(targetState);
+        });
+
+        it("should match the state when ADD_DIVISION is dispatched", () => {
+            var id = 5;
+            var name = "Womens Div";
+
+            targetState.divisions[0] = {
+                id,
+                name,
+            };
+
+            expect(
+                reducer(initialState, {
+                    type: actionTypes.ADD_DIVISION,
+                    id,
+                    name,
+                })
+            ).toEqual(targetState);
+        });
     });
 });

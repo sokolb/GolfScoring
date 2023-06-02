@@ -1,7 +1,7 @@
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import { addOrUpdatePlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses } from "./GolfActions.js";
+import { addOrUpdatePlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses, getDivisions, addDivision, removeDivision } from "./GolfActions.js";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
@@ -710,6 +710,84 @@ describe("Actions tests", () => {
                 courses: responseData,
                 type: actionTypes.SET_COURSES,
             });
+        });
+    });
+
+    describe("Divisions", () => {
+        it("getDivisions dispatches SET_DIVISIONS on successfull API call", async () => {
+            const dispatch = jest.fn();
+            var filename = "testDivisions.json";
+
+            var responseData = [
+                {
+                    name: "Divisions1",
+                },
+                {
+                    name: "Division 2",
+                },
+            ];
+
+            AppData.getDivisions.mockReturnValue(Promise.resolve({ data: responseData }));
+
+            await getDivisions(filename)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                divisions: responseData,
+                type: actionTypes.SET_DIVISOINS,
+            });
+        });
+
+        it("addDivision dispatches ADD_DIVISION", async () => {
+            const dispatch = jest.fn();
+            var id = 4;
+            var name = "Mens Div 1";
+
+            var responseFromApi = {
+                data: id,
+            };
+            AppData.addDivision.mockReturnValue(Promise.resolve(responseFromApi));
+
+            await addDivision(name)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                id,
+                name,
+                type: actionTypes.ADD_DIVISION,
+            });
+        });
+
+        it("removeDispatch dispatches REMOVE_DISPATCH", async () => {
+            const dispatch = jest.fn();
+            let id = "12345abcdefg";
+
+            AppData.deleteDivision.mockReturnValue(Promise.resolve(""));
+
+            await removeDivision(id)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                id: id,
+                type: actionTypes.REMOVE_DIVISION,
+            });
+        });
+
+        it("removeDivision calls deleteTeam API", async () => {
+            const dispatch = jest.fn();
+            var id = 3;
+            AppData.deleteDivision.mockReturnValue(Promise.resolve(""));
+
+            await removeDivision(id)(dispatch);
+
+            expect(AppData.deleteDivision).toHaveBeenCalledWith(id);
+        });
+
+        it("removeDivision does not dispatch REMOVE_DIVISION when deleteDivision fails", async () => {
+            const dispatch = jest.fn();
+            let id = 66;
+            AppData.deleteDivision.mockReturnValue(Promise.reject(""));
+
+            await removeDivision(id)(dispatch);
+
+            expect(dispatch).not.toHaveBeenCalled();
         });
     });
 });

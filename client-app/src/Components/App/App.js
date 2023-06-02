@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Players from "../Pages/Players";
 import Teams from "../Pages/Teams";
 import Matches from "../Pages/Matches";
+import Divisions from "../Pages/Divisions";
 
 export class App extends Component {
     render() {
@@ -19,6 +20,7 @@ export class App extends Component {
                 <NavBar />
                 {this.props.golf.currentPage === "Login" && <Login />}
                 {this.props.golf.currentPage === "Players" && <Players />}
+                {this.props.golf.currentPage === "Divisions" && <Divisions />}
                 {this.props.golf.currentPage === "Teams" && <Teams />}
                 {this.props.golf.currentPage === "Matches" && <Matches />}
             </div>

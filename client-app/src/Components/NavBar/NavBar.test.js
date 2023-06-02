@@ -28,12 +28,16 @@ describe("NavBar Tests", () => {
         expect(btnTeams.length).toBe(1);
         expect(btnTeams.text()).toEqual("Teams");
 
+        const btnDivisions = wrapper.find({ name: "btnDivisions" });
+        expect(btnDivisions.length).toBe(1);
+        expect(btnDivisions.text()).toEqual("Divisions");
+
         const btnMatches = wrapper.find({ name: "btnMatches" });
         expect(btnMatches.length).toBe(1);
         expect(btnMatches.text()).toEqual("Matches");
     });
 
-    it("Renders correct buttons for logged no user", () => {
+    it("Renders correct buttons for NO logged in user", () => {
         props.golf.loggedInUser = undefined;
         const wrapper = shallow(<NavBar {...props} />);
 
@@ -48,6 +52,9 @@ describe("NavBar Tests", () => {
         const btnTeams = wrapper.find({ name: "btnTeams" });
         expect(btnTeams.length).toBe(0);
 
+        const btnDivisions = wrapper.find({ name: "btnDivisions" });
+        expect(btnDivisions.length).toBe(0);
+
         const btnMatches = wrapper.find({ name: "btnMatches" });
         expect(btnMatches.length).toBe(1);
         expect(btnMatches.text()).toEqual("Matches");
@@ -56,6 +63,7 @@ describe("NavBar Tests", () => {
     test.each([
         ["btnPlayers", "Players", "brian@test.com"],
         ["btnTeams", "Teams", "brian@test.com"],
+        ["btnDivisions", "Divisions", "brian@test.com"],
         ["btnMatches", "Matches", "brian@test.com"],
         ["btnLogin", "Login", undefined],
     ])("Button %s calls setCurrentPage with correct pageName %s", (buttonName, pageName, loggedInUser) => {

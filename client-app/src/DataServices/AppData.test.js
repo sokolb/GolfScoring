@@ -116,4 +116,41 @@ describe("AppData", () => {
             expect(Axios.get).toHaveBeenCalledWith(target);
         });
     });
+
+    describe("Divisions", () => {
+        test.each([["testDivisionsFile.json"], ["http://someurl/getAllDivisions"]])("getDivisions is called with correct parameter of %s", async (target) => {
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.getDivisions(target);
+
+            expect(Axios.get).toHaveBeenCalledWith(target);
+        });
+
+        it("deleteDivision calls API with correct value", async () => {
+            var divisionId = 66;
+            var url = "http://localhost:8082/division/" + divisionId;
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.deleteDivision(divisionId);
+
+            expect(Axios.delete).toHaveBeenCalledWith(url);
+        });
+
+        it("addDivision calls API with correct values", async () => {
+            var division = {
+                name: "Men's Div 1",
+            };
+            var url = "http://localhost:8082/division/-1";
+            var additionalData = {
+                headers: {
+                    "content-type": "application/json",
+                },
+                division,
+            };
+
+            Axios.mockImplementationOnce(() => Promise.resolve({ data: "" }));
+            await AppData.addDivision(division);
+
+            expect(Axios.post).toHaveBeenCalledWith(url, additionalData);
+        });
+    });
 });

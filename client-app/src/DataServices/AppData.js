@@ -47,5 +47,22 @@ class AppData {
     getCourses(fileName) {
         return Axios.get(fileName);
     }
+
+    getDivisions(target) {
+        return Axios.get(target);
+    }
+
+    deleteDivision(id) {
+        return Axios.delete(`http://localhost:8082/division/${id}`);
+    }
+
+    addDivision(division) {
+        return Axios.post("http://localhost:8082/division/-1", {
+            headers: {
+                "content-type": "application/json",
+            },
+            division,
+        });
+    }
 }
 export default new AppData();

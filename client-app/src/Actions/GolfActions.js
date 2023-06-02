@@ -222,3 +222,50 @@ const setCoursesCreator = (courses) => ({
     courses,
     type: actionTypes.SET_COURSES,
 });
+
+export const getDivisions = (fileName) => async (dispatch) => {
+    await AppData.getDivisions(fileName)
+        .then((response) => {
+            dispatch(setDivisionsCreator(response.data));
+        })
+        .catch((error) => {
+            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+                console.log(error.response);
+            }
+        });
+};
+
+const setDivisionsCreator = (divisions) => ({
+    divisions,
+    type: actionTypes.SET_DIVISOINS,
+});
+
+export const addDivision = (name) => async (dispatch) => {
+    var division = {
+        name,
+    };
+    await AppData.addDivision(division).then((response) => {
+        dispatch(addDivisionCreator(response.data, name));
+    });
+};
+
+const addDivisionCreator = (id, name) => ({
+    id,
+    name,
+    type: actionTypes.ADD_DIVISION,
+});
+
+export const removeDivision = (id) => async (dispatch) => {
+    await AppData.deleteDivision(id)
+        .then((response) => {
+            dispatch(removeDivisionCreator(id));
+        })
+        .catch((error) => {
+            console.log(error.response);
+        });
+};
+
+const removeDivisionCreator = (id) => ({
+    id,
+    type: actionTypes.REMOVE_DIVISION,
+});

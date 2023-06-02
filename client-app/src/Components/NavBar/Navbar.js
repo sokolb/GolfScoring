@@ -36,6 +36,11 @@ export class NavBar extends Component {
                             Teams
                         </button>
                     )}
+                    {this.props.golf.loggedInUser !== undefined && (
+                        <button name="btnDivisions" onClick={() => this.handleNavigationButtonClick("Divisions")}>
+                            Divisions
+                        </button>
+                    )}
                     <button name="btnMatches" onClick={() => this.handleNavigationButtonClick("Matches")}>
                         Matches
                     </button>

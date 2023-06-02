@@ -5,6 +5,7 @@ import Matches from "../Pages/Matches";
 import Players from "../Pages/Players";
 import Teams from "../Pages/Teams";
 import { App } from "./App";
+import Divisions from "../Pages/Divisions";
 
 var props;
 
@@ -39,6 +40,7 @@ describe("App tests", () => {
         ["Teams", Teams],
         ["Matches", Matches],
         ["Login", Login],
+        ["Divisions", Divisions]
     ])("Displays %s component when store is set to that page", (pageName, pageObject) => {
         props.golf.currentPage = pageName;
         const wrapper = shallow(<App {...props} />);
