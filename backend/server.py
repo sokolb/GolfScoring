@@ -47,6 +47,12 @@ except Exception as e:
 con.execute('''CREATE TABLE if not exists division
             (id INTEGER PRIMARY KEY, name TEXT)''')
 
+try:
+    con.execute('''ALTER TABLE team
+            ADD COLUMN divisionId INTEGER DEFAULT -1''')
+except Exception as e:
+    print("divisionId already exists")
+
 con.close()
 
 
@@ -119,7 +125,7 @@ def getAllPlayers():
 def team(team_id):
     con = engine.connect()
     if request.method == 'GET':
-        teamData = con.execute("SELECT id, teamNumber FROM team WHERE id = ?", (team_id,))
+        teamData = con.execute("SELECT id, teamNumber, divisionId FROM team WHERE id = ?", (team_id,))
         if teamData is None:
             retval = Response(response="Team not found with id " + team_id, status=204, mimetype="application/text")
         else:
@@ -127,7 +133,7 @@ def team(team_id):
             teamMemberData = con.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team_id,))
             for row in teamMemberData:
                 teamMembers.append(row[0])
-            team = Team(teamData[0], teamData[1], teamMembers)
+            team = Team(teamData[0], teamData[1], teamMembers, teamData[2])
             retval = Response(response=team.toJSON(), status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
         con.close()
@@ -136,17 +142,16 @@ def team(team_id):
     if request.method == 'POST':
         data = request.get_json()['team']
         if team_id == "-1":
-            sql = "INSERT INTO team(teamNumber) VALUES (?)"
-            result = con.execute(sql, (data['teamNumber'],))
+            sql = "INSERT INTO team(teamNumber, divisionId) VALUES (?,?)"
+            result = con.execute(sql, (data['teamNumber'], data['divisionId']))
             team_id = str(result.lastrowid)
 
         else:
-            sql = "UPDATE team SET teamNumber = ? WHERE id = ?"
-            con.execute(sql, (data['teamNumber'], team_id))
+            sql = "UPDATE team SET teamNumber = ?, divisionId = ? WHERE id = ?"
+            con.execute(sql, (data['teamNumber'], data['divisionId'], team_id))
             sql = "DELETE from team_member WHERE team_id = ?"
             con.execute(sql, (team_id,))
              
-
         for player_id in data['teamMemberIds']:
             sql = "INSERT INTO team_member(team_id, player_id) VALUES (?,?)"
             con.execute(sql, (team_id, player_id))
@@ -174,7 +179,7 @@ def team(team_id):
 def getAllTeams():
     con = engine.connect()
     teamsList = []
-    teamsData = con.execute("SELECT id, teamNumber FROM team")
+    teamsData = con.execute("SELECT id, teamNumber, divisionId FROM team")
     if teamsData is None:
         retval = Response(response="no teams found", status=204, mimetype="application/text")
     else:
@@ -183,7 +188,7 @@ def getAllTeams():
             teamMembersData = con.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team[0],))
             for teamMember in teamMembersData:
                 teamMembers.append(teamMember[0])
-            team = Team(team[0], team[1], teamMembers)
+            team = Team(team[0], team[1], teamMembers, team[2])
             teamsList.append(team)
         retval = Response(response=json.dumps(teamsList, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4), status=200, mimetype="application/json")
