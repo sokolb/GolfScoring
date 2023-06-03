@@ -170,7 +170,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"team\":{\n\t\t\"teamNumber\" : 1,\n\t\t\"teamMemberIds\" : [\n\t\t\t1,2\n\t\t\t]\n\t}\n}"
+							"raw": "{\n\t\"team\":{\n\t\t\"teamNumber\" : 1,\n\t\t\"teamMemberIds\" : [\n\t\t\t1,2\n\t\t\t],\n        \"divisionId\": -1\n\t}\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8082/team/-1",
@@ -206,6 +206,35 @@
 							"path": [
 								"team",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTeam",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"team\":{\n\t\t\"teamNumber\" : 1,\n\t\t\"teamMemberIds\" : [\n\t\t\t1,2\n\t\t\t],\n        \"divisionId\": 1\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/team/48",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"team",
+								"48"
 							]
 						}
 					},

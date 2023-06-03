@@ -9,6 +9,7 @@ describe("Team Tests", () => {
             team: {
                 teamNumber: 1,
                 teamMemberIds: ["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"],
+                divisionId: 3,
             },
             players: [
                 {
@@ -33,37 +34,56 @@ describe("Team Tests", () => {
                     handicap: 12,
                 },
             ],
+            divisions: [
+                {
+                    id: 3,
+                    name: "div 3 test",
+                },
+            ],
             showDeleteButton: true,
             removeTeam: jest.fn(),
+            getDivisions: jest.fn(),
         };
+    });
+
+    it("Calls GetTeams and GetPlayers when rendered", () => {
+        const wrapper = shallow(<Team {...props} />);
+
+        expect(props.getDivisions).toHaveBeenCalled();
     });
 
     it("Renders correct components", () => {
         const wrapper = shallow(<Team {...props} />);
 
-        const teamNumber = wrapper.find({ name: "teamNumber" });
+        const division = wrapper.find({ name: "division" });
         const teamMembers = wrapper.find({ name: "teamMembers" });
         const deleteButton = wrapper.find({ name: "delete" });
 
-        expect(teamNumber.length).toEqual(1);
+        expect(division.length).toEqual(1);
         expect(teamMembers.length).toEqual(1);
         expect(deleteButton.length).toEqual(1);
     });
 
-    describe("Renders values from props", () => {
-        var wrapper;
-        beforeEach(() => {
-            wrapper = shallow(<Team {...props} />);
-        });
+    it("Division renders with correct value", () => {
+        var wrapper = shallow(<Team {...props} />);
 
-        it("Team number renders with correct value", () => {
-            const teamNumber = wrapper.find({ name: "teamNumber" });
-            expect(teamNumber.text()).toEqual(props.team.teamNumber.toString());
-        });
-        it("Team members rendered correctly", () => {
-            const teamMembers = wrapper.find({ name: "teamMembers" });
-            expect(teamMembers.text()).toEqual("Brian Sokoloski | Bob Smith");
-        });
+        const division = wrapper.find({ name: "division" });
+        expect(division.text()).toEqual(props.divisions.find((d) => d.id === props.team.divisionId).name);
+    });
+
+    it("Temp Division renders with correct value", () => {
+        props.team.divisionId = -1;
+        var wrapper = shallow(<Team {...props} />);
+
+        const division = wrapper.find({ name: "division" });
+        expect(division.text()).toEqual("Temporary Team");
+    });
+
+    it("Team members rendered correctly", () => {
+        var wrapper = shallow(<Team {...props} />);
+
+        const teamMembers = wrapper.find({ name: "teamMembers" });
+        expect(teamMembers.text()).toEqual("Brian Sokoloski | Bob Smith");
     });
 
     it("Calls removeTeam with correct id value", () => {
