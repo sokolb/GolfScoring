@@ -449,18 +449,20 @@ describe("Actions tests", () => {
             var id = 4;
             var teamMemberIds = ["abc123", "xyz321"];
             var teamNumber = 3;
+            var divisionId = 1;
 
             var responseFromApi = {
                 data: id,
             };
             AppData.addTeam.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addTeam(teamNumber, teamMemberIds)(dispatch);
+            await addTeam(teamNumber, teamMemberIds, divisionId)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id,
                 teamNumber,
                 teamMemberIds,
+                divisionId,
                 type: actionTypes.ADD_TEAM,
             });
         });

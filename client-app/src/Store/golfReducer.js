@@ -82,6 +82,7 @@ export default (state = initialState, action) => {
                 id: action.id,
                 teamNumber: action.teamNumber,
                 teamMemberIds: action.teamMemberIds,
+                divisionId: action.divisionId,
             });
             return {
                 ...state,

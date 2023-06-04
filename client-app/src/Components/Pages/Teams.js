@@ -9,9 +9,11 @@ export class Teams extends Component {
 
         this.state = {
             selectedTeamMemberIds: [],
+            selectedDivisionId: -1,
         };
 
         this.handleSelectionBoxChange = this.handleSelectionBoxChange.bind(this);
+        this.handleDivisionSelectionChange = this.handleDivisionSelectionChange.bind(this);
     }
 
     componentDidMount() {
@@ -26,9 +28,15 @@ export class Teams extends Component {
         });
     }
 
+    handleDivisionSelectionChange(event) {
+        this.setState({
+            selectedDivisionId: event.target.value,
+        });
+    }
+
     handleSubmitClick = () => {
         var teamNumber = this.findTeamNumber();
-        this.props.addTeam(teamNumber, this.state.selectedTeamMemberIds);
+        this.props.addTeam(teamNumber, this.state.selectedTeamMemberIds, this.state.selectedDivisionId);
     };
 
     submitButtonDisabled() {
@@ -53,6 +61,23 @@ export class Teams extends Component {
             }
         }
         return teamNumber;
+    }
+
+    getArrayOfDivisionOptions() {
+        var retval = [];
+        retval.push(
+            <option value="-1" key="-1">
+                Temporary Team
+            </option>
+        );
+        this.props.golf.divisions.forEach((d) => {
+            retval.push(
+                <option key={d.id} value={d.id}>
+                    {d.name}
+                </option>
+            );
+        });
+        return retval;
     }
 
     render() {
@@ -84,6 +109,9 @@ export class Teams extends Component {
                                 })}
                         </select>
                         <br />
+                        <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
+                            {this.getArrayOfDivisionOptions()}
+                        </select>
                         <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                             Submit
                         </button>

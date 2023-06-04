@@ -22,6 +22,11 @@ var team3 = {
     teamMemberIds: [1, 4],
 };
 
+var divisions = [
+    { id: 1, name: "mens div 1" },
+    { id: 2, name: "mens div 2" },
+];
+
 describe("Teams Tests", () => {
     beforeEach(() => {
         props = {
@@ -60,6 +65,7 @@ describe("Teams Tests", () => {
                         handicap: 12,
                     },
                 ],
+                divisions: divisions,
                 loggedInUser: "stacy@hotmail.com",
             },
             addTeam: jest.fn(),
@@ -73,6 +79,21 @@ describe("Teams Tests", () => {
 
         expect(props.getTeams).toHaveBeenCalled();
         expect(props.getPlayers).toHaveBeenCalled();
+    });
+
+    it("Renders divisions drop down correctly", () => {
+        const wrapper = shallow(<Teams {...props} />);
+
+        var divisions = wrapper.find({ name: "divisions" });
+
+        expect(divisions.length).toEqual(1);
+        expect(divisions.props().children.length).toEqual(3);
+        expect(divisions.props().children[0].props.value).toEqual("-1");
+        expect(divisions.props().children[0].props.children).toEqual("Temporary Team");
+        expect(divisions.props().children[1].props.value).toEqual(props.golf.divisions[0].id);
+        expect(divisions.props().children[1].props.children).toEqual(props.golf.divisions[0].name);
+        expect(divisions.props().children[2].props.value).toEqual(props.golf.divisions[1].id);
+        expect(divisions.props().children[2].props.children).toEqual(props.golf.divisions[1].name);
     });
 
     it("Renders correct number of teams", () => {
@@ -116,6 +137,7 @@ describe("Teams Tests", () => {
         props.golf.teams = [];
         var teamNumber = 1;
         var teamMemberIds = [props.golf.players[0].id, props.golf.players[2].id];
+        var divisionId = 4;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -124,10 +146,13 @@ describe("Teams Tests", () => {
         });
         playerSelectionBox.simulate("change", createEvent(teamMemberIds));
 
+        const divisions = wrapper.find({ name: "divisions" });
+        divisions.simulate("change", { target: { value: divisionId } });
+
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds, divisionId);
     });
 
     test.each([
@@ -154,6 +179,7 @@ describe("Teams Tests", () => {
     ])("teamNumber should be set to lowest ingeger not used for %o %s", (teams, teamNumber) => {
         props.golf.teams = teams;
         var teamMemberIds = [6, 7];
+        var divisionId = 2;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -162,10 +188,13 @@ describe("Teams Tests", () => {
         });
         playerSelectionBox.simulate("change", createEvent(teamMemberIds));
 
+        const divisions = wrapper.find({ name: "divisions" });
+        divisions.simulate("change", { target: { value: divisionId } });
+
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds, divisionId);
     });
 
     it("Hides add new player boxes when user is not logged in", () => {

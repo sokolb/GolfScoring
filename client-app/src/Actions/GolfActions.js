@@ -189,20 +189,22 @@ const removeTeamCreator = (id) => ({
     type: actionTypes.REMOVE_TEAM,
 });
 
-export const addTeam = (teamNumber, teamMemberIds) => async (dispatch) => {
+export const addTeam = (teamNumber, teamMemberIds, divisionId) => async (dispatch) => {
     var team = {
         teamNumber,
         teamMemberIds,
+        divisionId,
     };
     await AppData.addTeam(team).then((response) => {
-        dispatch(addTeamCreator(response.data, teamNumber, teamMemberIds));
+        dispatch(addTeamCreator(response.data, teamNumber, teamMemberIds, divisionId));
     });
 };
 
-const addTeamCreator = (id, teamNumber, teamMemberIds) => ({
+const addTeamCreator = (id, teamNumber, teamMemberIds, divisionId) => ({
     id,
     teamNumber,
     teamMemberIds,
+    divisionId,
     type: actionTypes.ADD_TEAM,
 });
 

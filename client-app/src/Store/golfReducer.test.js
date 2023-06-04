@@ -455,11 +455,13 @@ describe("Golf Reducer tests", () => {
             var id = 5;
             var teamMemberIds = ["abc567", "pp001"];
             var teamNumber = 7;
+            var divisionId = 3;
 
             targetState.teams[0] = {
                 id,
                 teamNumber,
                 teamMemberIds,
+                divisionId,
             };
 
             expect(
@@ -468,6 +470,7 @@ describe("Golf Reducer tests", () => {
                     id,
                     teamNumber,
                     teamMemberIds,
+                    divisionId,
                 })
             ).toEqual(targetState);
         });
