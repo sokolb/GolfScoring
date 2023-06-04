@@ -129,7 +129,7 @@ export class Teams extends Component {
                         }}
                     >
                         <tbody>
-                            <tr>
+                            <tr key="header">
                                 <th>Division</th>
                                 <th>Team Members</th>
                                 <th></th>
@@ -156,7 +156,7 @@ export class Teams extends Component {
                                         return 0;
                                     })
                                     .map((t) => {
-                                        return <Team key={t.id} team={t} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
+                                        return <Team key={t.id} team={t} showDeleteButton={this.props.golf.loggedInUser !== undefined || t.divisionId === -1} />;
                                     })}
                         </tbody>
                     </table>

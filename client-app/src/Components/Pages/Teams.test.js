@@ -36,10 +36,17 @@ describe("Teams Tests", () => {
                     {
                         teamNumber: 1,
                         teamMemberIds: [1, 2],
+                        divisionId: 1,
                     },
                     {
                         teamNumber: 2,
                         teamMemberIds: [3, 4],
+                        divisionId: 2,
+                    },
+                    {
+                        teamNumber: 3,
+                        teamMemberIds: [1, 4],
+                        divisionId: -1,
                     },
                 ],
                 players: [
@@ -101,7 +108,7 @@ describe("Teams Tests", () => {
 
         const allTeams = wrapper.find(Team);
 
-        expect(allTeams.length).toEqual(2);
+        expect(allTeams.length).toEqual(3);
     });
 
     describe("Player Selection Box", () => {
@@ -206,16 +213,25 @@ describe("Teams Tests", () => {
         expect(addTeam.length).toEqual(0);
     });
 
-    test.each([
-        ["bobby.t@yahoo.com", true],
-        [undefined, false],
-    ])("Renders teams with correct delete button on user logged in: %s", (user, showDeleteButton) => {
-        props.golf.loggedInUser = user;
+    it("Renders showDelete buttom when user is logged in", () => {
+        props.golf.loggedInUser = "bobby.t@yahoo.com";
         const wrapper = shallow(<Teams {...props} />);
 
         const allTeams = wrapper.find(Team);
 
         allTeams.forEach((team) => {
+            expect(team.prop("showDeleteButton")).toEqual(true);
+        });
+    });
+
+    it("Renders showDelete buttom only for temp team when user is not logged in", () => {
+        props.golf.loggedInUser = undefined;
+        const wrapper = shallow(<Teams {...props} />);
+
+        const allTeams = wrapper.find(Team);
+
+        allTeams.forEach((team) => {
+            var showDeleteButton = team.prop("team").divisionId === -1;
             expect(team.prop("showDeleteButton")).toEqual(showDeleteButton);
         });
     });

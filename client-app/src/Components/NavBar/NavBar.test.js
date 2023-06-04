@@ -50,7 +50,8 @@ describe("NavBar Tests", () => {
         expect(btnPlayer.text()).toEqual("Players");
 
         const btnTeams = wrapper.find({ name: "btnTeams" });
-        expect(btnTeams.length).toBe(0);
+        expect(btnTeams.length).toBe(1);
+        expect(btnTeams.text()).toEqual("Teams");
 
         const btnDivisions = wrapper.find({ name: "btnDivisions" });
         expect(btnDivisions.length).toBe(0);
