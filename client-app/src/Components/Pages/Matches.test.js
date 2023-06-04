@@ -13,10 +13,12 @@ describe("Matches tests", () => {
                     {
                         teamNumber: 1,
                         teamMemberIds: [1, 2],
+                        divisionId: 1,
                     },
                     {
                         teamNumber: 2,
                         teamMemberIds: [3, 4],
+                        divisionId: 2,
                     },
                 ],
                 players: [
@@ -48,6 +50,10 @@ describe("Matches tests", () => {
                         lastName: "Doe",
                         handicap: 17,
                     },
+                ],
+                divisions: [
+                    { id: 1, name: "mens div 1" },
+                    { id: 2, name: "mens div 2" },
                 ],
             },
             getTeams: jest.fn(),
@@ -83,18 +89,18 @@ describe("Matches tests", () => {
         expect(team1.props().children.length).toEqual(3);
         expect(team1.props().children[0].props.children).toEqual("Select a team");
         expect(team1.props().children[0].props.value).toEqual(-1);
-        expect(team1.props().children[1].props.children).toEqual("1: Brian Sokoloski | Bob Smith");
+        expect(team1.props().children[1].props.children).toEqual("mens div 1: Brian Sokoloski | Bob Smith");
         expect(team1.props().children[1].props.value).toEqual(1);
-        expect(team1.props().children[2].props.children).toEqual("2: Mary Johnson | Jane Doe");
+        expect(team1.props().children[2].props.children).toEqual("mens div 2: Mary Johnson | Jane Doe");
         expect(team1.props().children[2].props.value).toEqual(2);
 
         var team2 = wrapper.find({ name: "team2" });
         expect(team2.props().children.length).toEqual(3);
         expect(team2.props().children[0].props.children).toEqual("Select a team");
         expect(team2.props().children[0].props.value).toEqual(-1);
-        expect(team2.props().children[1].props.children).toEqual("1: Brian Sokoloski | Bob Smith");
+        expect(team2.props().children[1].props.children).toEqual("mens div 1: Brian Sokoloski | Bob Smith");
         expect(team2.props().children[1].props.value).toEqual(1);
-        expect(team2.props().children[2].props.children).toEqual("2: Mary Johnson | Jane Doe");
+        expect(team2.props().children[2].props.children).toEqual("mens div 2: Mary Johnson | Jane Doe");
         expect(team2.props().children[2].props.value).toEqual(2);
     });
 

@@ -5,4 +5,13 @@ export default class CommonMethods {
             .map((player) => player.firstName + " " + player.lastName)
             .join(" | ");
     }
+
+    static getDivisionById(divisionId, divisions) {
+        var division = divisions.find((d) => d.id === divisionId);
+        if (division === undefined) {
+            return { id: -1, name: "Temporary Team" };
+        } else {
+            return division;
+        }
+    }
 }

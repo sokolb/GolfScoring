@@ -65,13 +65,33 @@ export class Matches extends Component {
         );
 
         if (this.props.golf.teams !== undefined) {
-            teampOptions = this.props.golf.teams.map((t) => {
-                return (
-                    <option key={t.teamNumber} value={t.teamNumber}>
-                        {this.getTeamNumberAndNames(t)}
-                    </option>
-                );
-            });
+            teampOptions = this.props.golf.teams
+                .sort((a, b) => {
+                    var divisionAname = CommonMethods.getDivisionById(a.divisionId, this.props.golf.divisions).name;
+                    var divisionBname = CommonMethods.getDivisionById(b.divisionId, this.props.golf.divisions).name;
+
+                    if (divisionAname === "Temporary Team") {
+                        return 1; // Move "Temporary Team" to the end
+                    }
+                    if (divisionBname === "Temporary Team") {
+                        return -1; // Move "Temporary Team" to the end
+                    }
+
+                    if (divisionAname < divisionBname) {
+                        return -1;
+                    }
+                    if (divisionAname > divisionBname) {
+                        return 1;
+                    }
+                    return 0;
+                })
+                .map((t) => {
+                    return (
+                        <option key={t.teamNumber} value={t.teamNumber}>
+                            {this.getDivisionAndPlayerNames(t)}
+                        </option>
+                    );
+                });
         }
 
         var options = [emptyOption, ...teampOptions];
@@ -79,8 +99,8 @@ export class Matches extends Component {
         return options;
     }
 
-    getTeamNumberAndNames(team) {
-        return team.teamNumber + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
+    getDivisionAndPlayerNames(team) {
+        return CommonMethods.getDivisionById(team.divisionId, this.props.golf.divisions).name + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
     }
 
     handleSubmitClick = () => {

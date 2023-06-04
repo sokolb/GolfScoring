@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTeams, addTeam, getPlayers } from "../../Actions/GolfActions";
 import Team from "./Team";
+import CommonMethods from "../../Commons/commonMethods";
 
 export class Teams extends Component {
     constructor(props) {
@@ -61,15 +62,6 @@ export class Teams extends Component {
             }
         }
         return teamNumber;
-    }
-
-    getDivisionById(divisionId) {
-        var division = this.props.golf.divisions.find((d) => d.id === divisionId);
-        if (division === undefined) {
-            return { id: -1, name: "Temporary Team" };
-        } else {
-            return division;
-        }
     }
 
     getArrayOfDivisionOptions() {
@@ -145,8 +137,8 @@ export class Teams extends Component {
                             {this.props.golf.teams !== undefined &&
                                 this.props.golf.teams
                                     .sort((a, b) => {
-                                        var divisionAname = this.getDivisionById(a.divisionId).name;
-                                        var divisionBname = this.getDivisionById(b.divisionId).name;
+                                        var divisionAname = CommonMethods.getDivisionById(a.divisionId, this.props.golf.divisions).name;
+                                        var divisionBname = CommonMethods.getDivisionById(b.divisionId, this.props.golf.divisions).name;
 
                                         if (divisionAname === "Temporary Team") {
                                             return 1; // Move "Temporary Team" to the end
