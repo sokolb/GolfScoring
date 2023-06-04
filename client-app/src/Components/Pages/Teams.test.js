@@ -204,15 +204,6 @@ describe("Teams Tests", () => {
         expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds, divisionId);
     });
 
-    it("Hides add new player boxes when user is not logged in", () => {
-        props.golf.loggedInUser = undefined;
-        const wrapper = shallow(<Teams {...props} />);
-
-        var addTeam = wrapper.find({ name: "addTeam" });
-
-        expect(addTeam.length).toEqual(0);
-    });
-
     it("Renders showDelete buttom when user is logged in", () => {
         props.golf.loggedInUser = "bobby.t@yahoo.com";
         const wrapper = shallow(<Teams {...props} />);
@@ -234,6 +225,19 @@ describe("Teams Tests", () => {
             var showDeleteButton = team.prop("team").divisionId === -1;
             expect(team.prop("showDeleteButton")).toEqual(showDeleteButton);
         });
+    });
+
+    test.each([
+        ["logged.in.bobby@gmail.com", divisions.length + 1],
+        [undefined, 1],
+    ])("Show temp team in division drop down only for non logged in users %s", (loggedInUser, divisionCount) => {
+        props.golf.loggedInUser = loggedInUser;
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        var divisions = wrapper.find({ name: "divisions" });
+
+        expect(divisions.props().children.length).toEqual(divisionCount);
     });
 
     function createEvent(value) {

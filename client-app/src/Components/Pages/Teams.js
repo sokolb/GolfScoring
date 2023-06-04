@@ -71,53 +71,53 @@ export class Teams extends Component {
                 Temporary Team
             </option>
         );
-        this.props.golf.divisions.forEach((d) => {
-            retval.push(
-                <option key={d.id} value={d.id}>
-                    {d.name}
-                </option>
-            );
-        });
+        if (this.props.golf.loggedInUser !== undefined) {
+            this.props.golf.divisions.forEach((d) => {
+                retval.push(
+                    <option key={d.id} value={d.id}>
+                        {d.name}
+                    </option>
+                );
+            });
+        }
         return retval;
     }
 
     render() {
         return (
             <div>
-                {this.props.golf.loggedInUser !== undefined && (
-                    <div name="addTeam">
-                        <h2>Add Team</h2>
-                        <br />
-                        <select name="playersSelectionBox" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBoxChange}>
-                            {this.props.golf.players
-                                .sort((a, b) => {
-                                    var firstNameA = a.firstName.toUpperCase();
-                                    var firstNameB = b.firstName.toUpperCase();
-                                    if (firstNameA < firstNameB) {
-                                        return -1;
-                                    }
-                                    if (firstNameA > firstNameB) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                })
-                                .map((player) => {
-                                    return (
-                                        <option key={player.id} value={player.id}>
-                                            {player.firstName + " " + player.lastName}
-                                        </option>
-                                    );
-                                })}
-                        </select>
-                        <br />
-                        <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
-                            {this.getArrayOfDivisionOptions()}
-                        </select>
-                        <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
-                            Submit
-                        </button>
-                    </div>
-                )}
+                <div name="addTeam">
+                    <h2>Add Team</h2>
+                    <br />
+                    <select name="playersSelectionBox" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBoxChange}>
+                        {this.props.golf.players
+                            .sort((a, b) => {
+                                var firstNameA = a.firstName.toUpperCase();
+                                var firstNameB = b.firstName.toUpperCase();
+                                if (firstNameA < firstNameB) {
+                                    return -1;
+                                }
+                                if (firstNameA > firstNameB) {
+                                    return 1;
+                                }
+                                return 0;
+                            })
+                            .map((player) => {
+                                return (
+                                    <option key={player.id} value={player.id}>
+                                        {player.firstName + " " + player.lastName}
+                                    </option>
+                                );
+                            })}
+                    </select>
+                    <br />
+                    <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
+                        {this.getArrayOfDivisionOptions()}
+                    </select>
+                    <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
+                        Submit
+                    </button>
+                </div>
                 <div style={{ textAlign: "center" }}>
                     <h2>Team List</h2>
                     <table
