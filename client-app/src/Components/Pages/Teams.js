@@ -63,6 +63,15 @@ export class Teams extends Component {
         return teamNumber;
     }
 
+    getDivisionById(divisionId) {
+        var division = this.props.golf.divisions.find((d) => d.id === divisionId);
+        if (division === undefined) {
+            return { id: -1, name: "Temporary Team" };
+        } else {
+            return division;
+        }
+    }
+
     getArrayOfDivisionOptions() {
         var retval = [];
         retval.push(
@@ -134,9 +143,29 @@ export class Teams extends Component {
                                 <th></th>
                             </tr>
                             {this.props.golf.teams !== undefined &&
-                                this.props.golf.teams.map((t) => {
-                                    return <Team key={t.teamNumber} team={t} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
-                                })}
+                                this.props.golf.teams
+                                    .sort((a, b) => {
+                                        var divisionAname = this.getDivisionById(a.divisionId).name;
+                                        var divisionBname = this.getDivisionById(b.divisionId).name;
+
+                                        if (divisionAname === "Temporary Team") {
+                                            return 1; // Move "Temporary Team" to the end
+                                        }
+                                        if (divisionBname === "Temporary Team") {
+                                            return -1; // Move "Temporary Team" to the end
+                                        }
+
+                                        if (divisionAname < divisionBname) {
+                                            return -1;
+                                        }
+                                        if (divisionAname > divisionBname) {
+                                            return 1;
+                                        }
+                                        return 0;
+                                    })
+                                    .map((t) => {
+                                        return <Team key={t.id} team={t} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
+                                    })}
                         </tbody>
                     </table>
                 </div>
