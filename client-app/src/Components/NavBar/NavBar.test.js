@@ -1,6 +1,11 @@
 import { shallow } from "enzyme";
 import { NavBar } from "./Navbar";
 
+const expectedVersion = "4.0.0";
+jest.mock("../../../package.json", () => ({
+    version: expectedVersion,
+}));
+
 var props;
 
 describe("NavBar Tests", () => {
@@ -94,5 +99,13 @@ describe("NavBar Tests", () => {
         btnLogin.simulate("click");
 
         expect(props.setLoggedInUser).toHaveBeenCalledWith(undefined, undefined);
+    });
+
+    it("displays the correct version", () => {
+        const wrapper = shallow(<NavBar {...props} />);
+        const versionLabel = wrapper.find({ name: "lblVersion" });
+
+        expect(versionLabel.exists()).toEqual(true);
+        expect(versionLabel.text()).toEqual(`Version: ${expectedVersion}`);
     });
 });

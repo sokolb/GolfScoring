@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setCurrentPage, setLoggedInUser } from "../../Actions/GolfActions";
+import packageJson from "../../../package.json";
+
+const version = packageJson.version;
 
 export class NavBar extends Component {
     getLoginLogoutText() {
@@ -42,6 +45,11 @@ export class NavBar extends Component {
                     <button name="btnMatches" onClick={() => this.handleNavigationButtonClick("Matches")}>
                         Matches
                     </button>
+                </div>
+                <div style={{ position: "absolute", top: 0, right: 2 }}>
+                    <label name="lblVersion" style={{ fontSize: 10 }}>
+                        Version: {version}
+                    </label>
                 </div>
             </div>
         );
