@@ -9,11 +9,13 @@ export class Teams extends Component {
         super(props);
 
         this.state = {
-            selectedTeamMemberIds: [],
+            selectedTeamMemberId1: -1,
+            selectedTeamMemberId2: -1,
             selectedDivisionId: -1,
         };
 
-        this.handleSelectionBoxChange = this.handleSelectionBoxChange.bind(this);
+        this.handleSelectionBox1Change = this.handleSelectionBox1Change.bind(this);
+        this.handleSelectionBox2Change = this.handleSelectionBox2Change.bind(this);
         this.handleDivisionSelectionChange = this.handleDivisionSelectionChange.bind(this);
     }
 
@@ -22,10 +24,17 @@ export class Teams extends Component {
         this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
-    handleSelectionBoxChange(event) {
-        let selectedIds = [].slice.call(event.target.selectedOptions).map((option) => parseInt(option.value));
+    handleSelectionBox1Change(event) {
+        let selectedId = [].slice.call(event.target.selectedOptions).map((option) => parseInt(option.value));
         this.setState({
-            selectedTeamMemberIds: selectedIds,
+            selectedTeamMemberId1: selectedId,
+        });
+    }
+
+    handleSelectionBox2Change(event) {
+        let selectedId = [].slice.call(event.target.selectedOptions).map((option) => parseInt(option.value));
+        this.setState({
+            selectedTeamMemberId2: selectedId,
         });
     }
 
@@ -37,11 +46,16 @@ export class Teams extends Component {
 
     handleSubmitClick = () => {
         var teamNumber = this.findTeamNumber();
-        this.props.addTeam(teamNumber, this.state.selectedTeamMemberIds, this.state.selectedDivisionId);
+        var selectedTeamMemberIds = [this.state.selectedTeamMemberId1[0], this.state.selectedTeamMemberId2[0]];
+        this.props.addTeam(teamNumber, selectedTeamMemberIds, this.state.selectedDivisionId);
+        this.setState({
+            selectedTeamMemberId1: -1,
+            selectedTeamMemberId2: -1,
+        });
     };
 
     submitButtonDisabled() {
-        return this.state.selectedTeamMemberIds.length !== 2;
+        return !(this.state.selectedTeamMemberId1[0] > -1 && this.state.selectedTeamMemberId2[0] > -1 && this.state.selectedTeamMemberId1[0] !== this.state.selectedTeamMemberId2[0]);
     }
 
     findTeamNumber() {
@@ -89,7 +103,28 @@ export class Teams extends Component {
                 <div name="addTeam">
                     <h2>Add Team</h2>
                     <br />
-                    <select name="playersSelectionBox" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBoxChange}>
+                    <select key="playersSelectionBox1" name="playersSelectionBox1" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBox1Change}>
+                        {this.props.golf.players
+                            .sort((a, b) => {
+                                var firstNameA = a.firstName.toUpperCase();
+                                var firstNameB = b.firstName.toUpperCase();
+                                if (firstNameA < firstNameB) {
+                                    return -1;
+                                }
+                                if (firstNameA > firstNameB) {
+                                    return 1;
+                                }
+                                return 0;
+                            })
+                            .map((player) => {
+                                return (
+                                    <option key={player.id} value={player.id}>
+                                        {player.firstName + " " + player.lastName}
+                                    </option>
+                                );
+                            })}
+                    </select>
+                    <select key="playersSelectionBox2" name="playersSelectionBox2" style={{ height: "300px" }} multiple={true} onChange={this.handleSelectionBox2Change}>
                         {this.props.golf.players
                             .sort((a, b) => {
                                 var firstNameA = a.firstName.toUpperCase();

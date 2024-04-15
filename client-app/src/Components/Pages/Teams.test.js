@@ -115,17 +115,18 @@ describe("Teams Tests", () => {
         it("Renders select box", () => {
             const wrapper = shallow(<Teams {...props} />);
 
-            const playerSelectionBox = wrapper.find({ name: "playersSelectionBox" });
+            const playerSelectionBox1 = wrapper.find({ name: "playersSelectionBox1" });
+            const playerSelectionBox2 = wrapper.find({ name: "playersSelectionBox2" });
 
-            expect(playerSelectionBox.length).toEqual(1);
-            expect(playerSelectionBox.props().multiple).toBe(true);
+            expect(playerSelectionBox1.length).toEqual(1);
+            expect(playerSelectionBox2.length).toEqual(1);
         });
 
-        it("Selection box is populated with players on page load", () => {
+        test.each([["playersSelectionBox1"], ["playersSelectionBox2"]])("Selection box %s is populated with players on page load", (playBoxName) => {
             props.golf.teams = [];
             const wrapper = shallow(<Teams {...props} />);
 
-            const playerSelectionBox = wrapper.find({ name: "playersSelectionBox" });
+            const playerSelectionBox = wrapper.find({ name: playBoxName });
 
             expect(playerSelectionBox.props().children.length).toEqual(3);
 
@@ -143,15 +144,20 @@ describe("Teams Tests", () => {
     it("Submit buttons calls addTeam with correct parameters", () => {
         props.golf.teams = [];
         var teamNumber = 1;
-        var teamMemberIds = [props.golf.players[0].id, props.golf.players[2].id];
+        var teamMemberId1 = props.golf.players[0].id;
+        var teamMemberId2 = props.golf.players[2].id;
         var divisionId = 4;
 
         const wrapper = shallow(<Teams {...props} />);
 
-        const playerSelectionBox = wrapper.find({
-            name: "playersSelectionBox",
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
         });
-        playerSelectionBox.simulate("change", createEvent(teamMemberIds));
+        playerSelectionBox1.simulate("change", createEvent(teamMemberId1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(teamMemberId2));
 
         const divisions = wrapper.find({ name: "divisions" });
         divisions.simulate("change", { target: { value: divisionId } });
@@ -159,23 +165,43 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds, divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
     });
 
     test.each([
-        [["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"], false],
-        [[], true],
-        [["3b1823f4-b36c-4288-1111-ed0b00bc6653"], true],
-    ])("Submit button disabled/enabled correctly with params: selectedTeamMemberIds %s", (teamMemberIds, disabled) => {
+        [1, 2, false],
+        [-1, -1, true],
+        [2, -1, true],
+    ])("Submit button disabled/enabled correctly with params: selectedTeamMemberIds %s", (teamMemberId1, teamMemberId2, disabled) => {
         const wrapper = shallow(<Teams {...props} />);
 
-        const playerSelectionBox = wrapper.find({
-            name: "playersSelectionBox",
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
         });
-        playerSelectionBox.simulate("change", createEvent(teamMemberIds));
+        playerSelectionBox1.simulate("change", createEvent(teamMemberId1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(teamMemberId2));
 
         const submitButton = wrapper.find({ name: "submit" });
         expect(submitButton.props().disabled).toEqual(disabled);
+    });
+
+    it("Submit button disabled when same player selected", () => {
+        const wrapper = shallow(<Teams {...props} />);
+
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
+        });
+        playerSelectionBox1.simulate("change", createEvent(1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(1));
+
+        const submitButton = wrapper.find({ name: "submit" });
+        expect(submitButton.props().disabled).toEqual(true);
     });
 
     test.each([
@@ -185,15 +211,20 @@ describe("Teams Tests", () => {
         [[], 1],
     ])("teamNumber should be set to lowest ingeger not used for %o %s", (teams, teamNumber) => {
         props.golf.teams = teams;
-        var teamMemberIds = [6, 7];
+        var teamMemberId1 = 6;
+        var teamMemberId2 = 7;
         var divisionId = 2;
 
         const wrapper = shallow(<Teams {...props} />);
 
-        const playerSelectionBox = wrapper.find({
-            name: "playersSelectionBox",
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
         });
-        playerSelectionBox.simulate("change", createEvent(teamMemberIds));
+        playerSelectionBox1.simulate("change", createEvent(teamMemberId1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(teamMemberId2));
 
         const divisions = wrapper.find({ name: "divisions" });
         divisions.simulate("change", { target: { value: divisionId } });
@@ -201,7 +232,7 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMemberIds, divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
     });
 
     it("Renders showDelete buttom when user is logged in", () => {
@@ -242,9 +273,7 @@ describe("Teams Tests", () => {
 
     function createEvent(value) {
         var values = [];
-        for (var v in value) {
-            values.push({ value: value[v] });
-        }
+        values.push({ value: value });
 
         return {
             target: {
