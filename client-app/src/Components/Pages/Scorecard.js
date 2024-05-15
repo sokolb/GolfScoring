@@ -162,7 +162,7 @@ export class Scorecard extends Component {
                     <br />
                     <label name="frontBackNine">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"}</label>
                     <br />
-                    <label name="division">Division: {this.props.division}</label>
+                    <label name="division">{this.props.division !== "" ? "Division: " + this.props.division : ""}</label>
                     <table name="scoreCardTable" visible="true" border="1" style={{ width: "100%", textAlign: "center" }}>
                         <tbody>
                             <tr style={{ fontWeight: "bold" }}>

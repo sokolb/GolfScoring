@@ -99,6 +99,28 @@ export class Matches extends Component {
         return options;
     }
 
+    getDivisionForScorecard() {
+        var retval = "";
+        var team = this.props.golf.teams.find((team) => team.teamNumber === this.state.selectedTeam1);
+        var team1DivId = team ? team.divisionId : -1;
+        team = this.props.golf.teams.find((team) => team.teamNumber === this.state.selectedTeam2);
+        var team2DivId = team ? team.divisionId : -1;
+
+        var team1Div = CommonMethods.getDivisionById(team1DivId, this.props.golf.divisions).name;
+        var team2Div = CommonMethods.getDivisionById(team2DivId, this.props.golf.divisions).name;
+        if (team1Div !== "Temporary Team") {
+            retval = team1Div;
+        }
+        if (team2Div !== "Temporary Team") {
+            if (retval === "") {
+                retval = team2Div;
+            } else if (team1Div !== team2Div) {
+                retval += " | " + team2Div;
+            }
+        }
+        return retval;
+    }
+
     getDivisionAndPlayerNames(team) {
         return CommonMethods.getDivisionById(team.divisionId, this.props.golf.divisions).name + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
     }
@@ -162,7 +184,7 @@ export class Matches extends Component {
                         {this.state.errorMessage}
                     </label>
                 </div>
-                <div>{this.state.showScorecard && <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} />} </div>
+                <div>{this.state.showScorecard && <Scorecard frontBackNine={this.state.frontBackNine} team1Id={this.state.selectedTeam1} team2Id={this.state.selectedTeam2} division={this.getDivisionForScorecard()} />} </div>
             </div>
         );
     }

@@ -18,7 +18,7 @@ describe("Matches tests", () => {
                     {
                         teamNumber: 2,
                         teamMemberIds: [3, 4],
-                        divisionId: 2,
+                        divisionId: 1,
                     },
                 ],
                 players: [
@@ -91,7 +91,7 @@ describe("Matches tests", () => {
         expect(team1.props().children[0].props.value).toEqual(-1);
         expect(team1.props().children[1].props.children).toEqual("mens div 1: Brian Sokoloski | Bob Smith");
         expect(team1.props().children[1].props.value).toEqual(1);
-        expect(team1.props().children[2].props.children).toEqual("mens div 2: Mary Johnson | Jane Doe");
+        expect(team1.props().children[2].props.children).toEqual("mens div 1: Mary Johnson | Jane Doe");
         expect(team1.props().children[2].props.value).toEqual(2);
 
         var team2 = wrapper.find({ name: "team2" });
@@ -100,7 +100,7 @@ describe("Matches tests", () => {
         expect(team2.props().children[0].props.value).toEqual(-1);
         expect(team2.props().children[1].props.children).toEqual("mens div 1: Brian Sokoloski | Bob Smith");
         expect(team2.props().children[1].props.value).toEqual(1);
-        expect(team2.props().children[2].props.children).toEqual("mens div 2: Mary Johnson | Jane Doe");
+        expect(team2.props().children[2].props.children).toEqual("mens div 1: Mary Johnson | Jane Doe");
         expect(team2.props().children[2].props.value).toEqual(2);
     });
 
@@ -175,5 +175,28 @@ describe("Matches tests", () => {
         expect(scorecard.props().frontBackNine).toEqual("frontNine");
         expect(scorecard.props().team1Id).toEqual(1);
         expect(scorecard.props().team2Id).toEqual(2);
+    });
+
+    test.each([
+        [1, 1, "mens div 1"],
+        [1, 2, "mens div 1 | mens div 2"],
+        [-1, 1, "mens div 1"],
+        [1, 1, "mens div 1"],
+        [-1, -1, ""],
+    ])("Scorecard is rendered with correct division prop on button click", (team1Div, team2Div, divisionText) => {
+        props.golf.teams[0].divisionId = team1Div;
+        props.golf.teams[1].divisionId = team2Div;
+        const wrapper = shallow(<Matches {...props} />);
+
+        var team1SelectBox = wrapper.find({ name: "team1" });
+        team1SelectBox.simulate("change", { target: { value: 1 } });
+        var team2SelectBox = wrapper.find({ name: "team2" });
+        team2SelectBox.simulate("change", { target: { value: 2 } });
+
+        var createScoreCardButton = wrapper.find({ name: "createScoreCard" });
+        createScoreCardButton.simulate("click");
+
+        var scorecard = wrapper.find(Scorecard);
+        expect(scorecard.props().division).toEqual(divisionText);
     });
 });

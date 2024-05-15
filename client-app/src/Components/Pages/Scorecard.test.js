@@ -501,7 +501,7 @@ describe("Scorecard tests", () => {
         expect(frontBackNineHandicap.text()).toEqual(textValue + " Handicap");
     });
 
-    it("renders division", () => {
+    it("renders division when present in props", () => {
         var divisionText = "Mens Div1";
         props.division = divisionText;
         const wrapper = shallow(<Scorecard {...props} />);
@@ -509,6 +509,15 @@ describe("Scorecard tests", () => {
         var division = wrapper.find({ name: "division" });
 
         expect(division.text()).toEqual("Division: " + divisionText);
+    });
+
+    it("doesn't render division when not present in props", () => {
+        props.division = "";
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var division = wrapper.find({ name: "division" });
+
+        expect(division.text()).toEqual("");
     });
 
     it("renders todays date", () => {
