@@ -458,6 +458,7 @@ describe("Scorecard tests", () => {
             frontBackNine: "frontNine",
             team1Id: 1,
             team2Id: 2,
+            division: "Mens Division",
         };
     });
 
@@ -466,12 +467,14 @@ describe("Scorecard tests", () => {
 
         var date = wrapper.find({ name: "dateToday" });
         var frontBackNine = wrapper.find({ name: "frontBackNine" });
+        var division = wrapper.find({ name: "division" });
         var scoreCardTable = wrapper.find({ name: "scoreCardTable" });
         var print = wrapper.find({ name: "print" });
         var scorecard = wrapper.find({ id: "scorecard" });
 
         expect(date.length).toEqual(1);
         expect(frontBackNine.length).toEqual(1);
+        expect(division.length).toEqual(1);
         expect(scoreCardTable.length).toEqual(1);
         expect(print.length).toEqual(1);
         expect(scorecard.length).toEqual(1);
@@ -496,6 +499,16 @@ describe("Scorecard tests", () => {
 
         expect(frontBackNine.text()).toEqual(textValue);
         expect(frontBackNineHandicap.text()).toEqual(textValue + " Handicap");
+    });
+
+    it("renders division", () => {
+        var divisionText = "Mens Div1";
+        props.division = divisionText;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var division = wrapper.find({ name: "division" });
+
+        expect(division.text()).toEqual("Division: " + divisionText);
     });
 
     it("renders todays date", () => {
