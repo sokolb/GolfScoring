@@ -32,12 +32,22 @@ var player2 = {
 
 var team1 = {
     teamNumber: 1,
-    teamMemberIds: ["111123f4-b36c-4288-a827-ed0b00bc6653", "2212559a-ae1b-44d1-9c8b-d7f3f8b9e44a"],
+    teamMembers: [
+        { playerId: "111123f4-b36c-4288-a827-ed0b00bc6653", APlayer: true },
+        { playerId: "2212559a-ae1b-44d1-9c8b-d7f3f8b9e44a", APlayer: false },
+    ],
+    divisionId: 1,
+    forceAB: true,
 };
 
 var team2 = {
     teamNumber: 2,
-    teamMemberIds: ["333323f4-b36c-4288-a827-ed0b00bc6653", "4444559a-ae1b-44d1-9c8b-d7f3f8b9e44a"],
+    teamMembers: [
+        { playerId: "333323f4-b36c-4288-a827-ed0b00bc6653", APlayer: true },
+        { playerId: "4444559a-ae1b-44d1-9c8b-d7f3f8b9e44a", APlayer: false },
+    ],
+    divisionId: 1,
+    forceAB: false,
 };
 
 var course1 = {
@@ -237,10 +247,12 @@ var course2 = {
 };
 
 var division1 = {
+    id: 1,
     name: "mens Division 1",
 };
 
 var division2 = {
+    id: 2,
     name: "mens Division 2",
 };
 
@@ -453,15 +465,20 @@ describe("Golf Reducer tests", () => {
 
         it("should match the state when ADD_TEAM is dispatched", () => {
             var id = 5;
-            var teamMemberIds = ["abc567", "pp001"];
+            var teamMembers = [
+                { playerID: "abc567", APlayer: false },
+                { playerId: "pp001", APlayer: true },
+            ];
             var teamNumber = 7;
             var divisionId = 3;
+            var forceAB = false;
 
             targetState.teams[0] = {
                 id,
                 teamNumber,
-                teamMemberIds,
+                teamMembers,
                 divisionId,
+                forceAB,
             };
 
             expect(
@@ -469,8 +486,9 @@ describe("Golf Reducer tests", () => {
                     type: actionTypes.ADD_TEAM,
                     id,
                     teamNumber,
-                    teamMemberIds,
+                    teamMembers,
                     divisionId,
+                    forceAB,
                 })
             ).toEqual(targetState);
         });

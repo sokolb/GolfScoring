@@ -8,7 +8,10 @@ describe("Team Tests", () => {
         props = {
             team: {
                 teamNumber: 1,
-                teamMemberIds: ["3b1823f4-b36c-4288-1111-ed0b00bc6653", "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a"],
+                teamMembers: [
+                    { playerId: "3b1823f4-b36c-4288-1111-ed0b00bc6653", APlayer: true },
+                    { playerId: "0c6b559a-ae1b-44d1-2222-d7f3f8b9e44a", APlayer: false },
+                ],
                 divisionId: 3,
             },
             players: [

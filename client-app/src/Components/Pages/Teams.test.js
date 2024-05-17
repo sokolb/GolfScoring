@@ -7,19 +7,28 @@ var props;
 var team1 = {
     id: 1,
     teamNumber: 1,
-    teamMemberIds: [1, 2],
+    teamMembers: [
+        { playerId: 1, APlayer: true },
+        { playerId: 2, APlayer: false },
+    ],
 };
 
 var team2 = {
     id: 2,
     teamNumber: 2,
-    teamMemberIds: [3, 4],
+    teamMembers: [
+        { playerId: 3, APlayer: true },
+        { playerId: 4, APlayer: false },
+    ],
 };
 
 var team3 = {
     id: 3,
     teamNumber: 3,
-    teamMemberIds: [1, 4],
+    teamMembers: [
+        { playerId: 1, APlayer: true },
+        { playerId: 4, APlayer: false },
+    ],
 };
 
 var divisions = [
@@ -35,17 +44,26 @@ describe("Teams Tests", () => {
                 teams: [
                     {
                         teamNumber: 1,
-                        teamMemberIds: [1, 2],
+                        teamMembers: [
+                            { playerId: 1, APlayer: true },
+                            { playerId: 2, APlayer: false },
+                        ],
                         divisionId: 1,
                     },
                     {
                         teamNumber: 2,
-                        teamMemberIds: [3, 4],
+                        teamMembers: [
+                            { playerId: 3, APlayer: true },
+                            { playerId: 4, APlayer: false },
+                        ],
                         divisionId: 2,
                     },
                     {
                         teamNumber: 3,
-                        teamMemberIds: [1, 4],
+                        teamMembers: [
+                            { playerId: 1, APlayer: true },
+                            { playerId: 4, APlayer: false },
+                        ],
                         divisionId: -1,
                     },
                 ],
@@ -146,7 +164,12 @@ describe("Teams Tests", () => {
         var teamNumber = 1;
         var teamMemberId1 = props.golf.players[0].id;
         var teamMemberId2 = props.golf.players[2].id;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
         var divisionId = 4;
+        var forceAB = false;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -165,14 +188,48 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
+    });
+
+    test.each([[true], [false]])("Submit buttons calls addTeam with correct parameters for forceAB", (forceAB) => {
+        props.golf.teams = [];
+        var teamNumber = 1;
+        var teamMemberId1 = props.golf.players[0].id;
+        var teamMemberId2 = props.golf.players[2].id;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
+        var divisionId = 4;
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
+        });
+        playerSelectionBox1.simulate("change", createEvent(teamMemberId1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(teamMemberId2));
+
+        const divisions = wrapper.find({ name: "divisions" });
+        divisions.simulate("change", { target: { value: divisionId } });
+
+        const chkForceAB = wrapper.find({ name: "chkForceAB" });
+        chkForceAB.simulate("change", { target: { checked: forceAB } });
+
+        const submitButton = wrapper.find({ name: "submit" });
+        submitButton.simulate("click");
+
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
     });
 
     test.each([
         [1, 2, false],
         [-1, -1, true],
         [2, -1, true],
-    ])("Submit button disabled/enabled correctly with params: selectedTeamMemberIds %s", (teamMemberId1, teamMemberId2, disabled) => {
+    ])("Submit button disabled/enabled correctly with params: selectedTeamMembers %s", (teamMemberId1, teamMemberId2, disabled) => {
         const wrapper = shallow(<Teams {...props} />);
 
         const playerSelectionBox1 = wrapper.find({
@@ -213,7 +270,12 @@ describe("Teams Tests", () => {
         props.golf.teams = teams;
         var teamMemberId1 = 6;
         var teamMemberId2 = 7;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
         var divisionId = 2;
+        var forceAB = false;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -232,7 +294,7 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
     });
 
     it("Renders showDelete buttom when user is logged in", () => {
@@ -269,6 +331,21 @@ describe("Teams Tests", () => {
         var divisions = wrapper.find({ name: "divisions" });
 
         expect(divisions.props().children.length).toEqual(divisionCount);
+    });
+
+    test.each([
+        ["logged.in.bobby@gmail.com", 1],
+        [undefined, 0],
+    ])("Show forceAB for logged in users %s", (loggedInUser, length) => {
+        props.golf.loggedInUser = loggedInUser;
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        var chkForceAB = wrapper.find({ name: "chkForceAB" });
+        var lblForceAB = wrapper.find({ name: "lblForceAB" });
+
+        expect(chkForceAB.length).toEqual(length);
+        expect(lblForceAB.length).toEqual(length);
     });
 
     function createEvent(value) {

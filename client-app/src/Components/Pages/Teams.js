@@ -12,17 +12,25 @@ export class Teams extends Component {
             selectedTeamMemberId1: -1,
             selectedTeamMemberId2: -1,
             selectedDivisionId: -1,
+            forceAB: false,
         };
 
         this.handleSelectionBox1Change = this.handleSelectionBox1Change.bind(this);
         this.handleSelectionBox2Change = this.handleSelectionBox2Change.bind(this);
         this.handleDivisionSelectionChange = this.handleDivisionSelectionChange.bind(this);
+        // this.handleChkForceABChange = this.handleChkForceABChange(this);
     }
 
     componentDidMount() {
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
     }
+
+    handleChkForceABChange = (event) => {
+        this.setState({
+            forceAB: event.target.checked,
+        });
+    };
 
     handleSelectionBox1Change(event) {
         let selectedId = [].slice.call(event.target.selectedOptions).map((option) => parseInt(option.value));
@@ -46,11 +54,15 @@ export class Teams extends Component {
 
     handleSubmitClick = () => {
         var teamNumber = this.findTeamNumber();
-        var selectedTeamMemberIds = [this.state.selectedTeamMemberId1[0], this.state.selectedTeamMemberId2[0]];
-        this.props.addTeam(teamNumber, selectedTeamMemberIds, this.state.selectedDivisionId);
+        var teamMembers = [
+            { playerId: this.state.selectedTeamMemberId1[0], APlayer: true },
+            { playerId: this.state.selectedTeamMemberId2[0], APlayer: false },
+        ];
+        this.props.addTeam(teamNumber, teamMembers, this.state.selectedDivisionId, this.state.forceAB);
         this.setState({
             selectedTeamMemberId1: -1,
             selectedTeamMemberId2: -1,
+            forceAB: false,
         });
     };
 
@@ -149,6 +161,14 @@ export class Teams extends Component {
                     <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
                         {this.getArrayOfDivisionOptions()}
                     </select>
+                    {this.props.golf.loggedInUser !== undefined && (
+                        <div>
+                            <br />
+                            <input name="chkForceAB" type="checkbox" checked={this.state.forceAB} onChange={this.handleChkForceABChange} />
+                            <label name="lblForceAB">Force A and B player</label>
+                        </div>
+                    )}
+                    <br />
                     <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                         Submit
                     </button>

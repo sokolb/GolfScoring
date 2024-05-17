@@ -81,8 +81,9 @@ export default (state = initialState, action) => {
             teams.push({
                 id: action.id,
                 teamNumber: action.teamNumber,
-                teamMemberIds: action.teamMemberIds,
+                teamMembers: action.teamMembers,
                 divisionId: action.divisionId,
+                forceAB: action.forceAB,
             });
             return {
                 ...state,

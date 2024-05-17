@@ -426,11 +426,17 @@ describe("Actions tests", () => {
             var responseData = [
                 {
                     teamNumber: 324524,
-                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1122", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133"],
+                    teamMembers: [
+                        { playerId: "3b1823f4-b36c-4288-a827-ed0b00bc1122", APlayer: true },
+                        { playerId: "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133", APlayer: false },
+                    ],
                 },
                 {
                     teamNumber: 42342,
-                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1144", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155"],
+                    teamMembers: [
+                        { playerId: "3b1823f4-b36c-4288-a827-ed0b00bc1144", APlayer: true },
+                        { playerId: "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155", APlayer: false },
+                    ],
                 },
             ];
 
@@ -447,22 +453,30 @@ describe("Actions tests", () => {
         it("addTeam dispatches ADD_TEAM", async () => {
             const dispatch = jest.fn();
             var id = 4;
-            var teamMemberIds = ["abc123", "xyz321"];
+            var teamMembers = [
+                {
+                    playerId: "abc123",
+                    APlayer: true,
+                },
+                { playerId: "xyz321", APlayer: false },
+            ];
             var teamNumber = 3;
             var divisionId = 1;
+            var forceAB = false;
 
             var responseFromApi = {
                 data: id,
             };
             AppData.addTeam.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addTeam(teamNumber, teamMemberIds, divisionId)(dispatch);
+            await addTeam(teamNumber, teamMembers, divisionId, forceAB)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id,
                 teamNumber,
-                teamMemberIds,
+                teamMembers,
                 divisionId,
+                forceAB,
                 type: actionTypes.ADD_TEAM,
             });
         });

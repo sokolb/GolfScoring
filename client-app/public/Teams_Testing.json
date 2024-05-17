@@ -2,11 +2,17 @@
     {
         "id": 1,
         "teamNumber": 1,
-        "teamMemberIds": [1, 4]
+        "teamMembers": [
+            { "playerId": 1, "APlayer": true },
+            { "playerId": 2, "APlayer": false }
+        ]
     },
     {
         "id": 2,
         "teamNumber": 2,
-        "teamMemberIds": [2, 3]
+        "teamMembers": [
+            { "playerId": 2, "APlayer": true },
+            { "playerId": 3, "APlayer": false }
+        ]
     }
 ]

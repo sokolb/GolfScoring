@@ -91,7 +91,10 @@ describe("AppData", () => {
         it("addTeam calls API with correct values", async () => {
             var team = {
                 teamNumber: 1,
-                teamMemberIds: [1, 4],
+                teamMembers: [
+                    { playerId: 1, APlayer: true },
+                    { playerId: 4, APlayer: false },
+                ],
             };
             var url = "http://localhost:8082/team/-1";
             var additionalData = {

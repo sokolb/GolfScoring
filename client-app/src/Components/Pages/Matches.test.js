@@ -12,12 +12,18 @@ describe("Matches tests", () => {
                 teams: [
                     {
                         teamNumber: 1,
-                        teamMemberIds: [1, 2],
+                        teamMembers: [
+                            { playerId: 1, APlayer: true },
+                            { playerId: 2, APlayer: false },
+                        ],
                         divisionId: 1,
                     },
                     {
                         teamNumber: 2,
-                        teamMemberIds: [3, 4],
+                        teamMembers: [
+                            { playerId: 3, APlayer: true },
+                            { playerId: 4, APlayer: false },
+                        ],
                         divisionId: 1,
                     },
                 ],

@@ -1,9 +1,13 @@
 export default class CommonMethods {
     static getTeamMemberNames(team, players) {
-        return players
-            .filter((player) => team.teamMemberIds.includes(player.id))
-            .map((player) => player.firstName + " " + player.lastName)
+        var retval = players
+            .filter((player) => team.teamMembers.some((member) => member.playerId === player.id))
+            .map((player) => `${player.firstName} ${player.lastName}`)
             .join(" | ");
+        if (team.forceAB) {
+            retval += " (forced AB)";
+        }
+        return retval;
     }
 
     static getDivisionById(divisionId, divisions) {
