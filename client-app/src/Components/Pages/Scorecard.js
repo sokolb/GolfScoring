@@ -87,15 +87,22 @@ export class Scorecard extends Component {
         var team = this.props.golf.teams.find((team) => team.teamNumber === teamId);
         var player1 = this.getPlayer(team.teamMembers[0].playerId);
         var player2 = this.getPlayer(team.teamMembers[1].playerId);
-        return player1.handicap < player2.handicap ? player1 : player2;
+        if (team.forceAB) {
+            return team.teamMembers[0].APlayer == 1 ? player1 : player2;
+        } else {
+            return player1.handicap < player2.handicap ? player1 : player2;
+        }
     }
 
     findBPlayer(teamId) {
         var team = this.props.golf.teams.find((team) => team.teamNumber === teamId);
         var player1 = this.getPlayer(team.teamMembers[0].playerId);
         var player2 = this.getPlayer(team.teamMembers[1].playerId);
-
-        return player1.handicap > player2.handicap ? player1 : player2;
+        if (team.forceAB) {
+            return team.teamMembers[0].APlayer ? player2 : player1;
+        } else {
+            return player1.handicap > player2.handicap ? player1 : player2;
+        }
     }
 
     getPlayer(id) {

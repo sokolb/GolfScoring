@@ -11,18 +11,22 @@ describe("Scorecard tests", () => {
                 userToken: "abc123",
                 teams: [
                     {
+                        id: 1,
                         teamNumber: 1,
                         teamMembers: [
                             { playerId: 1, APlayer: true },
                             { playerId: 2, APlayer: false },
                         ],
+                        forceAB: false,
                     },
                     {
+                        id: 2,
                         teamNumber: 2,
                         teamMembers: [
                             { playerId: 3, APlayer: true },
                             { playerId: 4, APlayer: false },
                         ],
+                        forceAB: false,
                     },
                 ],
                 players: [
@@ -631,5 +635,19 @@ describe("Scorecard tests", () => {
         expect(team1Points.props().player2).toEqual(props.golf.players[0]);
         expect(team2Points.props().player1).toEqual(props.golf.players[2]);
         expect(team2Points.props().player2).toEqual(props.golf.players[3]);
+    });
+
+    test.each([
+        [false, 2, 1],
+        [true, 1, 2],
+    ])("renders A and B player correctly based on forceAB %s", (forceAB, APlayerId, BPlayerId) => {
+        props.golf.teams[0].forceAB = forceAB;
+        const wrapper = shallow(<Scorecard {...props} />);
+
+        var player1A = wrapper.find({ name: "player1A" });
+        var player1B = wrapper.find({ name: "player1B" });
+
+        expect(player1A.props().player.id).toEqual(APlayerId);
+        expect(player1B.props().player.id).toEqual(BPlayerId);
     });
 });
