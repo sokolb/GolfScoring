@@ -333,6 +333,21 @@ describe("Teams Tests", () => {
         expect(divisions.props().children.length).toEqual(divisionCount);
     });
 
+    test.each([
+        ["logged.in.bobby@gmail.com", 1],
+        [undefined, 0],
+    ])("Show forceAB for logged in users %s", (loggedInUser, length) => {
+        props.golf.loggedInUser = loggedInUser;
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        var chkForceAB = wrapper.find({ name: "chkForceAB" });
+        var lblForceAB = wrapper.find({ name: "lblForceAB" });
+
+        expect(chkForceAB.length).toEqual(length);
+        expect(lblForceAB.length).toEqual(length);
+    });
+
     function createEvent(value) {
         var values = [];
         values.push({ value: value });

@@ -161,9 +161,13 @@ export class Teams extends Component {
                     <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
                         {this.getArrayOfDivisionOptions()}
                     </select>
-                    <br />
-                    <input name="chkForceAB" type="checkbox" checked={this.state.forceAB} onChange={this.handleChkForceABChange} />
-                    <label name="lblForceAB">Force A and B player</label>
+                    {this.props.golf.loggedInUser !== undefined && (
+                        <div>
+                            <br />
+                            <input name="chkForceAB" type="checkbox" checked={this.state.forceAB} onChange={this.handleChkForceABChange} />
+                            <label name="lblForceAB">Force A and B player</label>
+                        </div>
+                    )}
                     <br />
                     <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                         Submit
