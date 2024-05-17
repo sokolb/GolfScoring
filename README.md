@@ -5,7 +5,7 @@ This is a program used for our golf match play league. It is also a learning pro
 ## Production Settings
 
 Required ENV variables:
-DATABASE_LOCATION=location on local machine where DB volume is persisted
+DATABASE_LOCATION=location on local machine where DB volume is persisted. NOTE: this is the PATH to the database location, do not include the db file itself in this env variable.
 
 ## To start backend
 
