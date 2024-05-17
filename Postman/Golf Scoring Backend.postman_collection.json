@@ -239,6 +239,14 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetTeam",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},

@@ -1,10 +1,10 @@
 import json
 
 class Team:
-    def __init__(self, id, teamNumber, teamMemberIds, divisionId, forceAB):
+    def __init__(self, id, teamNumber, teamMembers, divisionId, forceAB):
         self.id = id
         self.teamNumber = teamNumber
-        self.teamMemberIds = teamMemberIds
+        self.teamMembers = teamMembers
         self.divisionId = divisionId
         self.forceAB = forceAB
 

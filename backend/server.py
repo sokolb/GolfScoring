@@ -4,6 +4,7 @@ from flask import Response
 from flask_cors import CORS
 from Player import Player
 from Team import Team
+from TeamMember import TeamMember
 from Course import Course
 from Hole import Hole
 from Division import Division
@@ -138,14 +139,16 @@ def team(team_id):
     con = engine.connect()
     if request.method == 'GET':
         teamData = con.execute("SELECT id, teamNumber, divisionId, forceAB FROM team WHERE id = ?", (team_id,))
+        teamRow = teamData.fetchone()
         if teamData is None:
             retval = Response(response="Team not found with id " + team_id, status=204, mimetype="application/text")
         else:
             teamMembers = []
-            teamMemberData = con.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team_id,))
+            teamMemberData = con.execute("SELECT player_id, APlayer FROM team_member WHERE team_id = ?", (team_id,))
             for row in teamMemberData:
-                teamMembers.append(row[0])
-            team = Team(teamData[0], teamData[1], teamMembers, teamData[2], teamData[3])
+                teamMember = TeamMember(row[0], row[1])
+                teamMembers.append(teamMember)
+            team = Team(teamRow[0], teamRow[1], teamMembers, teamRow[2], teamRow[3])
             retval = Response(response=team.toJSON(), status=200, mimetype="application/text")
         retval.headers.add('Access-Control-Allow-Origin', '*')
         con.close()
@@ -200,9 +203,10 @@ def getAllTeams():
     else:
         for team in teamsData:
             teamMembers = []
-            teamMembersData = con.execute("SELECT player_id FROM team_member WHERE team_id = ?", (team[0],))
-            for teamMember in teamMembersData:
-                teamMembers.append(teamMember[0])
+            teamMembersData = con.execute("SELECT player_id, APlayer FROM team_member WHERE team_id = ?", (team[0],))
+            for row in teamMembersData:
+                teamMember = TeamMember(row[0], row[1])
+                teamMembers.append(teamMember)
             team = Team(team[0], team[1], teamMembers, team[2], team[3])
             teamsList.append(team)
         retval = Response(response=json.dumps(teamsList, default=lambda o: o.__dict__, 
