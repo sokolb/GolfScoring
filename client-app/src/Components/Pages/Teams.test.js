@@ -185,8 +185,39 @@ describe("Teams Tests", () => {
         const divisions = wrapper.find({ name: "divisions" });
         divisions.simulate("change", { target: { value: divisionId } });
 
-        // const btnForceAB = wrapper.find({ name: "btnForceAB" });
-        // divisions.simulate("change", { target: { value: forceAB } });
+        const submitButton = wrapper.find({ name: "submit" });
+        submitButton.simulate("click");
+
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
+    });
+
+    test.each([[true], [false]])("Submit buttons calls addTeam with correct parameters for forceAB", (forceAB) => {
+        props.golf.teams = [];
+        var teamNumber = 1;
+        var teamMemberId1 = props.golf.players[0].id;
+        var teamMemberId2 = props.golf.players[2].id;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
+        var divisionId = 4;
+
+        const wrapper = shallow(<Teams {...props} />);
+
+        const playerSelectionBox1 = wrapper.find({
+            name: "playersSelectionBox1",
+        });
+        playerSelectionBox1.simulate("change", createEvent(teamMemberId1));
+        const playerSelectionBox2 = wrapper.find({
+            name: "playersSelectionBox2",
+        });
+        playerSelectionBox2.simulate("change", createEvent(teamMemberId2));
+
+        const divisions = wrapper.find({ name: "divisions" });
+        divisions.simulate("change", { target: { value: divisionId } });
+
+        const chkForceAB = wrapper.find({ name: "chkForceAB" });
+        chkForceAB.simulate("change", { target: { checked: forceAB } });
 
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
