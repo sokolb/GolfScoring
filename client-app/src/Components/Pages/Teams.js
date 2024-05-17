@@ -53,7 +53,6 @@ export class Teams extends Component {
     }
 
     handleSubmitClick = () => {
-        console.log("STATE: " + JSON.stringify(this.state));
         var teamNumber = this.findTeamNumber();
         var teamMembers = [
             { playerId: this.state.selectedTeamMemberId1[0], APlayer: true },
@@ -162,8 +161,10 @@ export class Teams extends Component {
                     <select name="divisions" value={this.state.selectedDivisionId} onChange={this.handleDivisionSelectionChange}>
                         {this.getArrayOfDivisionOptions()}
                     </select>
+                    <br />
                     <input name="chkForceAB" type="checkbox" checked={this.state.forceAB} onChange={this.handleChkForceABChange} />
                     <label name="lblForceAB">Force A and B player</label>
+                    <br />
                     <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                         Submit
                     </button>
