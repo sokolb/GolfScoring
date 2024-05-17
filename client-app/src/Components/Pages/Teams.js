@@ -46,8 +46,11 @@ export class Teams extends Component {
 
     handleSubmitClick = () => {
         var teamNumber = this.findTeamNumber();
-        var selectedTeamMemberIds = [this.state.selectedTeamMemberId1[0], this.state.selectedTeamMemberId2[0]];
-        this.props.addTeam(teamNumber, selectedTeamMemberIds, this.state.selectedDivisionId);
+        var teamMembers = [
+            { playerId: this.state.selectedTeamMemberId1[0], APlayer: true },
+            { playerId: this.state.selectedTeamMemberId2[0], APlayer: false },
+        ];
+        this.props.addTeam(teamNumber, teamMembers, this.state.selectedDivisionId, false);
         this.setState({
             selectedTeamMemberId1: -1,
             selectedTeamMemberId2: -1,

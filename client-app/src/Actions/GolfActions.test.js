@@ -447,22 +447,30 @@ describe("Actions tests", () => {
         it("addTeam dispatches ADD_TEAM", async () => {
             const dispatch = jest.fn();
             var id = 4;
-            var teamMemberIds = ["abc123", "xyz321"];
+            var teamMembers = [
+                {
+                    playerId: "abc123",
+                    APlayer: true,
+                },
+                { playerId: "xyz321", APlayer: false },
+            ];
             var teamNumber = 3;
             var divisionId = 1;
+            var forceAB = false;
 
             var responseFromApi = {
                 data: id,
             };
             AppData.addTeam.mockReturnValue(Promise.resolve(responseFromApi));
 
-            await addTeam(teamNumber, teamMemberIds, divisionId)(dispatch);
+            await addTeam(teamNumber, teamMembers, divisionId, forceAB)(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 id,
                 teamNumber,
-                teamMemberIds,
+                teamMembers,
                 divisionId,
+                forceAB,
                 type: actionTypes.ADD_TEAM,
             });
         });

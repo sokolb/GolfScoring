@@ -146,7 +146,12 @@ describe("Teams Tests", () => {
         var teamNumber = 1;
         var teamMemberId1 = props.golf.players[0].id;
         var teamMemberId2 = props.golf.players[2].id;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
         var divisionId = 4;
+        var forceAB = false;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -162,10 +167,13 @@ describe("Teams Tests", () => {
         const divisions = wrapper.find({ name: "divisions" });
         divisions.simulate("change", { target: { value: divisionId } });
 
+        // const btnForceAB = wrapper.find({ name: "btnForceAB" });
+        // divisions.simulate("change", { target: { value: forceAB } });
+
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
     });
 
     test.each([
@@ -213,7 +221,12 @@ describe("Teams Tests", () => {
         props.golf.teams = teams;
         var teamMemberId1 = 6;
         var teamMemberId2 = 7;
+        var teamMembers = [
+            { playerId: teamMemberId1, APlayer: true },
+            { playerId: teamMemberId2, APlayer: false },
+        ];
         var divisionId = 2;
+        var forceAB = false;
 
         const wrapper = shallow(<Teams {...props} />);
 
@@ -232,7 +245,7 @@ describe("Teams Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
-        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, [teamMemberId1, teamMemberId2], divisionId);
+        expect(props.addTeam).toHaveBeenCalledWith(teamNumber, teamMembers, divisionId, forceAB);
     });
 
     it("Renders showDelete buttom when user is logged in", () => {
