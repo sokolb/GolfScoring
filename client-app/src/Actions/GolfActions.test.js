@@ -426,11 +426,17 @@ describe("Actions tests", () => {
             var responseData = [
                 {
                     teamNumber: 324524,
-                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1122", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133"],
+                    teamMembers: [
+                        { playerId: "3b1823f4-b36c-4288-a827-ed0b00bc1122", APlayer: true },
+                        { playerId: "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1133", APlayer: false },
+                    ],
                 },
                 {
                     teamNumber: 42342,
-                    teamMemberIds: ["3b1823f4-b36c-4288-a827-ed0b00bc1144", "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155"],
+                    teamMembers: [
+                        { playerId: "3b1823f4-b36c-4288-a827-ed0b00bc1144", APlayer: true },
+                        { playerId: "0c6b559a-ae1b-44d1-9c8b-d7f3f8b9e1155", APlayer: false },
+                    ],
                 },
             ];
 

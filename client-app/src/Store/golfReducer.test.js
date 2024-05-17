@@ -32,7 +32,7 @@ var player2 = {
 
 var team1 = {
     teamNumber: 1,
-    teamMemberIds: [
+    teamMembers: [
         { playerId: "111123f4-b36c-4288-a827-ed0b00bc6653", APlayer: true },
         { playerId: "2212559a-ae1b-44d1-9c8b-d7f3f8b9e44a", APlayer: false },
     ],
@@ -42,7 +42,7 @@ var team1 = {
 
 var team2 = {
     teamNumber: 2,
-    teamMemberIds: [
+    teamMembers: [
         { playerId: "333323f4-b36c-4288-a827-ed0b00bc6653", APlayer: true },
         { playerId: "4444559a-ae1b-44d1-9c8b-d7f3f8b9e44a", APlayer: false },
     ],

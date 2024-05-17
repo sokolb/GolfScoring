@@ -7,19 +7,28 @@ var props;
 var team1 = {
     id: 1,
     teamNumber: 1,
-    teamMemberIds: [1, 2],
+    teamMembers: [
+        { playerId: 1, APlayer: true },
+        { playerId: 2, APlayer: false },
+    ],
 };
 
 var team2 = {
     id: 2,
     teamNumber: 2,
-    teamMemberIds: [3, 4],
+    teamMembers: [
+        { playerId: 3, APlayer: true },
+        { playerId: 4, APlayer: false },
+    ],
 };
 
 var team3 = {
     id: 3,
     teamNumber: 3,
-    teamMemberIds: [1, 4],
+    teamMembers: [
+        { playerId: 1, APlayer: true },
+        { playerId: 4, APlayer: false },
+    ],
 };
 
 var divisions = [
@@ -35,17 +44,26 @@ describe("Teams Tests", () => {
                 teams: [
                     {
                         teamNumber: 1,
-                        teamMemberIds: [1, 2],
+                        teamMembers: [
+                            { playerId: 1, APlayer: true },
+                            { playerId: 2, APlayer: false },
+                        ],
                         divisionId: 1,
                     },
                     {
                         teamNumber: 2,
-                        teamMemberIds: [3, 4],
+                        teamMembers: [
+                            { playerId: 3, APlayer: true },
+                            { playerId: 4, APlayer: false },
+                        ],
                         divisionId: 2,
                     },
                     {
                         teamNumber: 3,
-                        teamMemberIds: [1, 4],
+                        teamMembers: [
+                            { playerId: 1, APlayer: true },
+                            { playerId: 4, APlayer: false },
+                        ],
                         divisionId: -1,
                     },
                 ],
@@ -180,7 +198,7 @@ describe("Teams Tests", () => {
         [1, 2, false],
         [-1, -1, true],
         [2, -1, true],
-    ])("Submit button disabled/enabled correctly with params: selectedTeamMemberIds %s", (teamMemberId1, teamMemberId2, disabled) => {
+    ])("Submit button disabled/enabled correctly with params: selectedTeamMembers %s", (teamMemberId1, teamMemberId2, disabled) => {
         const wrapper = shallow(<Teams {...props} />);
 
         const playerSelectionBox1 = wrapper.find({
