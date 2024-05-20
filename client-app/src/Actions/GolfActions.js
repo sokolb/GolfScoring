@@ -83,10 +83,12 @@ export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, 
             autoUpdateGHIN: updateGHIN,
         };
         if (id === -1) {
+            console.log("Adding new player with auto update GHIN");
             await AppData.addPlayer(player).then((response) => {
                 dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
             });
         } else {
+            console.log("Updating existing player with auto update GHIN with ID: " + id);
             await AppData.updatePlayer(player).then((response) => {
                 dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
             });
@@ -107,10 +109,12 @@ export const addOrUpdatePlayerNoAutoGhinUpdate = (id, firstName, lastName, GHIN,
         autoUpdateGHIN: updateGHIN,
     };
     if (id === -1) {
+        console.log("Adding new player without auto update GHIN");
         await AppData.addPlayer(player).then((response) => {
             dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
         });
     } else {
+        console.log("Updating existing without auto update GHIN with player with ID: " + id);
         await AppData.updatePlayer(player).then((response) => {
             dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
         });

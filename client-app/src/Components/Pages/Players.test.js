@@ -30,9 +30,10 @@ describe("Players Tests", () => {
         };
     });
 
-    it("Renders add new player boxes", () => {
+    it("Renders player boxes", () => {
         const wrapper = shallow(<Players {...props} />);
 
+        var ddlPlayers = wrapper.find({ name: "players" });
         var firstName = wrapper.find({ name: "firstName" });
         var lastName = wrapper.find({ name: "lastName" });
         var GHIN = wrapper.find({ name: "GHIN" });
@@ -40,6 +41,7 @@ describe("Players Tests", () => {
         var refreshAllHandicaps = wrapper.find({ name: "refreshAllHandicaps" });
         var autoUpdateGHIN = wrapper.find({ name: "autoUpdateGHIN" });
 
+        expect(ddlPlayers.length).toEqual(1);
         expect(firstName.length).toEqual(1);
         expect(lastName.length).toEqual(1);
         expect(GHIN.length).toEqual(1);
@@ -47,6 +49,29 @@ describe("Players Tests", () => {
         expect(refreshAllHandicaps.length).toEqual(1);
         expect(autoUpdateGHIN.length).toEqual(1);
     });
+
+    it("Players drop down is populated on load", () => {
+        const wrapper = shallow(<Players {...props} />);
+
+        var ddlPlayers = wrapper.find({ name: "players" });
+        expect(ddlPlayers.props().children.length).toEqual(3);
+        expect(ddlPlayers.props().children[0].props.children).toEqual("Add new player");
+        expect(ddlPlayers.props().children[0].props.value).toEqual(-1);
+        expect(ddlPlayers.props().children[1].props.children).toEqual(props.golf.players[0].firstName + " " + props.golf.players[0].lastName);
+        expect(ddlPlayers.props().children[1].props.value).toEqual(props.golf.players[0].id);
+        expect(ddlPlayers.props().children[2].props.children).toEqual(props.golf.players[1].firstName + " " + props.golf.players[1].lastName);
+        expect(ddlPlayers.props().children[2].props.value).toEqual(props.golf.players[1].id);
+    });
+
+    // it("Player data is populated when player is selected", () => {
+    //     const wrapper = shallow(<Players {...props} />);
+
+    //     var ddlPlayers = wrapper.find({ name: "players" });
+    //     ddlPlayers.simulate("change", { target: { value: props.golf.players[0].id } });
+
+    //     var firstName = wrapper.find({ name: "firstName" });
+    //     expect(firstName.text()).toEqual(props.golf.players[0].firstName);
+    // });
 
     it("Hides add new player boxes when user is not logged in", () => {
         props.golf.loggedInUser = undefined;
@@ -86,6 +111,22 @@ describe("Players Tests", () => {
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, autoUpdate, props.golf.userToken);
     });
+
+    // it("Submit click calls addOrUpdatePlayer with update existing player", () => {
+    //     var playerId = props.golf.players[0].id;
+    //     var firstName = props.golf.players[0].firstName;
+    //     var lastName = props.golf.players[0].lastName;
+    //     var GHIN = props.golf.players[0].GHIN;
+    //     var teePreference = props.golf.players[0].teePreference;
+    //     var autoUpdate = props.golf.players[0].autoUpdate;
+
+    //     const wrapper = shallow(<Players {...props} />);
+
+    //     var ddlPlayers = wrapper.find({ name: "players" });
+    //     ddlPlayers.simulate("change", { target: { value: props.golf.players[0].id } });
+
+    //     expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(playerId, firstName, lastName, GHIN, teePreference, autoUpdate, props.golf.userToken);
+    // });
 
     it("Submit click calls addOrUpdatePlayer without autoUpdate", () => {
         var firstName = "brian";
@@ -237,22 +278,6 @@ describe("Players Tests", () => {
         const submitButton = wrapper.find({ name: "submit" });
 
         expect(submitButton.props().disabled).toEqual(disabled);
-    });
-
-    it("Submit button is disabled when player with GHIN already exists", () => {
-        const wrapper = shallow(<Players {...props} />);
-
-        const firstNameTextBox = wrapper.find({ name: "firstName" });
-        firstNameTextBox.simulate("change", { target: { value: "Brian" } });
-        const lastNameTextBox = wrapper.find({ name: "lastName" });
-        lastNameTextBox.simulate("change", { target: { value: "Sok" } });
-        const ghinTextBox = wrapper.find({ name: "GHIN" });
-        ghinTextBox.simulate("change", {
-            target: { value: props.golf.players[0].GHIN },
-        });
-        const submitButton = wrapper.find({ name: "submit" });
-
-        expect(submitButton.props().disabled).toEqual(true);
     });
 
     describe("Tee Preference Selection Box", () => {

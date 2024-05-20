@@ -14,10 +14,11 @@ export class Players extends Component {
             lastName: "",
             GHIN: "",
             selectedTeePreference: "White",
-            autoUpdateGHIN: props.autoUpdateGHIN !== undefined ? props.autoUpdateGHIN : false,
             handicap: -1,
             frontNine: -1,
             backNine: -1,
+            selectedPlayerId: -1,
+            autoUpdateGHIN: true,
         };
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
@@ -28,6 +29,7 @@ export class Players extends Component {
         this.handleHandicapChange = this.handleHandicapChange.bind(this);
         this.handleFrontNineChange = this.handleFrontNineChange.bind(this);
         this.handleBackNineChange = this.handleBackNineChange.bind(this);
+        this.handlePlayersSelectionChange = this.handlePlayersSelectionChange.bind(this);
     }
 
     componentDidMount() {
@@ -35,10 +37,44 @@ export class Players extends Component {
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
     }
 
+    resetState() {
+        this.setState({
+            firstName: "",
+            lastName: "",
+            GHIN: "",
+            selectedTeePreference: "White",
+            autoUpdateGHIN: true,
+            handicap: -1,
+            frontNine: -1,
+            backNine: -1,
+            selectedPlayerId: -1,
+        });
+    }
+
     handleFirstNameChange(event) {
         this.setState({
             firstName: event.target.value,
         });
+    }
+
+    handlePlayersSelectionChange(event) {
+        var playerId = parseInt(event.target.value);
+        if (playerId === -1) {
+            this.resetState();
+        } else {
+            var player = this.props.golf.players.find((p) => p.id === playerId);
+            this.setState({
+                firstName: player.firstName,
+                lastName: player.lastName,
+                GHIN: player.GHIN,
+                selectedTeePreference: player.teePreference,
+                handicap: player.handicap,
+                frontNine: player.frontNine,
+                backNine: player.backNine,
+                selectedPlayerId: playerId,
+                autoUpdateGHIN: Boolean(player.autoUpdateGHIN),
+            });
+        }
     }
 
     handleLastNameChange(event) {
@@ -78,20 +114,13 @@ export class Players extends Component {
     }
 
     handleSubmitClick = () => {
+        console.log("this.state.selectedPlayerId: " + this.state.selectedPlayerId);
         if (this.state.autoUpdateGHIN) {
-            this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.props.golf.userToken);
+            this.props.addOrUpdatePlayer(this.state.selectedPlayerId, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.props.golf.userToken);
         } else {
-            this.props.addOrUpdatePlayerNoAutoGhinUpdate(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.state.handicap, this.state.frontNine, this.state.backNine);
+            this.props.addOrUpdatePlayerNoAutoGhinUpdate(this.state.selectedPlayerId, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.state.handicap, this.state.frontNine, this.state.backNine);
         }
-        this.setState({
-            firstName: "",
-            lastName: "",
-            GHIN: "",
-            autoUpdateGHIN: true,
-            handicap: -1,
-            frontNine: -1,
-            backNine: -1,
-        });
+        this.resetState();
     };
 
     handleRefreshAllHandicapsClick = () => {
@@ -103,7 +132,7 @@ export class Players extends Component {
     };
 
     submitButtonDisabled() {
-        return this.state.firstName === "" || this.state.lastName === "" || this.state.GHIN === "" || this.playerExistsWithGHIN(this.state.GHIN);
+        return this.state.firstName === "" || this.state.lastName === "" || this.state.GHIN === "";
     }
 
     playerExistsWithGHIN(targetGHIN) {
@@ -117,12 +146,40 @@ export class Players extends Component {
         });
     }
 
+    getPlayers() {
+        const emptyOption = (
+            <option key="teamEmpty" value={-1}>
+                Add new player
+            </option>
+        );
+
+        var playerOptions = this.props.golf.players
+            .map((p) => ({
+                id: p.id,
+                fullName: p.firstName + " " + p.lastName,
+            }))
+            .sort((a, b) => a.fullName.localeCompare(b.fullName))
+            .map((p) => (
+                <option key={p.id} value={p.id}>
+                    {p.fullName}
+                </option>
+            ));
+
+        var options = [emptyOption, ...playerOptions];
+
+        return options;
+    }
+
     render() {
         return (
             <div>
                 {this.props.golf.loggedInUser !== undefined && (
                     <div name="addPlayer">
-                        <h2>Add Player</h2>
+                        <h2>Players</h2>
+                        <br />
+                        <select name="players" onChange={this.handlePlayersSelectionChange}>
+                            {this.getPlayers()}
+                        </select>
                         <br />
                         <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
                             Refresh All Handicaps
@@ -137,7 +194,7 @@ export class Players extends Component {
                         <label>GHIN:</label>
                         <input name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
                         <br />
-                        <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange}>
+                        <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange} value={this.state.selectedTeePreference}>
                             {tees.map((tee) => {
                                 return (
                                     <option key={tee} value={tee}>
@@ -148,7 +205,7 @@ export class Players extends Component {
                         </select>
                         <br />
                         <label>Auto Update GHIN:</label>
-                        <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} selected={this.state.autoUpdateGHIN}></input>
+                        <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} checked={this.state.autoUpdateGHIN}></input>
                         <br />
                         <div hidden={this.state.autoUpdateGHIN}>
                             <label>Handicap:</label>
