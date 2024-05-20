@@ -1,6 +1,7 @@
 import { shallow } from "enzyme";
 import { Players } from "../Pages/Players";
 import Player from "./Player";
+import { act } from "@testing-library/react";
 
 var props;
 
@@ -24,6 +25,7 @@ describe("Players Tests", () => {
                 ],
             },
             addOrUpdatePlayer: jest.fn(),
+            addOrUpdatePlayerNoAutoGhinUpdate: jest.fn(),
             getPlayers: jest.fn(),
         };
     });
@@ -55,7 +57,7 @@ describe("Players Tests", () => {
         expect(addPlayer.length).toEqual(0);
     });
 
-    it("Submit click calls addOrUpdatePlayer", () => {
+    it("Submit click calls addOrUpdatePlayer with autoUpdate", () => {
         var firstName = "brian";
         var lastName = "Johnson";
         var GHIN = "110492312";
@@ -76,13 +78,53 @@ describe("Players Tests", () => {
         });
         teePreferenceSelectionBox.simulate("change", createEvent(teePreference));
 
-        const autoUpdateGhin = wrapper.find({ name: "autoUpdateGhin" });
-        GHINtextBox.simulate("autoUpdateGhin", createEvent(autoUpdate));
+        const autoUpdateGhin = wrapper.find({ name: "autoUpdateGHIN" });
+        autoUpdateGhin.simulate("change", { target: { checked: autoUpdate } });
 
         const submitButton = wrapper.find({ name: "submit" });
         submitButton.simulate("click");
 
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, autoUpdate, props.golf.userToken);
+    });
+
+    it("Submit click calls addOrUpdatePlayer without autoUpdate", () => {
+        var firstName = "brian";
+        var lastName = "Johnson";
+        var GHIN = "110492312";
+        var teePreference = "Gold";
+        var autoUpdate = false;
+        var handicap = 19;
+        var frontNine = 10;
+        var backNine = 9;
+
+        const wrapper = shallow(<Players {...props} />);
+
+        const autoUpdateGhin = wrapper.find({ name: "autoUpdateGHIN" });
+        autoUpdateGhin.simulate("change", { target: { checked: autoUpdate } });
+
+        const firstNameTextBox = wrapper.find({ name: "firstName" });
+        firstNameTextBox.simulate("change", createEvent(firstName));
+        const lastNameTextBox = wrapper.find({ name: "lastName" });
+        lastNameTextBox.simulate("change", createEvent(lastName));
+        const GHINtextBox = wrapper.find({ name: "GHIN" });
+        GHINtextBox.simulate("change", createEvent(GHIN));
+
+        const teePreferenceSelectionBox = wrapper.find({
+            name: "teePreferenceSelectionBox",
+        });
+        teePreferenceSelectionBox.simulate("change", createEvent(teePreference));
+
+        const handicapTextBox = wrapper.find({ name: "handicap" });
+        handicapTextBox.simulate("change", createEvent(handicap));
+        const frontNineTextBox = wrapper.find({ name: "frontNine" });
+        frontNineTextBox.simulate("change", createEvent(frontNine));
+        const backNineTextBox = wrapper.find({ name: "backNine" });
+        backNineTextBox.simulate("change", createEvent(backNine));
+
+        const submitButton = wrapper.find({ name: "submit" });
+        submitButton.simulate("click");
+
+        expect(props.addOrUpdatePlayerNoAutoGhinUpdate).toHaveBeenCalledWith(-1, firstName, lastName, GHIN, teePreference, autoUpdate, handicap, frontNine, backNine);
     });
 
     it("refreshAllHandicaps click calls addOrUpdatePlayer per player", () => {
@@ -110,6 +152,21 @@ describe("Players Tests", () => {
         expect(props.addOrUpdatePlayer).toHaveBeenCalledTimes(1);
         expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(player2.id, player2.firstName, player2.lastName, player2.GHIN, player2.teePreference, true, props.golf.userToken);
     });
+
+    // test.each([[true], [false]])("Correctly show handicap boxes when autoUpdateGHIN is %s", (autoUpdate) => {
+    //     const wrapper = shallow(<Players {...props} />);
+
+    //     const autoUpdateGhin = wrapper.find({ name: "autoUpdateGHIN" });
+    //     autoUpdateGhin.simulate("change", { target: { checked: autoUpdate } });
+
+    //     const handicapTextBox = wrapper.find({ name: "handicap" });
+    //     const frontNineTextBox = wrapper.find({ name: "frontNine" });
+    //     const backNineTextBox = wrapper.find({ name: "backNine" });
+
+    //     expect(handicapTextBox.length).toEqual(autoUpdate ? 0 : 1);
+    //     expect(frontNineTextBox.length).toEqual(autoUpdate ? 0 : 1);
+    //     expect(backNineTextBox.length).toEqual(autoUpdate ? 0 : 1);
+    // });
 
     function createEvent(value) {
         return {

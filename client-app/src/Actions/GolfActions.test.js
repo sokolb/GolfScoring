@@ -1,7 +1,7 @@
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
-import { addOrUpdatePlayer, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses, getDivisions, addDivision, removeDivision } from "./GolfActions.js";
+import { addOrUpdatePlayer, addOrUpdatePlayerNoAutoGhinUpdate, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses, getDivisions, addDivision, removeDivision } from "./GolfActions.js";
 
 jest.mock("../DataServices/GhinDataService");
 jest.mock("../DataServices/AppData");
@@ -280,7 +280,7 @@ describe("Actions tests", () => {
             expect(AppData.updatePlayer).toHaveBeenCalledWith(player);
         });
 
-        it("addOrUpdatePlayer dispatches UPDATE_PLAYER for existing player", async () => {
+        it("addOrUpdatePlayer dispatches UPDATE_PLAYER for existing player updateGHIN true", async () => {
             const dispatch = jest.fn();
             var id = "3";
             var playerId = 42;
@@ -310,6 +310,41 @@ describe("Actions tests", () => {
                 teePreference,
                 frontNine: responseDataCourseHandicap.data.tee_sets[1].ratings[2].course_handicap,
                 backNine: responseDataCourseHandicap.data.tee_sets[1].ratings[1].course_handicap,
+                autoUpdateGHIN: updateGHIN,
+                type: actionTypes.UPDATE_PLAYER,
+            });
+        });
+
+        it("addOrUpdatePlayer no GHIN auto update dispatches UPDATE_PLAYER for existing player updateGHIN", async () => {
+            const dispatch = jest.fn();
+            var id = "3";
+            var playerId = 42;
+            var firstName = "Brian";
+            var lastName = "Smith";
+            var GHIN = "1234132";
+            var teePreference = "White";
+            var handicap = 10;
+            var frontNine = 4;
+            var backNine = 6;
+            var user_token = "asfdsadfasdfdsaasdf";
+            var updateGHIN = false;
+
+            var responseFromApi = {
+                data: id,
+            };
+            AppData.updatePlayer.mockReturnValue(Promise.resolve(responseFromApi));
+
+            await addOrUpdatePlayerNoAutoGhinUpdate(playerId, firstName, lastName, GHIN, teePreference, updateGHIN, handicap, frontNine, backNine)(dispatch);
+
+            expect(dispatch).toHaveBeenCalledWith({
+                id: playerId,
+                firstName,
+                lastName,
+                GHIN,
+                handicap: handicap,
+                teePreference,
+                frontNine: frontNine,
+                backNine: backNine,
                 autoUpdateGHIN: updateGHIN,
                 type: actionTypes.UPDATE_PLAYER,
             });

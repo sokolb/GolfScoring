@@ -94,6 +94,29 @@ export const addOrUpdatePlayer = (id, firstName, lastName, GHIN, teePreference, 
     }
 };
 
+export const addOrUpdatePlayerNoAutoGhinUpdate = (id, firstName, lastName, GHIN, teePreference, updateGHIN, handicapIndex, frontNine, backNine) => async (dispatch) => {
+    var player = {
+        id,
+        GHIN,
+        firstName,
+        lastName,
+        handicap: handicapIndex,
+        teePreference,
+        frontNine,
+        backNine,
+        autoUpdateGHIN: updateGHIN,
+    };
+    if (id === -1) {
+        await AppData.addPlayer(player).then((response) => {
+            dispatch(addPlayerCreator(response.data, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
+        });
+    } else {
+        await AppData.updatePlayer(player).then((response) => {
+            dispatch(updatePlayerCreator(id, firstName, lastName, GHIN, handicapIndex, teePreference, frontNine, backNine, updateGHIN));
+        });
+    }
+};
+
 const addPlayerCreator = (id, firstName, lastName, GHIN, handicap, teePreference, frontNine, backNine, autoUpdateGHIN) => ({
     id,
     firstName,

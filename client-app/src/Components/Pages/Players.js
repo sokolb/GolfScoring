@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addOrUpdatePlayer, getPlayers } from "../../Actions/GolfActions";
+import { addOrUpdatePlayer, addOrUpdatePlayerNoAutoGhinUpdate, getPlayers } from "../../Actions/GolfActions";
 import Player from "./Player";
 
 const tees = ["Blue", "White", "Gold", "Red"];
@@ -14,7 +14,10 @@ export class Players extends Component {
             lastName: "",
             GHIN: "",
             selectedTeePreference: "White",
-            autoUpdateGHIN: true,
+            autoUpdateGHIN: props.autoUpdateGHIN !== undefined ? props.autoUpdateGHIN : false,
+            handicap: -1,
+            frontNine: -1,
+            backNine: -1,
         };
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
@@ -22,6 +25,9 @@ export class Players extends Component {
         this.handleGHINChange = this.handleGHINChange.bind(this);
         this.handleTeePreferenceSelectionBoxChange = this.handleTeePreferenceSelectionBoxChange.bind(this);
         this.handleAutoUpdateGHINChange = this.handleAutoUpdateGHINChange.bind(this);
+        this.handleHandicapChange = this.handleHandicapChange.bind(this);
+        this.handleFrontNineChange = this.handleFrontNineChange.bind(this);
+        this.handleBackNineChange = this.handleBackNineChange.bind(this);
     }
 
     componentDidMount() {
@@ -53,13 +59,38 @@ export class Players extends Component {
         });
     }
 
+    handleHandicapChange(event) {
+        this.setState({
+            handicap: event.target.value,
+        });
+    }
+
+    handleFrontNineChange(event) {
+        this.setState({
+            frontNine: event.target.value,
+        });
+    }
+
+    handleBackNineChange(event) {
+        this.setState({
+            backNine: event.target.value,
+        });
+    }
+
     handleSubmitClick = () => {
-        this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.props.golf.userToken);
+        if (this.state.autoUpdateGHIN) {
+            this.props.addOrUpdatePlayer(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.props.golf.userToken);
+        } else {
+            this.props.addOrUpdatePlayerNoAutoGhinUpdate(-1, this.state.firstName, this.state.lastName, this.state.GHIN, this.state.selectedTeePreference, this.state.autoUpdateGHIN, this.state.handicap, this.state.frontNine, this.state.backNine);
+        }
         this.setState({
             firstName: "",
             lastName: "",
             GHIN: "",
             autoUpdateGHIN: true,
+            handicap: -1,
+            frontNine: -1,
+            backNine: -1,
         });
     };
 
@@ -119,6 +150,18 @@ export class Players extends Component {
                         <label>Auto Update GHIN:</label>
                         <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} selected={this.state.autoUpdateGHIN}></input>
                         <br />
+                        <div hidden={this.state.autoUpdateGHIN}>
+                            <label>Handicap:</label>
+                            <input name="handicap" onChange={this.handleHandicapChange} value={this.state.handicap} />
+                            <br />
+                            <label>Front Nine:</label>
+                            <input name="frontNine" onChange={this.handleFrontNineChange} value={this.state.frontNine} />
+                            <br />
+                            <label>Back Nine:</label>
+                            <input name="backNine" onChange={this.handleBackNineChange} value={this.state.backNine} />
+                            <br />
+                        </div>
+
                         <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
                             Submit
                         </button>
@@ -182,6 +225,7 @@ const mapStateToProps = (state) => {
 
 const actionCreators = {
     addOrUpdatePlayer,
+    addOrUpdatePlayerNoAutoGhinUpdate,
     getPlayers,
 };
 
