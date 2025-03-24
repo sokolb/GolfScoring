@@ -46,6 +46,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/plugin-transform-private-property-in-object": "^7.25.9",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.3",
         "redux-devtools-extension": "^2.13.8"

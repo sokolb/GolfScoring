@@ -176,14 +176,14 @@ export class Players extends Component {
                 {this.props.golf.loggedInUser !== undefined && (
                     <div name="addPlayer">
                         <h2>Players</h2>
+                        <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
+                            Refresh All Handicaps
+                        </button>
+                        <br />
                         <br />
                         <select name="players" onChange={this.handlePlayersSelectionChange}>
                             {this.getPlayers()}
                         </select>
-                        <br />
-                        <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
-                            Refresh All Handicaps
-                        </button>
                         <br />
                         <label>First Name:</label>
                         <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
