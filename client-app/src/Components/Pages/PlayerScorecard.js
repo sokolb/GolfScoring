@@ -36,11 +36,23 @@ export class PlayerScorecard extends Component {
         return this.props.course.holes[holeOffset + position].number;
     }
 
+    getHandicapDateForPlayer(player) {
+        if (player.handicap_updated_date === undefined || player.handicap_updated_date === null) {
+            return "-";
+        } else {
+            return player.handicap_updated_date.split(" ")[0];
+        }
+    }
+
     render() {
         return (
             <tr style={{ height: "40px" }}>
                 <td>
                     <label name="name">{this.props.player.firstName + " " + this.props.player.lastName}</label>
+                    <br />
+                    <span name="handicapAsOf" style={{ fontSize: "xx-small" }}>
+                        Handicap as of: {this.getHandicapDateForPlayer(this.props.player)}
+                    </span>
                 </td>
                 <td>
                     <label name="handicap">{this.getPlayerHandicap()}</label>
