@@ -6,6 +6,9 @@ var props;
 
 describe("Matches tests", () => {
     beforeEach(() => {
+        process.env.REACT_APP_USERNAME = "b@b.com";
+        process.env.REACT_APP_PASSWORD = "abc123";
+
         props = {
             golf: {
                 userToken: "abc123",
@@ -64,7 +67,14 @@ describe("Matches tests", () => {
             },
             getTeams: jest.fn(),
             getPlayers: jest.fn(),
+            logInUser: jest.fn(),
         };
+    });
+
+    afterEach(() => {
+        delete process.env.REACT_APP_USERNAME;
+        delete process.env.REACT_APP_PASSWORD;
+        jest.clearAllMocks();
     });
 
     it("Renders add new player boxes", () => {
@@ -79,6 +89,12 @@ describe("Matches tests", () => {
         expect(team2.length).toEqual(1);
         expect(frontBackNine.length).toEqual(1);
         expect(createScoreCard.length).toEqual(1);
+    });
+
+    it("Gets user token on page load", () => {
+        const wrapper = shallow(<Matches {...props} />);
+
+        expect(props.logInUser).toHaveBeenCalledWith(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD);
     });
 
     it("populate teams and players on page load", () => {

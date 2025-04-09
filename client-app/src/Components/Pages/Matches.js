@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTeams, getPlayers } from "../../Actions/GolfActions";
+import { getTeams, getPlayers, logInUser } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
 import Scorecard from "./Scorecard";
 
@@ -21,6 +21,14 @@ export class Matches extends Component {
         this.handleTeam1Change = this.handleTeam1Change.bind(this);
         this.handleTeam2Change = this.handleTeam2Change.bind(this);
         this.handleFronBackNineChange = this.handleFronBackNineChange.bind(this);
+    }
+
+    componentDidMount() {
+        const username = process.env.REACT_APP_USERNAME || ""; // Fallback
+        const password = process.env.REACT_APP_PASSWORD || ""; // Fallback
+        this.props.logInUser(username, password);
+        this.props.getPlayers("http://localhost:8082/getAllPlayers");
+        this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
     handleDateChange(event) {
@@ -49,11 +57,6 @@ export class Matches extends Component {
             frontBackNine: event.target.value,
         });
         this.resetForm();
-    }
-
-    componentDidMount() {
-        this.props.getPlayers("http://localhost:8082/getAllPlayers");
-        this.props.getTeams("http://localhost:8082/getAllTeams");
     }
 
     getTeamOptions() {
@@ -196,6 +199,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const actionCreators = { getTeams, getPlayers };
+const actionCreators = { getTeams, getPlayers, logInUser };
 
 export default connect(mapStateToProps, actionCreators)(Matches);
