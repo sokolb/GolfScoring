@@ -3,6 +3,7 @@ import { Matches } from "./Matches";
 import Scorecard from "./Scorecard";
 
 var props;
+var user_token = "abcxyz";
 
 describe("Matches tests", () => {
     beforeEach(() => {
@@ -37,6 +38,8 @@ describe("Matches tests", () => {
                         firstName: "Brian",
                         lastName: "Sokoloski",
                         handicap: 11,
+                        teePreference: "White",
+                        autoUpdateGHIN: true,
                     },
                     {
                         id: 2,
@@ -44,6 +47,8 @@ describe("Matches tests", () => {
                         firstName: "Bob",
                         lastName: "Smith",
                         handicap: 12,
+                        teePreference: "Blue",
+                        autoUpdateGHIN: true,
                     },
                     {
                         id: 3,
@@ -51,6 +56,8 @@ describe("Matches tests", () => {
                         firstName: "Mary",
                         lastName: "Johnson",
                         handicap: 12,
+                        teePreference: "Red",
+                        autoUpdateGHIN: true,
                     },
                     {
                         id: 4,
@@ -58,6 +65,8 @@ describe("Matches tests", () => {
                         firstName: "Jane",
                         lastName: "Doe",
                         handicap: 17,
+                        teePreference: "Gold",
+                        autoUpdateGHIN: false,
                     },
                 ],
                 divisions: [
@@ -68,6 +77,7 @@ describe("Matches tests", () => {
             getTeams: jest.fn(),
             getPlayers: jest.fn(),
             logInUser: jest.fn(),
+            addOrUpdatePlayer: jest.fn(),
         };
     });
 
@@ -220,5 +230,23 @@ describe("Matches tests", () => {
 
         var scorecard = wrapper.find(Scorecard);
         expect(scorecard.props().division).toEqual(divisionText);
+    });
+
+    it("addOrUpdatePlayer is called when team is selected", () => {
+        const wrapper = shallow(<Matches {...props} />);
+
+        var team1SelectBox = wrapper.find({ name: "team1" });
+        team1SelectBox.simulate("change", { target: { value: 1 } });
+        var team2SelectBox = wrapper.find({ name: "team2" });
+        team2SelectBox.simulate("change", { target: { value: 2 } });
+
+        var team1PlayerA = props.golf.players[0];
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(team1PlayerA.id, team1PlayerA.firstName, team1PlayerA.lastName, team1PlayerA.GHIN, team1PlayerA.teePreference, team1PlayerA.autoUpdateGHIN, props.golf.userToken);
+        var team1PlayerB = props.golf.players[1];
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(team1PlayerB.id, team1PlayerB.firstName, team1PlayerB.lastName, team1PlayerB.GHIN, team1PlayerB.teePreference, team1PlayerB.autoUpdateGHIN, props.golf.userToken);
+        var team2PlayerA = props.golf.players[2];
+        expect(props.addOrUpdatePlayer).toHaveBeenCalledWith(team2PlayerA.id, team2PlayerA.firstName, team2PlayerA.lastName, team2PlayerA.GHIN, team2PlayerA.teePreference, team2PlayerA.autoUpdateGHIN, props.golf.userToken);
+        var team2PlayerB = props.golf.players[3];
+        expect(props.addOrUpdatePlayer).not.toHaveBeenCalledWith(team2PlayerB.id, team2PlayerB.firstName, team2PlayerB.lastName, team2PlayerB.GHIN, team2PlayerB.teePreference, team2PlayerB.autoUpdateGHIN, props.golf.userToken);
     });
 });

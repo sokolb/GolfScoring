@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTeams, getPlayers, logInUser } from "../../Actions/GolfActions";
+import { getTeams, getPlayers, logInUser, addOrUpdatePlayer } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
 import Scorecard from "./Scorecard";
 
@@ -39,16 +39,38 @@ export class Matches extends Component {
     }
 
     handleTeam1Change(event) {
+        var teamId = parseInt(event.target.value, 10);
         this.setState({
-            selectedTeam1: parseInt(event.target.value, 10),
+            selectedTeam1: teamId,
         });
+        if (teamId !== undefined && teamId > -1) {
+            var playerA = this.findAPlayer(teamId);
+            var playerB = this.findBPlayer(teamId);
+            if (playerA.autoUpdateGHIN) {
+                this.props.addOrUpdatePlayer(playerA.id, playerA.firstName, playerA.lastName, playerA.GHIN, playerA.teePreference, playerA.autoUpdateGHIN, this.props.golf.userToken);
+            }
+            if (playerB.autoUpdateGHIN) {
+                this.props.addOrUpdatePlayer(playerB.id, playerB.firstName, playerB.lastName, playerB.GHIN, playerB.teePreference, playerB.autoUpdateGHIN, this.props.golf.userToken);
+            }
+        }
         this.resetForm();
     }
 
     handleTeam2Change(event) {
+        var teamId = parseInt(event.target.value, 10);
         this.setState({
-            selectedTeam2: parseInt(event.target.value, 10),
+            selectedTeam2: teamId,
         });
+        if (teamId !== undefined && teamId > -1) {
+            var playerA = this.findAPlayer(teamId);
+            var playerB = this.findBPlayer(teamId);
+            if (playerA.autoUpdateGHIN) {
+                this.props.addOrUpdatePlayer(playerA.id, playerA.firstName, playerA.lastName, playerA.GHIN, playerA.teePreference, playerA.autoUpdateGHIN, this.props.golf.userToken);
+            }
+            if (playerB.autoUpdateGHIN) {
+                this.props.addOrUpdatePlayer(playerB.id, playerB.firstName, playerB.lastName, playerB.GHIN, playerB.teePreference, playerB.autoUpdateGHIN, this.props.golf.userToken);
+            }
+        }
         this.resetForm();
     }
 
@@ -128,6 +150,32 @@ export class Matches extends Component {
         return CommonMethods.getDivisionById(team.divisionId, this.props.golf.divisions).name + ": " + CommonMethods.getTeamMemberNames(team, this.props.golf.players);
     }
 
+    findAPlayer(teamId) {
+        var team = this.props.golf.teams.find((team) => team.teamNumber === teamId);
+        var player1 = this.getPlayer(team.teamMembers[0].playerId);
+        var player2 = this.getPlayer(team.teamMembers[1].playerId);
+        if (team.forceAB) {
+            return team.teamMembers[0].APlayer == 1 ? player1 : player2;
+        } else {
+            return player1.handicap < player2.handicap ? player1 : player2;
+        }
+    }
+
+    findBPlayer(teamId) {
+        var team = this.props.golf.teams.find((team) => team.teamNumber === teamId);
+        var player1 = this.getPlayer(team.teamMembers[0].playerId);
+        var player2 = this.getPlayer(team.teamMembers[1].playerId);
+        if (team.forceAB) {
+            return team.teamMembers[0].APlayer ? player2 : player1;
+        } else {
+            return player1.handicap > player2.handicap ? player1 : player2;
+        }
+    }
+
+    getPlayer(id) {
+        return this.props.golf.players.find((player) => player.id === id);
+    }
+
     handleSubmitClick = () => {
         this.resetForm();
 
@@ -199,6 +247,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const actionCreators = { getTeams, getPlayers, logInUser };
+const actionCreators = { getTeams, getPlayers, logInUser, addOrUpdatePlayer };
 
 export default connect(mapStateToProps, actionCreators)(Matches);
