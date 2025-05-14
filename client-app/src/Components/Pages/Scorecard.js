@@ -90,7 +90,9 @@ export class Scorecard extends Component {
         if (team.forceAB) {
             return team.teamMembers[0].APlayer == 1 ? player1 : player2;
         } else {
-            return player1.handicap < player2.handicap ? player1 : player2;
+            const handicap1 = parseFloat(player1.handicap);
+            const handicap2 = parseFloat(player2.handicap);
+            return handicap1 < handicap2 ? player1 : player2;
         }
     }
 
@@ -101,7 +103,9 @@ export class Scorecard extends Component {
         if (team.forceAB) {
             return team.teamMembers[0].APlayer ? player2 : player1;
         } else {
-            return player1.handicap > player2.handicap ? player1 : player2;
+            const handicap1 = parseFloat(player1.handicap);
+            const handicap2 = parseFloat(player2.handicap);
+            return handicap1 > handicap2 ? player1 : player2;
         }
     }
 
