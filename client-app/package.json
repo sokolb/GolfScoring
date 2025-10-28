@@ -6,7 +6,7 @@
         "@testing-library/jest-dom": "^5.13.0",
         "@testing-library/react": "^11.2.7",
         "@testing-library/user-event": "^12.8.3",
-        "axios": "^0.19.2",
+        "axios": "^0.30.2",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
         "react-redux": "^7.2.1",
