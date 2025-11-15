@@ -1,33 +1,130 @@
-# GolfScoring
+# Golf Scoring
 
-This is a program used for our golf match play league. It is also a learning project for React and Python. The DB is very light weight, SQLite.
+A golf match play league management application built with React and Python, featuring a lightweight SQLite database.
 
-## Production Settings
+## 📋 Table of Contents
 
-Required ENV variables:
-DATABASE_LOCATION=location on local machine where DB volume is persisted. NOTE: this is the PATH to the database location, do not include the db file itself in this env variable.
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+  - [Backend Setup](#backend-setup)
+  - [Client Setup](#client-setup)
+- [Production Deployment](#production-deployment)
+- [Project Structure](#project-structure)
 
-## To start backend
+## Overview
 
-If you don't set the DATABASE_LOCATION, then you can create the folder 'GolfScoring/backend/data'. On start, it will create an empty league.db for you.
+This application is designed to manage golf match play leagues, providing features for tracking players, teams, matches, and scorecards. It also serves as a learning project for React and Python development.
 
-Version for development: Python 3.11.6
+## Tech Stack
 
-Run these from the 'GolfScoring/backend' directory
+- **Frontend:** React
+- **Backend:** Python (Flask)
+- **Database:** SQLite
 
-pip3 install -r requirements.txt
+## Prerequisites
 
-python3 server.py
+Before you begin, ensure you have the following installed:
 
-## To start client
+- **Python:** 3.11.6 or higher
+- **Node.js:** 16.20.2 or higher
+- **npm:** (comes with Node.js)
 
-Version for development: Node 16.20.2
-Run these from the 'GolfScoring/client-app' directory
+## Getting Started
 
-npm install
+### Backend Setup
 
-npm start
+1. Navigate to the backend directory:
 
-To run tests: npm test
+   ```bash
+   cd backend
+   ```
 
-Install prettier to help with formatting
+2. Install Python dependencies:
+
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+3. Start the backend server:
+   ```bash
+   python3 server.py
+   ```
+
+> **Note:** If you don't set the `DATABASE_LOCATION` environment variable, create the folder `GolfScoring/backend/data`. The application will automatically create an empty `league.db` file on startup.
+
+### Client Setup
+
+1. Navigate to the client app directory:
+
+   ```bash
+   cd client-app
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm start
+   ```
+
+4. Run tests:
+   ```bash
+   npm test
+   ```
+
+> **Tip:** Install Prettier for consistent code formatting
+
+## Production Deployment
+
+### Environment Variables
+
+The following environment variables are required for production:
+
+| Variable            | Description                                                                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_LOCATION` | Path to the directory where the database volume is persisted. **Do not include the database filename** (e.g., `/path/to/data` not `/path/to/data/league.db`) |
+
+### Docker Deployment
+
+Use the provided Docker Compose files for containerized deployment:
+
+- **Development:** `docker-compose.yml`
+- **Production:** `docker-compose-prod.yml`
+
+```bash
+# For production
+docker-compose -f docker-compose-prod.yml up -d
+```
+
+## Project Structure
+
+```
+GolfScoring/
+├── backend/              # Python Flask backend
+│   ├── server.py        # Main server file
+│   ├── Course.py        # Course model
+│   ├── Player.py        # Player model
+│   ├── Team.py          # Team model
+│   └── data/            # SQLite database location
+├── client-app/          # React frontend
+│   ├── src/
+│   │   ├── Components/  # React components
+│   │   ├── Actions/     # Redux actions
+│   │   ├── Store/       # Redux store
+│   │   └── DataServices/# API services
+│   └── public/          # Static assets
+└── Postman/             # API collection for testing
+```
+
+---
+
+**License:** MIT
+
+**Contributors:** Feel free to contribute to this learning project!
