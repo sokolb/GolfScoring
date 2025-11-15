@@ -1,4 +1,5 @@
 import Axios from "axios";
+import config from "../config";
 
 class AppData {
     getPlayers(target) {
@@ -6,11 +7,11 @@ class AppData {
     }
 
     deletePlayer(id) {
-        return Axios.delete(`http://localhost:8082/player/${id}`);
+        return Axios.delete(`${config.apiBaseUrl}/player/${id}`);
     }
 
     addPlayer(player) {
-        return Axios.post("http://localhost:8082/player/-1", {
+        return Axios.post(`${config.apiBaseUrl}/player/-1`, {
             headers: {
                 "content-type": "application/json",
             },
@@ -19,7 +20,7 @@ class AppData {
     }
 
     updatePlayer(player) {
-        return Axios.post("http://localhost:8082/player/" + player.id, {
+        return Axios.post(`${config.apiBaseUrl}/player/${player.id}`, {
             headers: {
                 "content-type": "application/json",
             },
@@ -32,11 +33,11 @@ class AppData {
     }
 
     deleteTeam(id) {
-        return Axios.delete(`http://localhost:8082/team/${id}`);
+        return Axios.delete(`${config.apiBaseUrl}/team/${id}`);
     }
 
     addTeam(team) {
-        return Axios.post("http://localhost:8082/team/-1", {
+        return Axios.post(`${config.apiBaseUrl}/team/-1`, {
             headers: {
                 "content-type": "application/json",
             },
@@ -53,11 +54,11 @@ class AppData {
     }
 
     deleteDivision(id) {
-        return Axios.delete(`http://localhost:8082/division/${id}`);
+        return Axios.delete(`${config.apiBaseUrl}/division/${id}`);
     }
 
     addDivision(division) {
-        return Axios.post("http://localhost:8082/division/-1", {
+        return Axios.post(`${config.apiBaseUrl}/division/-1`, {
             headers: {
                 "content-type": "application/json",
             },

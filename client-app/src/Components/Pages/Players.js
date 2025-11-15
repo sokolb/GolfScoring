@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addOrUpdatePlayer, addOrUpdatePlayerNoAutoGhinUpdate, getPlayers } from "../../Actions/GolfActions";
 import Player from "./Player";
+import config from "../../config";
 
 const tees = ["Blue", "White", "Gold", "Red"];
 
@@ -34,7 +35,7 @@ export class Players extends Component {
 
     componentDidMount() {
         // this.props.getPlayers("Players_Testing.json");
-        this.props.getPlayers("http://localhost:8082/getAllPlayers");
+        this.props.getPlayers(`${config.apiBaseUrl}/getAllPlayers`);
     }
 
     resetState() {

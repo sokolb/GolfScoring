@@ -1,7 +1,6 @@
 """Team routes blueprint."""
 from flask import Blueprint, request, Response
-from Entities.Team import Team
-from Entities.TeamMember import TeamMember
+from models import Team, TeamMember
 import json
 
 teams_bp = Blueprint('teams', __name__)
@@ -11,131 +10,134 @@ teams_bp = Blueprint('teams', __name__)
 def team(team_id):
     """Handle team CRUD operations."""
     from db import db
-    con = db.get_connection()
+    session = db.get_session()
     
-    if request.method == 'GET':
-        teamData = con.execute(
-            "SELECT id, teamNumber, divisionId, forceAB FROM team WHERE id = ?",
-            (team_id,)
-        )
-        teamRow = teamData.fetchone()
-        if teamRow is None:
+    try:
+        if request.method == 'GET':
+            team_obj = session.query(Team).filter_by(id=team_id).first()
+            
+            if team_obj is None:
+                retval = Response(
+                    response=f"Team not found with id {team_id}",
+                    status=204,
+                    mimetype="application/text"
+                )
+            else:
+                retval = Response(
+                    response=json.dumps(team_obj.to_dict()),
+                    status=200,
+                    mimetype="application/json"
+                )
+            retval.headers.add('Access-Control-Allow-Origin', '*')
+            return retval
+        
+        if request.method == 'POST':
+            data = request.get_json()['team']
+            
+            if team_id == "-1":
+                # Create new team
+                team_obj = Team(
+                    teamNumber=data['teamNumber'],
+                    divisionId=data['divisionId'],
+                    forceAB=data['forceAB']
+                )
+                session.add(team_obj)
+                session.flush()  # Get the team ID before adding members
+                
+                # Add team members
+                for member_data in data['teamMembers']:
+                    team_member = TeamMember(
+                        team_id=team_obj.id,
+                        player_id=member_data['playerId'],
+                        APlayer=member_data['APlayer']
+                    )
+                    session.add(team_member)
+                
+                session.commit()
+                team_id = str(team_obj.id)
+            else:
+                # Update existing team
+                team_obj = session.query(Team).filter_by(id=team_id).first()
+                if team_obj:
+                    team_obj.teamNumber = data['teamNumber']
+                    team_obj.divisionId = data['divisionId']
+                    team_obj.forceAB = data['forceAB']
+                    
+                    # Delete existing team members (cascade will handle this automatically)
+                    session.query(TeamMember).filter_by(team_id=team_id).delete()
+                    
+                    # Add new team members
+                    for member_data in data['teamMembers']:
+                        team_member = TeamMember(
+                            team_id=team_obj.id,
+                            player_id=member_data['playerId'],
+                            APlayer=member_data['APlayer']
+                        )
+                        session.add(team_member)
+                    
+                    session.commit()
+            
             retval = Response(
-                response="Team not found with id " + team_id,
-                status=204,
-                mimetype="application/text"
-            )
-        else:
-            teamMembers = []
-            teamMemberData = con.execute(
-                "SELECT player_id, APlayer FROM team_member WHERE team_id = ?",
-                (team_id,)
-            )
-            for row in teamMemberData:
-                teamMember = TeamMember(row[0], row[1])
-                teamMembers.append(teamMember)
-            team = Team(teamRow[0], teamRow[1], teamMembers, teamRow[2], teamRow[3])
-            retval = Response(
-                response=team.toJSON(),
+                response=team_id,
                 status=200,
                 mimetype="application/text"
             )
-        retval.headers.add('Access-Control-Allow-Origin', '*')
-        con.close()
-        return retval
-    
-    if request.method == 'POST':
-        data = request.get_json()['team']
-        if team_id == "-1":
-            sql = "INSERT INTO team(teamNumber, divisionId, forceAB) VALUES (?,?,?)"
-            result = con.execute(
-                sql,
-                (data['teamNumber'], data['divisionId'], data['forceAB'])
+            retval.headers.add('Access-Control-Allow-Origin', '*')
+            return retval
+        
+        if request.method == 'DELETE':
+            team_obj = session.query(Team).filter_by(id=team_id).first()
+            if team_obj:
+                # Cascade delete will automatically delete team members
+                session.delete(team_obj)
+                session.commit()
+            
+            retval = Response(
+                response="Success",
+                status=200,
+                mimetype="application/text"
             )
-            team_id = str(result.lastrowid)
+            retval.headers.add('Access-Control-Allow-Origin', '*')
+            return retval
+        
         else:
-            sql = "UPDATE team SET teamNumber = ?, divisionId = ?, forceAB = ? WHERE id = ?"
-            con.execute(
-                sql,
-                (data['teamNumber'], data['divisionId'], data['forceAB'], team_id)
+            retval = Response(
+                response="Backend Server Error",
+                status=500,
+                mimetype="application/text"
             )
-            sql = "DELETE from team_member WHERE team_id = ?"
-            con.execute(sql, (team_id,))
-        
-        for player in data['teamMembers']:
-            print("Player data: " + json.dumps(player))
-            playerId = player['playerId']
-            APlayer = player['APlayer']
-            sql = "INSERT INTO team_member(team_id, player_id, APlayer) VALUES (?,?,?)"
-            con.execute(sql, (team_id, playerId, APlayer))
-        
-        retval = Response(
-            response=team_id,
-            status=200,
-            mimetype="application/text"
-        )
-        retval.headers.add('Access-Control-Allow-Origin', '*')
-        con.close()
-        return retval
+            retval.headers.add('Access-Control-Allow-Origin', '*')
+            return retval
     
-    if request.method == 'DELETE':
-        con.execute("DELETE FROM team WHERE id = ?", (team_id,))
-        con.execute("DELETE FROM team_member WHERE team_id = ?", (team_id,))
-        retval = Response(
-            response="Success",
-            status=200,
-            mimetype="application/text"
-        )
-        retval.headers.add('Access-Control-Allow-Origin', '*')
-        con.close()
-        return retval
-    
-    else:
-        retval = Response(
-            response="Backend Server Error",
-            status=500,
-            mimetype="application/text"
-        )
-        retval.headers.add('Access-Control-Allow-Origin', '*')
-        con.close()
-        return retval
+    finally:
+        session.close()
 
 
 @teams_bp.route("/getAllTeams")
 def get_all_teams():
     """Get all teams."""
     from db import db
-    con = db.get_connection()
-    teamsList = []
-    teamsData = con.execute("SELECT id, teamNumber, divisionId, forceAB FROM team")
-    if teamsData is None:
-        retval = Response(
-            response="no teams found",
-            status=204,
-            mimetype="application/text"
-        )
-    else:
-        for team in teamsData:
-            teamMembers = []
-            teamMembersData = con.execute(
-                "SELECT player_id, APlayer FROM team_member WHERE team_id = ?",
-                (team[0],)
+    session = db.get_session()
+    
+    try:
+        teams = session.query(Team).all()
+        
+        if not teams:
+            retval = Response(
+                response="no teams found",
+                status=204,
+                mimetype="application/text"
             )
-            for row in teamMembersData:
-                teamMember = TeamMember(row[0], row[1])
-                teamMembers.append(teamMember)
-            team = Team(team[0], team[1], teamMembers, team[2], team[3])
-            teamsList.append(team)
-        retval = Response(
-            response=json.dumps(
-                teamsList,
-                default=lambda o: o.__dict__,
-                sort_keys=True,
-                indent=4
-            ),
-            status=200,
-            mimetype="application/json"
-        )
-    retval.headers.add('Access-Control-Allow-Origin', '*')
-    con.close()
-    return retval
+        else:
+            teams_list = [team.to_dict() for team in teams]
+            retval = Response(
+                response=json.dumps(teams_list, indent=4),
+                status=200,
+                mimetype="application/json"
+            )
+        
+        retval.headers.add('Access-Control-Allow-Origin', '*')
+        return retval
+    
+    finally:
+        session.close()

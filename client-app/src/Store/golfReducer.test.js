@@ -318,6 +318,32 @@ describe("Golf Reducer tests", () => {
             ).toEqual(targetState);
         });
 
+        it("ADD_PLAYER should not mutate original state (immutability check)", () => {
+            const originalPlayers = initialState.players;
+            const originalPlayersLength = initialState.players.length;
+
+            const newState = reducer(initialState, {
+                type: actionTypes.ADD_PLAYER,
+                id: "4",
+                firstName: player1.firstName,
+                lastName: player1.lastName,
+                GHIN: player1.GHIN,
+                handicap: player1.handicap,
+                teePreference: player1.teePreference,
+                frontNine: player1.frontNine,
+                backNine: player1.backNine,
+                autoUpdateGHIN: player1.autoUpdateGHIN,
+            });
+
+            // Original state should not be mutated
+            expect(initialState.players).toBe(originalPlayers);
+            expect(initialState.players.length).toBe(originalPlayersLength);
+
+            // New state should have a different array reference
+            expect(newState.players).not.toBe(initialState.players);
+            expect(newState.players.length).toBe(originalPlayersLength + 1);
+        });
+
         it("ADD_PLAYER should clear out any previous error message", () => {
             initialState.errorMessage = "Previous error message";
 
@@ -340,7 +366,7 @@ describe("Golf Reducer tests", () => {
             player1.id = id;
 
             //Add Player
-            reducer(initialState, {
+            const stateWithPlayer = reducer(initialState, {
                 type: actionTypes.ADD_PLAYER,
                 id: id,
                 firstName: player1.firstName,
@@ -358,7 +384,7 @@ describe("Golf Reducer tests", () => {
             player1.handicap = newHandicap;
             targetState.players[0] = player1;
             expect(
-                reducer(initialState, {
+                reducer(stateWithPlayer, {
                     type: actionTypes.UPDATE_PLAYER,
                     id: id,
                     firstName: player1.firstName,
@@ -373,6 +399,45 @@ describe("Golf Reducer tests", () => {
             ).toEqual(targetState);
         });
 
+        it("UPDATE_PLAYER should not mutate original state (immutability check)", () => {
+            var playerId = 2;
+
+            // Add a player first
+            const stateWithPlayer = reducer(initialState, {
+                type: actionTypes.ADD_PLAYER,
+                id: playerId,
+                firstName: player1.firstName,
+                lastName: player1.lastName,
+                GHIN: player1.GHIN,
+                handicap: player1.handicap,
+                teePreference: player1.teePreference,
+                frontNine: player1.frontNine,
+                backNine: player1.backNine,
+                autoUpdateGHIN: player1.autoUpdateGHIN,
+            });
+
+            const playersBeforeUpdate = stateWithPlayer.players;
+            const newHandicap = 25;
+
+            // Update the player
+            const updatedState = reducer(stateWithPlayer, {
+                type: actionTypes.UPDATE_PLAYER,
+                id: playerId,
+                firstName: player1.firstName,
+                lastName: player1.lastName,
+                GHIN: player1.GHIN,
+                handicap: newHandicap,
+                teePreference: player1.teePreference,
+                frontNine: player1.frontNine,
+                backNine: player1.backNine,
+                autoUpdateGHIN: player1.autoUpdateGHIN,
+            });
+
+            // New state should have a different array reference
+            expect(updatedState.players).not.toBe(playersBeforeUpdate);
+            expect(updatedState.players[0].handicap).toBe(newHandicap);
+        });
+
         it("UPDATE_PLAYER should clear out any previous error message", () => {
             initialState.errorMessage = "Previous error message";
 
@@ -381,7 +446,7 @@ describe("Golf Reducer tests", () => {
             targetState.errorMessage = "";
 
             //Add Player
-            reducer(initialState, {
+            const stateWithPlayer = reducer(initialState, {
                 type: actionTypes.ADD_PLAYER,
                 id: playerId,
                 firstName: player1.firstName,
@@ -394,7 +459,7 @@ describe("Golf Reducer tests", () => {
             });
 
             expect(
-                reducer(initialState, {
+                reducer(stateWithPlayer, {
                     type: actionTypes.UPDATE_PLAYER,
                     id: playerId,
                     firstName: player1.firstName,
@@ -492,6 +557,31 @@ describe("Golf Reducer tests", () => {
                 })
             ).toEqual(targetState);
         });
+
+        it("ADD_TEAM should not mutate original state (immutability check)", () => {
+            const originalTeams = initialState.teams;
+            const originalTeamsLength = initialState.teams.length;
+
+            const newState = reducer(initialState, {
+                type: actionTypes.ADD_TEAM,
+                id: 5,
+                teamNumber: 7,
+                teamMembers: [
+                    { playerID: "abc567", APlayer: false },
+                    { playerId: "pp001", APlayer: true },
+                ],
+                divisionId: 3,
+                forceAB: false,
+            });
+
+            // Original state should not be mutated
+            expect(initialState.teams).toBe(originalTeams);
+            expect(initialState.teams.length).toBe(originalTeamsLength);
+
+            // New state should have a different array reference
+            expect(newState.teams).not.toBe(initialState.teams);
+            expect(newState.teams.length).toBe(originalTeamsLength + 1);
+        });
     });
 
     describe("Courses", () => {
@@ -545,6 +635,25 @@ describe("Golf Reducer tests", () => {
                     name,
                 })
             ).toEqual(targetState);
+        });
+
+        it("ADD_DIVISION should not mutate original state (immutability check)", () => {
+            const originalDivisions = initialState.divisions;
+            const originalDivisionsLength = initialState.divisions.length;
+
+            const newState = reducer(initialState, {
+                type: actionTypes.ADD_DIVISION,
+                id: 5,
+                name: "Womens Div",
+            });
+
+            // Original state should not be mutated
+            expect(initialState.divisions).toBe(originalDivisions);
+            expect(initialState.divisions.length).toBe(originalDivisionsLength);
+
+            // New state should have a different array reference
+            expect(newState.divisions).not.toBe(initialState.divisions);
+            expect(newState.divisions.length).toBe(originalDivisionsLength + 1);
         });
     });
 });

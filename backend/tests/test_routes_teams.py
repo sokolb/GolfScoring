@@ -7,15 +7,19 @@ from unittest.mock import patch, MagicMock
 class TestTeamRoutes:
     """Test cases for team API endpoints."""
     
-    @patch('db.db.get_connection')
-    def test_create_team(self, mock_get_conn, client, sample_team_data):
+    @patch('routes.teams.TeamMember')
+    @patch('routes.teams.Team')
+    @patch('db.db.get_session')
+    def test_create_team(self, mock_get_session, mock_team_class, mock_team_member_class, client, sample_team_data):
         """Test creating a new team."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_result = MagicMock()
-        mock_result.lastrowid = 1
-        mock_conn.execute.return_value = mock_result
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock the team instance that gets created
+        mock_team_instance = MagicMock()
+        mock_team_instance.id = 1
+        mock_team_class.return_value = mock_team_instance
         
         response = client.post('/team/-1',
                                data=json.dumps(sample_team_data),
@@ -24,23 +28,40 @@ class TestTeamRoutes:
         assert response.status_code == 200
         assert response.data.decode() == '1'
         assert 'Access-Control-Allow-Origin' in response.headers
+        mock_session.add.assert_called()
+        mock_session.commit.assert_called_once()
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_get_team_existing(self, mock_get_conn, client):
+    @patch('db.db.get_session')
+    def test_get_team_existing(self, mock_get_session, client):
         """Test retrieving an existing team."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_team_result = MagicMock()
-        mock_team_result.fetchone.return_value = (1, 5, 1, 0)
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
         
-        mock_members_result = [
-            (1, 1),
-            (2, 0)
-        ]
+        # Mock team members
+        mock_member1 = MagicMock()
+        mock_member1.to_dict.return_value = {'playerId': 1, 'APlayer': True}
         
-        # Configure execute to return different results for different queries
-        mock_conn.execute.side_effect = [mock_team_result, mock_members_result]
-        mock_get_conn.return_value = mock_conn
+        mock_member2 = MagicMock()
+        mock_member2.to_dict.return_value = {'playerId': 2, 'APlayer': False}
+        
+        # Mock the team object
+        mock_team = MagicMock()
+        mock_team.to_dict.return_value = {
+            'id': 1,
+            'teamNumber': 5,
+            'divisionId': 1,
+            'forceAB': False,
+            'teamMembers': [
+                {'playerId': 1, 'APlayer': True},
+                {'playerId': 2, 'APlayer': False}
+            ]
+        }
+        
+        mock_query = MagicMock()
+        mock_query.filter_by.return_value.first.return_value = mock_team
+        mock_session.query.return_value = mock_query
         
         response = client.get('/team/1')
         
@@ -52,27 +73,36 @@ class TestTeamRoutes:
         assert data['teamNumber'] == 5
         assert data['divisionId'] == 1
         assert len(data['teamMembers']) == 2
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_get_team_not_found(self, mock_get_conn, client):
+    @patch('db.db.get_session')
+    def test_get_team_not_found(self, mock_get_session, client):
         """Test retrieving a non-existent team."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_result = MagicMock()
-        mock_result.fetchone.return_value = None
-        mock_conn.execute.return_value = mock_result
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        mock_query = MagicMock()
+        mock_query.filter_by.return_value.first.return_value = None
+        mock_session.query.return_value = mock_query
         
         response = client.get('/team/999')
         
         assert response.status_code == 204
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_update_team(self, mock_get_conn, client, sample_team_data):
+    @patch('db.db.get_session')
+    def test_update_team(self, mock_get_session, client, sample_team_data):
         """Test updating an existing team."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock existing team
+        mock_team = MagicMock()
+        mock_query = MagicMock()
+        mock_query.filter_by.return_value.first.return_value = mock_team
+        mock_session.query.return_value = mock_query
         
         response = client.post('/team/1',
                                data=json.dumps(sample_team_data),
@@ -80,46 +110,67 @@ class TestTeamRoutes:
         
         assert response.status_code == 200
         assert response.data.decode() == '1'
-        # Check that execute was called multiple times (update team + delete members + insert members)
-        assert mock_conn.execute.call_count >= 3
+        # Should commit changes
+        mock_session.commit.assert_called_once()
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_delete_team(self, mock_get_conn, client):
+    @patch('db.db.get_session')
+    def test_delete_team(self, mock_get_session, client):
         """Test deleting a team."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock existing team
+        mock_team = MagicMock()
+        mock_query = MagicMock()
+        mock_query.filter_by.return_value.first.return_value = mock_team
+        mock_session.query.return_value = mock_query
         
         response = client.delete('/team/1')
         
         assert response.status_code == 200
         assert b'Success' in response.data
-        # Should delete from team table and team_member table
-        assert mock_conn.execute.call_count == 2
+        # Should delete team (cascade will delete members automatically)
+        mock_session.delete.assert_called_once_with(mock_team)
+        mock_session.commit.assert_called_once()
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_get_all_teams(self, mock_get_conn, client):
+    @patch('db.db.get_session')
+    def test_get_all_teams(self, mock_get_session, client):
         """Test retrieving all teams."""
-        # Mock database behavior
-        mock_conn = MagicMock()
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
         
-        # Mock teams data
-        teams_data = [
-            (1, 1, 1, 0),
-            (2, 2, 1, 1)
-        ]
+        # Mock team objects
+        mock_team1 = MagicMock()
+        mock_team1.to_dict.return_value = {
+            'id': 1,
+            'teamNumber': 1,
+            'divisionId': 1,
+            'forceAB': False,
+            'teamMembers': [
+                {'playerId': 1, 'APlayer': True},
+                {'playerId': 2, 'APlayer': False}
+            ]
+        }
         
-        # Mock team members for each team
-        team1_members = [(1, 1), (2, 0)]
-        team2_members = [(3, 1), (4, 0)]
+        mock_team2 = MagicMock()
+        mock_team2.to_dict.return_value = {
+            'id': 2,
+            'teamNumber': 2,
+            'divisionId': 1,
+            'forceAB': True,
+            'teamMembers': [
+                {'playerId': 3, 'APlayer': True},
+                {'playerId': 4, 'APlayer': False}
+            ]
+        }
         
-        # Configure execute to return different results for different queries
-        mock_conn.execute.side_effect = [
-            teams_data,
-            team1_members,
-            team2_members
-        ]
-        mock_get_conn.return_value = mock_conn
+        mock_query = MagicMock()
+        mock_query.all.return_value = [mock_team1, mock_team2]
+        mock_session.query.return_value = mock_query
         
         response = client.get('/getAllTeams')
         
@@ -132,28 +183,37 @@ class TestTeamRoutes:
         assert data[1]['teamNumber'] == 2
         assert len(data[0]['teamMembers']) == 2
         assert len(data[1]['teamMembers']) == 2
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_get_all_teams_empty(self, mock_get_conn, client):
+    @patch('db.db.get_session')
+    def test_get_all_teams_empty(self, mock_get_session, client):
         """Test retrieving all teams when none exist."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_conn.execute.return_value = None
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        mock_query = MagicMock()
+        mock_query.all.return_value = []
+        mock_session.query.return_value = mock_query
         
         response = client.get('/getAllTeams')
         
         assert response.status_code == 204
+        mock_session.close.assert_called_once()
     
-    @patch('db.db.get_connection')
-    def test_create_team_with_force_ab(self, mock_get_conn, client):
+    @patch('routes.teams.TeamMember')
+    @patch('routes.teams.Team')
+    @patch('db.db.get_session')
+    def test_create_team_with_force_ab(self, mock_get_session, mock_team_class, mock_team_member_class, client):
         """Test creating a team with forceAB enabled."""
-        # Mock database behavior
-        mock_conn = MagicMock()
-        mock_result = MagicMock()
-        mock_result.lastrowid = 1
-        mock_conn.execute.return_value = mock_result
-        mock_get_conn.return_value = mock_conn
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock the team instance that gets created
+        mock_team_instance = MagicMock()
+        mock_team_instance.id = 1
+        mock_team_class.return_value = mock_team_instance
         
         team_data = {
             'team': {
@@ -173,3 +233,6 @@ class TestTeamRoutes:
         
         assert response.status_code == 200
         assert response.data.decode() == '1'
+        mock_session.add.assert_called()
+        mock_session.commit.assert_called_once()
+        mock_session.close.assert_called_once()

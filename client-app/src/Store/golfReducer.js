@@ -16,26 +16,26 @@ export default (state = initialState, action) => {
                 currentPage: action.pageName,
             };
         case actionTypes.ADD_PLAYER:
-            var players = state.players;
-            players.push({
-                id: action.id,
-                firstName: action.firstName,
-                lastName: action.lastName,
-                GHIN: action.GHIN,
-                handicap: action.handicap,
-                teePreference: action.teePreference,
-                frontNine: action.frontNine,
-                backNine: action.backNine,
-                autoUpdateGHIN: action.autoUpdateGHIN,
-            });
+            // Fixed: Use immutable array spread instead of push
             return {
                 ...state,
-                players: players,
+                players: [
+                    ...state.players,
+                    {
+                        id: action.id,
+                        firstName: action.firstName,
+                        lastName: action.lastName,
+                        GHIN: action.GHIN,
+                        handicap: action.handicap,
+                        teePreference: action.teePreference,
+                        frontNine: action.frontNine,
+                        backNine: action.backNine,
+                        autoUpdateGHIN: action.autoUpdateGHIN,
+                    },
+                ],
                 errorMessage: "",
             };
         case actionTypes.UPDATE_PLAYER:
-            var existingPlayers = state.players;
-
             const existingPlayer = {
                 id: action.id,
                 firstName: action.firstName,
@@ -47,17 +47,23 @@ export default (state = initialState, action) => {
                 backNine: action.backNine,
                 autoUpdateGHIN: action.autoUpdateGHIN,
             };
-            const index = existingPlayers.findIndex((p) => p.id === existingPlayer.id);
-            existingPlayers[index] = existingPlayer;
+            const index = state.players.findIndex((p) => p.id === existingPlayer.id);
+
+            // Fixed: Create new array with updated player
+            const updatedPlayers = [...state.players];
+            updatedPlayers[index] = existingPlayer;
 
             return {
                 ...state,
-                players: existingPlayers,
+                players: updatedPlayers,
                 errorMessage: "",
             };
         case actionTypes.REMOVE_PLAYER:
-            var newPlayersArray = state.players.filter((player) => player.id !== action.id);
-            return { ...state, players: newPlayersArray };
+            // Already immutable - filter creates new array
+            return {
+                ...state,
+                players: state.players.filter((player) => player.id !== action.id),
+            };
         case actionTypes.SET_PLAYERS:
             return {
                 ...state,
@@ -69,25 +75,30 @@ export default (state = initialState, action) => {
                 teams: action.teams,
             };
         case actionTypes.REMOVE_TEAM:
-            var newTeamsArray = state.teams.filter((team) => team.id !== action.id);
-            return { ...state, teams: newTeamsArray };
+            // Already immutable - filter creates new array
+            return {
+                ...state,
+                teams: state.teams.filter((team) => team.id !== action.id),
+            };
         case actionTypes.SET_ERROR_MESSAGE:
             return {
                 ...state,
                 errorMessage: action.errorMessage,
             };
         case actionTypes.ADD_TEAM:
-            var teams = state.teams;
-            teams.push({
-                id: action.id,
-                teamNumber: action.teamNumber,
-                teamMembers: action.teamMembers,
-                divisionId: action.divisionId,
-                forceAB: action.forceAB,
-            });
+            // Fixed: Use immutable array spread instead of push
             return {
                 ...state,
-                teams,
+                teams: [
+                    ...state.teams,
+                    {
+                        id: action.id,
+                        teamNumber: action.teamNumber,
+                        teamMembers: action.teamMembers,
+                        divisionId: action.divisionId,
+                        forceAB: action.forceAB,
+                    },
+                ],
             };
         case actionTypes.SET_COURSES:
             return {
@@ -100,17 +111,22 @@ export default (state = initialState, action) => {
                 divisions: action.divisions,
             };
         case actionTypes.REMOVE_DIVISION:
-            var newDivisionsArray = state.divisions.filter((d) => d.id !== action.id);
-            return { ...state, divisions: newDivisionsArray };
-        case actionTypes.ADD_DIVISION:
-            var divisions = state.divisions;
-            divisions.push({
-                id: action.id,
-                name: action.name,
-            });
+            // Already immutable - filter creates new array
             return {
                 ...state,
-                divisions,
+                divisions: state.divisions.filter((d) => d.id !== action.id),
+            };
+        case actionTypes.ADD_DIVISION:
+            // Fixed: Use immutable array spread instead of push
+            return {
+                ...state,
+                divisions: [
+                    ...state.divisions,
+                    {
+                        id: action.id,
+                        name: action.name,
+                    },
+                ],
             };
         default:
             return state;
