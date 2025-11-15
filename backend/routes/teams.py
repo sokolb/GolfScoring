@@ -1,7 +1,7 @@
 """Team routes blueprint."""
 from flask import Blueprint, request, Response
-from Team import Team
-from TeamMember import TeamMember
+from Entities.Team import Team
+from Entities.TeamMember import TeamMember
 import json
 
 teams_bp = Blueprint('teams', __name__)
@@ -19,7 +19,7 @@ def team(team_id):
             (team_id,)
         )
         teamRow = teamData.fetchone()
-        if teamData is None:
+        if teamRow is None:
             retval = Response(
                 response="Team not found with id " + team_id,
                 status=204,

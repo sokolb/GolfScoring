@@ -48,8 +48,31 @@ Before you begin, ensure you have the following installed:
    ```
 
 3. Start the backend server:
+
    ```bash
    python3 server.py
+   ```
+
+4. Run backend tests:
+
+   ```bash
+   pytest
+   ```
+
+   Additional test options:
+
+   ```bash
+   # Run with verbose output
+   pytest -v
+
+   # Run specific test file
+   pytest tests/test_entities.py
+
+   # Run with coverage report
+   pytest --cov=. --cov-report=html
+
+   # Run tests matching a pattern
+   pytest -k "test_player"
    ```
 
 > **Note:** If you don't set the `DATABASE_LOCATION` environment variable, create the folder `GolfScoring/backend/data`. The application will automatically create an empty `league.db` file on startup.
@@ -109,9 +132,23 @@ docker-compose -f docker-compose-prod.yml up -d
 GolfScoring/
 ├── backend/              # Python Flask backend
 │   ├── server.py        # Main server file
-│   ├── Course.py        # Course model
-│   ├── Player.py        # Player model
-│   ├── Team.py          # Team model
+│   ├── db.py            # Database connection
+│   ├── Entities/        # Entity models
+│   │   ├── Course.py
+│   │   ├── Division.py
+│   │   ├── Hole.py
+│   │   ├── Player.py
+│   │   ├── Team.py
+│   │   └── TeamMember.py
+│   ├── routes/          # API route blueprints
+│   │   ├── courses.py
+│   │   ├── divisions.py
+│   │   ├── players.py
+│   │   └── teams.py
+│   ├── tests/           # Backend unit tests
+│   │   ├── conftest.py  # Test fixtures
+│   │   ├── test_entities.py
+│   │   └── test_routes_*.py
 │   └── data/            # SQLite database location
 ├── client-app/          # React frontend
 │   ├── src/

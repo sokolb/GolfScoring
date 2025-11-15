@@ -1,6 +1,6 @@
 """Division routes blueprint."""
 from flask import Blueprint, request, Response
-from Division import Division
+from Entities.Division import Division
 import json
 
 divisions_bp = Blueprint('divisions', __name__)

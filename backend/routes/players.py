@@ -1,6 +1,6 @@
 """Player routes blueprint."""
 from flask import Blueprint, request, Response
-from Player import Player
+from Entities.Player import Player
 from datetime import datetime
 import json
 

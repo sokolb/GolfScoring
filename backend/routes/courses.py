@@ -1,7 +1,7 @@
 """Course routes blueprint."""
 from flask import Blueprint, request, Response
-from Course import Course
-from Hole import Hole
+from Entities.Course import Course
+from Entities.Hole import Hole
 import json
 
 courses_bp = Blueprint('courses', __name__)
