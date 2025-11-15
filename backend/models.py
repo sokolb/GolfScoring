@@ -1,7 +1,6 @@
 """SQLAlchemy ORM models for the golf scoring application."""
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
 
 Base = declarative_base()
