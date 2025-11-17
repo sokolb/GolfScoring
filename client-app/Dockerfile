@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:18.20.8-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Build the production version of the application
-# Node 14 uses OpenSSL 1.1.1, so no legacy provider flag needed
+# Node 18 uses OpenSSL 3.0, requires legacy provider for react-scripts 4.0.3
 RUN npm run build
 
 # Expose port 3000 to the host
