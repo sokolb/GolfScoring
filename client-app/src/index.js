@@ -1,12 +1,14 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import configureStore from "./Store/configureStore";
 import Root from "./Root";
 
 const store = configureStore();
+const container = document.getElementById("root");
+const root = createRoot(container);
 
-ReactDOM.render(<Root store={store} />, document.getElementById("root"));
+root.render(<Root store={store} />);
 
 reportWebVitals();

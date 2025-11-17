@@ -1,4 +1,8 @@
-import { configure } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import "@testing-library/jest-dom";
+import { expect, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
 
-configure({ adapter: new Adapter() });
+// Cleanup after each test case (e.g., clearing jsdom)
+afterEach(() => {
+    cleanup();
+});

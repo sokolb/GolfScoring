@@ -1,14 +1,15 @@
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import GhinDataService from "../DataServices/GhinDataService.js";
 import AppData from "../DataServices/AppData.js";
 import * as actionTypes from "./ActionTypes.js";
 import { addOrUpdatePlayer, addOrUpdatePlayerNoAutoGhinUpdate, getPlayers, getTeams, logInUser, setCurrentPage, setLoggedInUser, removePlayer, removeTeam, addTeam, getCourses, getDivisions, addDivision, removeDivision } from "./GolfActions.js";
 
-jest.mock("../DataServices/GhinDataService");
-jest.mock("../DataServices/AppData");
+vi.mock("../DataServices/GhinDataService");
+vi.mock("../DataServices/AppData");
 
 describe("Actions tests", () => {
     it("setCurrentPage dispatches SET_CURRENT_PAGE", () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         var pageName = "Players";
 
         setCurrentPage(pageName)(dispatch);
@@ -21,7 +22,7 @@ describe("Actions tests", () => {
 
     describe("Users", () => {
         it("logInUser calls get user token from API", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var user = "brian.sokoloski3@gmail.com";
             var pwd = "@bc!23";
             GhinDataService.getUserToken.mockReturnValue(Promise.resolve({ data: {} }));
@@ -32,7 +33,7 @@ describe("Actions tests", () => {
         });
 
         it("logInUser dispatches setLoggedInUser on success from API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var user = "brian.sokoloski3@gmail.com";
             var pwd = "@bc!23";
             var responseData = {
@@ -54,7 +55,7 @@ describe("Actions tests", () => {
         });
 
         it("logInUser does not dispatch setLoggedInUser on failure from API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var user = "brian.sokoloski3@gmail.com";
             var pwd = "@bc!23";
 
@@ -66,7 +67,7 @@ describe("Actions tests", () => {
         });
 
         it("setLoggedInUser dispatches SET_LOGGED_IN_USER", () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var user = "brian.sokoloski3@gmail.com";
             var userToken = "asdfjiofaweoijwef234";
 
@@ -167,7 +168,7 @@ describe("Actions tests", () => {
         };
 
         it("addOrUpdatePlayer calls getUserHandicap and getUserCourseHandicap", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
@@ -186,7 +187,7 @@ describe("Actions tests", () => {
         });
 
         it("addOrUpdatePlayer calls addPlayer API for new player", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
@@ -216,7 +217,7 @@ describe("Actions tests", () => {
         });
 
         it("addOrUpdatePlayer dispatches ADD_PLAYER for new player", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = "3";
             var firstName = "Brian";
             var lastName = "Smith";
@@ -250,7 +251,7 @@ describe("Actions tests", () => {
         });
 
         it("addOrUpdatePlayer calls updatePlayer API for existing player", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var playerId = 13;
             var firstName = "Brian";
             var lastName = "Smith";
@@ -281,7 +282,7 @@ describe("Actions tests", () => {
         });
 
         it("addOrUpdatePlayer dispatches UPDATE_PLAYER for existing player updateGHIN true", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = "3";
             var playerId = 42;
             var firstName = "Brian";
@@ -316,7 +317,7 @@ describe("Actions tests", () => {
         });
 
         it("addOrUpdatePlayer no GHIN auto update dispatches UPDATE_PLAYER for existing player updateGHIN", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = "3";
             var playerId = 42;
             var firstName = "Brian";
@@ -351,7 +352,7 @@ describe("Actions tests", () => {
         });
 
         it("removePlayer calls deletePlayer API", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var playerId = "2244";
             AppData.deletePlayer.mockReturnValue(Promise.resolve(""));
 
@@ -361,7 +362,7 @@ describe("Actions tests", () => {
         });
 
         it("removePlayer dispatches REMOVE_PLAYER", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = "12345";
             AppData.deletePlayer.mockReturnValue(Promise.resolve(""));
 
@@ -374,7 +375,7 @@ describe("Actions tests", () => {
         });
 
         it("removePlayer does not dispatch REMOVE_PLAYER when deletePlayer fails", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = "12345";
             AppData.deletePlayer.mockReturnValue(Promise.reject(""));
 
@@ -384,7 +385,7 @@ describe("Actions tests", () => {
         });
 
         it("addPlayer dispatches SET_ERROR_MESSAGE when API call call fails", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var firstName = "Brian";
             var lastName = "Smith";
             var GHIN = "1234132";
@@ -414,7 +415,7 @@ describe("Actions tests", () => {
         });
 
         it("getPlayers calls getPlayers endpoint", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var fileName = "test.json";
             AppData.getPlayers.mockReturnValue(Promise.resolve({ data: {} }));
 
@@ -424,7 +425,7 @@ describe("Actions tests", () => {
         });
 
         it("getPlayers dispatches SET_PLAYERS on successful API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var fileName = "test.json";
 
             var responseData = [
@@ -455,7 +456,7 @@ describe("Actions tests", () => {
 
     describe("Teams", () => {
         it("getTeams dispatches SET_TEAMS on successfull API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var filename = "testTeams.json";
 
             var responseData = [
@@ -486,7 +487,7 @@ describe("Actions tests", () => {
         });
 
         it("addTeam dispatches ADD_TEAM", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = 4;
             var teamMembers = [
                 {
@@ -517,7 +518,7 @@ describe("Actions tests", () => {
         });
 
         it("removeTeam dispatches REMOVE_TEAM", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = "12345abcdefg";
 
             AppData.deleteTeam.mockReturnValue(Promise.resolve(""));
@@ -531,7 +532,7 @@ describe("Actions tests", () => {
         });
 
         it("removeTeam calls deleteTeam API", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var teamId = 3;
             AppData.deleteTeam.mockReturnValue(Promise.resolve(""));
 
@@ -541,7 +542,7 @@ describe("Actions tests", () => {
         });
 
         it("remoteTeam does not dispatch REMOVE_TEAM when deleteTeam fails", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = 66;
             AppData.deleteTeam.mockReturnValue(Promise.reject(""));
 
@@ -553,7 +554,7 @@ describe("Actions tests", () => {
 
     describe("Courses", () => {
         it("getCourses dispatches SET_COURSES on successfull API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var filename = "test.json";
 
             var responseData = [
@@ -766,7 +767,7 @@ describe("Actions tests", () => {
 
     describe("Divisions", () => {
         it("getDivisions dispatches SET_DIVISIONS on successfull API call", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var filename = "testDivisions.json";
 
             var responseData = [
@@ -789,7 +790,7 @@ describe("Actions tests", () => {
         });
 
         it("addDivision dispatches ADD_DIVISION", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = 4;
             var name = "Mens Div 1";
 
@@ -808,7 +809,7 @@ describe("Actions tests", () => {
         });
 
         it("removeDispatch dispatches REMOVE_DISPATCH", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = "12345abcdefg";
 
             AppData.deleteDivision.mockReturnValue(Promise.resolve(""));
@@ -822,7 +823,7 @@ describe("Actions tests", () => {
         });
 
         it("removeDivision calls deleteTeam API", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             var id = 3;
             AppData.deleteDivision.mockReturnValue(Promise.resolve(""));
 
@@ -832,7 +833,7 @@ describe("Actions tests", () => {
         });
 
         it("removeDivision does not dispatch REMOVE_DIVISION when deleteDivision fails", async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             let id = 66;
             AppData.deleteDivision.mockReturnValue(Promise.reject(""));
 

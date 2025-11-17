@@ -1,11 +1,12 @@
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import Axios from "axios";
 import GhinDataService from "./GhinDataService";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("GhinDataService", () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("getUserToken fetches data successfully from the API", async () => {

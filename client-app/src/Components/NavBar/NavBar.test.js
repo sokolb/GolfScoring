@@ -1,9 +1,11 @@
-import { shallow } from "enzyme";
+import { describe, it, expect, beforeEach, vi, test } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { NavBar } from "./Navbar";
 
-const expectedVersion = "4.0.0";
-jest.mock("../../../package.json", () => ({
-    version: expectedVersion,
+vi.mock("../../../package.json", () => ({
+    default: { version: "2.1.0" },
+    version: "2.1.0",
 }));
 
 var props;
@@ -12,100 +14,71 @@ describe("NavBar Tests", () => {
     beforeEach(() => {
         props = {
             golf: { loggedInUser: "test@test.com" },
-            setCurrentPage: jest.fn(),
-            setLoggedInUser: jest.fn(),
+            setCurrentPage: vi.fn(),
+            setLoggedInUser: vi.fn(),
         };
     });
 
     it("Renders correct buttons for logged in user", () => {
         props.golf.loggedInUser = "test@test.com";
-        const wrapper = shallow(<NavBar {...props} />);
+        render(<NavBar {...props} />);
 
-        const btnLogin = wrapper.find({ name: "btnLogin" });
-        expect(btnLogin.length).toBe(1);
-        expect(btnLogin.text()).toEqual("Logout");
-
-        const btnPlayer = wrapper.find({ name: "btnPlayers" });
-        expect(btnPlayer.length).toBe(1);
-        expect(btnPlayer.text()).toEqual("Players");
-
-        const btnTeams = wrapper.find({ name: "btnTeams" });
-        expect(btnTeams.length).toBe(1);
-        expect(btnTeams.text()).toEqual("Teams");
-
-        const btnDivisions = wrapper.find({ name: "btnDivisions" });
-        expect(btnDivisions.length).toBe(1);
-        expect(btnDivisions.text()).toEqual("Divisions");
-
-        const btnMatches = wrapper.find({ name: "btnMatches" });
-        expect(btnMatches.length).toBe(1);
-        expect(btnMatches.text()).toEqual("Matches");
+        expect(screen.getByRole("button", { name: /logout/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /players/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /teams/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /divisions/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /matches/i })).toBeInTheDocument();
     });
 
     it("Renders correct buttons for NO logged in user", () => {
         props.golf.loggedInUser = undefined;
-        const wrapper = shallow(<NavBar {...props} />);
+        render(<NavBar {...props} />);
 
-        const btnLogin = wrapper.find({ name: "btnLogin" });
-        expect(btnLogin.length).toBe(1);
-        expect(btnLogin.text()).toEqual("Login");
-
-        const btnPlayer = wrapper.find({ name: "btnPlayers" });
-        expect(btnPlayer.length).toBe(1);
-        expect(btnPlayer.text()).toEqual("Players");
-
-        const btnTeams = wrapper.find({ name: "btnTeams" });
-        expect(btnTeams.length).toBe(1);
-        expect(btnTeams.text()).toEqual("Teams");
-
-        const btnDivisions = wrapper.find({ name: "btnDivisions" });
-        expect(btnDivisions.length).toBe(0);
-
-        const btnMatches = wrapper.find({ name: "btnMatches" });
-        expect(btnMatches.length).toBe(1);
-        expect(btnMatches.text()).toEqual("Matches");
+        expect(screen.getByRole("button", { name: /^login$/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /players/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /teams/i })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /divisions/i })).not.toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /matches/i })).toBeInTheDocument();
     });
 
     test.each([
-        ["btnPlayers", "Players", "brian@test.com"],
-        ["btnTeams", "Teams", "brian@test.com"],
-        ["btnDivisions", "Divisions", "brian@test.com"],
-        ["btnMatches", "Matches", "brian@test.com"],
-        ["btnLogin", "Login", undefined],
-    ])("Button %s calls setCurrentPage with correct pageName %s", (buttonName, pageName, loggedInUser) => {
+        ["Players", "Players", "brian@test.com"],
+        ["Teams", "Teams", "brian@test.com"],
+        ["Divisions", "Divisions", "brian@test.com"],
+        ["Matches", "Matches", "brian@test.com"],
+        ["Login", "Login", undefined],
+    ])("Button %s calls setCurrentPage with correct pageName %s", async (buttonText, pageName, loggedInUser) => {
         props.golf.loggedInUser = loggedInUser;
-        const wrapper = shallow(<NavBar {...props} />);
-        const button = wrapper.find({ name: buttonName });
+        const user = userEvent.setup();
+        render(<NavBar {...props} />);
 
-        button.simulate("click");
+        const button = screen.getByRole("button", { name: new RegExp(buttonText, "i") });
+        await user.click(button);
 
         expect(props.setCurrentPage).toHaveBeenCalledWith(pageName);
     });
 
     it("Show Logout button when user is logged in", () => {
         props.golf.loggedInUser = "bob.smith@gmail.com";
-        const wrapper = shallow(<NavBar {...props} />);
+        render(<NavBar {...props} />);
 
-        const btnLogin = wrapper.find({ name: "btnLogin" });
-
-        expect(btnLogin.text()).toEqual("Logout");
+        expect(screen.getByRole("button", { name: /logout/i })).toBeInTheDocument();
     });
 
-    it("Logout clicked will clear logged in user and user token", () => {
+    it("Logout clicked will clear logged in user and user token", async () => {
         props.golf.loggedInUser = "bob.smith@gmail.com";
-        const wrapper = shallow(<NavBar {...props} />);
+        const user = userEvent.setup();
+        render(<NavBar {...props} />);
 
-        const btnLogin = wrapper.find({ name: "btnLogin" });
-        btnLogin.simulate("click");
+        const btnLogin = screen.getByRole("button", { name: /logout/i });
+        await user.click(btnLogin);
 
         expect(props.setLoggedInUser).toHaveBeenCalledWith(undefined, undefined);
     });
 
     it("displays the correct version", () => {
-        const wrapper = shallow(<NavBar {...props} />);
-        const versionLabel = wrapper.find({ name: "lblVersion" });
+        render(<NavBar {...props} />);
 
-        expect(versionLabel.exists()).toEqual(true);
-        expect(versionLabel.text()).toEqual(`Version: ${expectedVersion}`);
+        expect(screen.getByText("Version: 2.1.0")).toBeInTheDocument();
     });
 });

@@ -1,52 +1,89 @@
-import { shallow } from "enzyme";
-import Login from "../Login/Login";
-import NavBar from "../NavBar/Navbar";
-import Matches from "../Pages/Matches";
-import Players from "../Pages/Players";
-import Teams from "../Pages/Teams";
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, beforeEach, test } from "vitest";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import { App } from "./App";
-import Divisions from "../Pages/Divisions";
 
 var props;
+var mockStore;
+
+// Mock reducer that returns full state
+const mockReducer = (state = {}) => state;
 
 describe("App tests", () => {
     beforeEach(() => {
-        props = {
+        const initialState = {
             golf: {
                 loggedInUser: "brian.sokoloski@gmail.com",
                 currentPage: "Matches",
+                players: [],
+                teams: [],
+                courses: [],
+                divisions: [],
             },
         };
+
+        props = {
+            golf: initialState.golf,
+        };
+
+        // Create a mock Redux store with thunk middleware
+        mockStore = createStore(mockReducer, initialState, applyMiddleware(thunk));
     });
 
     it("renders correct components", () => {
-        const wrapper = shallow(<App {...props} />);
+        render(
+            <Provider store={mockStore}>
+                <App {...props} />
+            </Provider>
+        );
 
-        const navBar = wrapper.find(NavBar);
-        expect(navBar.length).toEqual(1);
-        const loggedinUser = wrapper.find({ name: "loggedInUser" });
-        expect(loggedinUser.length).toEqual(1);
+        // Check that NavBar is rendered (look for navigation buttons)
+        expect(screen.getByRole("button", { name: /players/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /teams/i })).toBeInTheDocument();
+
+        // Check that logged in user is displayed
+        expect(screen.getByText(/Logged in user:/i)).toBeInTheDocument();
     });
 
     it("display logged in user", () => {
-        const wrapper = shallow(<App {...props} />);
+        render(
+            <Provider store={mockStore}>
+                <App {...props} />
+            </Provider>
+        );
 
-        const loggedinUser = wrapper.find({ name: "loggedInUser" });
-        expect(loggedinUser.text()).toEqual("Logged in user: " + props.golf.loggedInUser);
+        expect(screen.getByText("Logged in user: " + props.golf.loggedInUser)).toBeInTheDocument();
     });
 
     test.each([
-        ["Players", Players],
-        ["Teams", Teams],
-        ["Matches", Matches],
-        ["Login", Login],
-        ["Divisions", Divisions]
-    ])("Displays %s component when store is set to that page", (pageName, pageObject) => {
-        props.golf.currentPage = pageName;
-        const wrapper = shallow(<App {...props} />);
+        ["Players", "Player List"],
+        ["Teams", "Add Team"],
+        ["Matches", "Create Match"],
+        ["Login", "Login:"],
+        ["Divisions", "Add Division"],
+    ])("Displays %s component when store is set to that page", (pageName, pageHeading) => {
+        const testState = {
+            golf: {
+                loggedInUser: "brian.sokoloski@gmail.com",
+                currentPage: pageName,
+                players: [],
+                teams: [],
+                courses: [],
+                divisions: [],
+            },
+        };
 
-        const playersComponent = wrapper.find(pageObject);
+        const testStore = createStore(mockReducer, testState, applyMiddleware(thunk));
 
-        expect(playersComponent.length).toEqual(1);
+        render(
+            <Provider store={testStore}>
+                <App {...testState} />
+            </Provider>
+        );
+
+        // Check that the page component is rendered by looking for page-specific heading
+        expect(screen.getByRole("heading", { name: pageHeading })).toBeInTheDocument();
     });
 });

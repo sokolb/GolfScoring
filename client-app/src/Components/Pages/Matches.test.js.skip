@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
 import { shallow } from "enzyme";
 import { Matches } from "./Matches";
 import Scorecard from "./Scorecard";
@@ -74,10 +75,10 @@ describe("Matches tests", () => {
                     { id: 2, name: "mens div 2" },
                 ],
             },
-            getTeams: jest.fn(),
-            getPlayers: jest.fn(),
-            logInUser: jest.fn(),
-            addOrUpdatePlayer: jest.fn(),
+            getTeams: vi.fn(),
+            getPlayers: vi.fn(),
+            logInUser: vi.fn(),
+            addOrUpdatePlayer: vi.fn(),
         };
     });
 

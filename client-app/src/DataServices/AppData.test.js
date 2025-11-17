@@ -1,11 +1,12 @@
+import { describe, it, expect, beforeEach, vi, test } from "vitest";
 import Axios from "axios";
 import AppData from "./AppData";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("AppData", () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     describe("Players", () => {

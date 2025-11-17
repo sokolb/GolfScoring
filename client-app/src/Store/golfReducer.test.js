@@ -3,7 +3,7 @@ import * as actionTypes from "../Actions/ActionTypes";
 import reducer from "./golfReducer.js";
 import { v4 as uuidv4 } from "uuid";
 
-jest.mock("uuid");
+vi.mock("uuid");
 
 var targetState;
 var initialState;

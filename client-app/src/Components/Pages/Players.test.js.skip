@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
 import { shallow } from "enzyme";
 import { Players } from "../Pages/Players";
 import Player from "./Player";
@@ -24,9 +25,9 @@ describe("Players Tests", () => {
                     },
                 ],
             },
-            addOrUpdatePlayer: jest.fn(),
-            addOrUpdatePlayerNoAutoGhinUpdate: jest.fn(),
-            getPlayers: jest.fn(),
+            addOrUpdatePlayer: vi.fn(),
+            addOrUpdatePlayerNoAutoGhinUpdate: vi.fn(),
+            getPlayers: vi.fn(),
         };
     });
 

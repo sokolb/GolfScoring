@@ -2,30 +2,30 @@
     "name": "client-app",
     "version": "2.1.0",
     "private": true,
+    "type": "module",
     "dependencies": {
-        "@testing-library/jest-dom": "^5.13.0",
-        "@testing-library/react": "^11.2.7",
-        "@testing-library/user-event": "^12.8.3",
-        "axios": "^0.30.2",
-        "react": "^16.14.0",
-        "react-dom": "^16.14.0",
-        "react-redux": "^7.2.1",
-        "react-scripts": "4.0.3",
-        "redux": "^4.0.5",
-        "redux-thunk": "^2.3.0",
-        "uuid": "^8.3.2",
-        "web-vitals": "^1.1.2"
+        "axios": "^1.6.0",
+        "prop-types": "^15.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-redux": "^8.1.0",
+        "redux": "^4.2.1",
+        "redux-thunk": "^2.4.2",
+        "uuid": "^9.0.0",
+        "web-vitals": "^3.5.0"
     },
     "scripts": {
-        "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
-        "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
-        "test": "react-scripts test --env=jsdom --verbose --maxWorkers=4",
-        "eject": "react-scripts eject"
+        "dev": "vite",
+        "start": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test": "vitest",
+        "test:ui": "vitest --ui",
+        "test:run": "vitest run"
     },
     "eslintConfig": {
         "extends": [
-            "react-app",
-            "react-app/jest"
+            "react-app"
         ]
     },
     "browserslist": {
@@ -40,15 +40,15 @@
             "last 1 safari version"
         ]
     },
-    "typeAcquisition": {
-        "include": [
-            "jest"
-        ]
-    },
     "devDependencies": {
-        "@babel/plugin-transform-private-property-in-object": "^7.25.9",
-        "enzyme": "^3.11.0",
-        "enzyme-adapter-react-16": "^1.15.3",
-        "redux-devtools-extension": "^2.13.8"
+        "@testing-library/jest-dom": "^6.1.5",
+        "@testing-library/react": "^14.1.2",
+        "@testing-library/user-event": "^14.5.1",
+        "@vitejs/plugin-react": "^4.2.1",
+        "@vitest/ui": "^1.0.4",
+        "jsdom": "^23.0.1",
+        "redux-devtools-extension": "^2.13.9",
+        "vite": "^5.0.8",
+        "vitest": "^1.0.4"
     }
 }
