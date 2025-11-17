@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16.16.0-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN npm install
 COPY . .
 
 # Build the production version of the application
-# Set NODE_OPTIONS inline for the build command only
-RUN export NODE_OPTIONS=--openssl-legacy-provider && npm run build
+ENV NODE_OPTIONS=--openssl-legacy-provider
+RUN npm run build
 
 # Expose port 3000 to the host
 EXPOSE 3000
