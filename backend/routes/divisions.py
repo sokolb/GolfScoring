@@ -1,5 +1,6 @@
 """Division routes blueprint."""
 from flask import Blueprint, request, Response
+from sqlalchemy import text
 from Entities.Division import Division
 import json
 
@@ -14,7 +15,7 @@ def division(division_id):
     
     if request.method == 'GET':
         result = con.execute(
-            "SELECT id, name FROM division WHERE id = ?",
+            text("SELECT id, name FROM division WHERE id = ?"),
             (division_id,)
         )
         data = result.fetchone()
@@ -39,12 +40,12 @@ def division(division_id):
         data = request.get_json()['division']
         data_tuple = (data['name'],)
         if division_id == "-1":
-            sql = "INSERT INTO division(name) VALUES (?)"
+            sql = text("INSERT INTO division(name) VALUES (?)")
             result = con.execute(sql, data_tuple)
             division_id = str(result.lastrowid)
         else:
-            sql = '''UPDATE division SET name = ?
-                WHERE id = ?'''
+            sql = text('''UPDATE division SET name = ?
+                WHERE id = ?''')
             con.execute(sql, data_tuple + (division_id,))
         
         retval = Response(
@@ -57,7 +58,7 @@ def division(division_id):
         return retval
     
     if request.method == 'DELETE':
-        con.execute("DELETE FROM division WHERE id = ?", (division_id,))
+        con.execute(text("DELETE FROM division WHERE id = ?"), (division_id,))
         retval = Response(
             response="Success",
             status=200,
@@ -84,7 +85,7 @@ def get_all_divisions():
     from db import db
     conn = db.get_connection()
     divisionList = []
-    data = conn.execute("SELECT id, name FROM division")
+    data = conn.execute(text("SELECT id, name FROM division"))
     if data is None:
         retval = Response(
             response="no divisions found",

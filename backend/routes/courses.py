@@ -1,5 +1,6 @@
 """Course routes blueprint."""
 from flask import Blueprint, request, Response
+from sqlalchemy import text
 from Entities.Course import Course
 from Entities.Hole import Hole
 import json
@@ -15,7 +16,7 @@ def course(course_id):
     
     if request.method == 'GET':
         result = con.execute(
-            "SELECT id, name, tee FROM course WHERE id = ?",
+            text("SELECT id, name, tee FROM course WHERE id = ?"),
             (course_id,)
         )
         courseData = result.fetchone()
@@ -28,7 +29,7 @@ def course(course_id):
         else:
             holes = []
             holesResult = con.execute(
-                "SELECT id, number, handicapIndex FROM hole WHERE course_id = ?",
+                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?"),
                 (course_id,)
             )
             holesData = holesResult.fetchall()
@@ -48,19 +49,19 @@ def course(course_id):
         data = request.get_json()['course']
         data_tuple = (data['name'], data['tee'])
         if course_id == "-1":
-            sql = "INSERT INTO course(name, tee) VALUES (?, ?)"
+            sql = text("INSERT INTO course(name, tee) VALUES (?, ?)")
             result = con.execute(sql, data_tuple)
             course_id = str(result.lastrowid)
         else:
-            sql = '''UPDATE course SET name = ?, 
+            sql = text('''UPDATE course SET name = ?, 
                 tee = ?
-                WHERE id = ?'''
+                WHERE id = ?''')
             con.execute(sql, data_tuple + (course_id,))
-            sql = "DELETE from hole WHERE course_id = ?"
+            sql = text("DELETE from hole WHERE course_id = ?")
             con.execute(sql, (course_id,))
         
         for hole in data['holes']:
-            sql = "INSERT INTO hole(number, handicapIndex, course_id) VALUES (?,?,?)"
+            sql = text("INSERT INTO hole(number, handicapIndex, course_id) VALUES (?,?,?)")
             con.execute(sql, (hole["number"], hole["handicapIndex"], course_id))
         
         retval = Response(
@@ -73,8 +74,8 @@ def course(course_id):
         return retval
     
     if request.method == 'DELETE':
-        con.execute("DELETE FROM course WHERE id = ?", (course_id,))
-        con.execute("DELETE FROM hole WHERE course_id = ?", (course_id,))
+        con.execute(text("DELETE FROM course WHERE id = ?"), (course_id,))
+        con.execute(text("DELETE FROM hole WHERE course_id = ?"), (course_id,))
         retval = Response(
             response="Success",
             status=200,
@@ -101,7 +102,7 @@ def get_all_courses():
     from db import db
     con = db.get_connection()
     courseList = []
-    courseData = con.execute("SELECT id, name, tee FROM course")
+    courseData = con.execute(text("SELECT id, name, tee FROM course"))
     if courseData is None:
         retval = Response(
             response="No courses found",
@@ -112,7 +113,7 @@ def get_all_courses():
         for course in courseData:
             holes = []
             holeData = con.execute(
-                "SELECT id, number, handicapIndex FROM hole WHERE course_id = ?",
+                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?"),
                 (course[0],)
             )
             for hole in holeData:
