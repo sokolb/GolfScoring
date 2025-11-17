@@ -1,4 +1,4 @@
-FROM node:16.16.0-alpine
+FROM node:14-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Build the production version of the application
-ENV NODE_OPTIONS=--openssl-legacy-provider
+# Node 14 uses OpenSSL 1.1.1, so no legacy provider flag needed
 RUN npm run build
 
 # Expose port 3000 to the host
