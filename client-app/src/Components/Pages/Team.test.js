@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
-import { shallow } from "enzyme";
+import { render } from "@testing-library/react";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { Team } from "../Pages/Team";
 
 var props;
@@ -51,60 +52,61 @@ describe("Team Tests", () => {
     });
 
     it("Calls GetTeams and GetPlayers when rendered", () => {
-        const wrapper = shallow(<Team {...props} />);
+        render(<Team {...props} />);
 
         expect(props.getDivisions).toHaveBeenCalled();
     });
 
     it("Renders correct components", () => {
-        const wrapper = shallow(<Team {...props} />);
+        const { container } = render(<Team {...props} />);
 
-        const division = wrapper.find({ name: "division" });
-        const teamMembers = wrapper.find({ name: "teamMembers" });
-        const deleteButton = wrapper.find({ name: "delete" });
+        const division = container.querySelector('[name="division"]');
+        const teamMembers = container.querySelector('[name="teamMembers"]');
+        const deleteButton = container.querySelector('[name="delete"]');
 
-        expect(division.length).toEqual(1);
-        expect(teamMembers.length).toEqual(1);
-        expect(deleteButton.length).toEqual(1);
+        expect(division).toBeInTheDocument();
+        expect(teamMembers).toBeInTheDocument();
+        expect(deleteButton).toBeInTheDocument();
     });
 
     it("Division renders with correct value", () => {
-        var wrapper = shallow(<Team {...props} />);
+        const { container } = render(<Team {...props} />);
 
-        const division = wrapper.find({ name: "division" });
-        expect(division.text()).toEqual(props.divisions.find((d) => d.id === props.team.divisionId).name);
+        const division = container.querySelector('[name="division"]');
+        expect(division.textContent).toEqual(props.divisions.find((d) => d.id === props.team.divisionId).name);
     });
 
     it("Temp Division renders with correct value", () => {
         props.team.divisionId = -1;
-        var wrapper = shallow(<Team {...props} />);
+        const { container } = render(<Team {...props} />);
 
-        const division = wrapper.find({ name: "division" });
-        expect(division.text()).toEqual("Temporary Team");
+        const division = container.querySelector('[name="division"]');
+        expect(division.textContent).toEqual("Temporary Team");
     });
 
     it("Team members rendered correctly", () => {
-        var wrapper = shallow(<Team {...props} />);
+        const { container } = render(<Team {...props} />);
 
-        const teamMembers = wrapper.find({ name: "teamMembers" });
-        expect(teamMembers.text()).toEqual("Brian Sokoloski | Bob Smith");
+        const teamMembers = container.querySelector('[name="teamMembers"]');
+        expect(teamMembers.textContent).toEqual("Brian Sokoloski | Bob Smith");
     });
 
-    it("Calls removeTeam with correct id value", () => {
-        const wrapper = shallow(<Team {...props} />);
+    it("Calls removeTeam with correct id value", async () => {
+        const user = userEvent.setup();
+        const { container } = render(<Team {...props} />);
 
-        const deleteButton = wrapper.find({ name: "delete" });
-        deleteButton.simulate("click");
+        const deleteButton = container.querySelector('[name="delete"]');
+        await user.click(deleteButton);
 
         expect(props.removeTeam).toHaveBeenCalledWith(props.team.id);
     });
 
     it("Hides delete button when showDeleteButton is false", () => {
         props.showDeleteButton = false;
-        const wrapper = shallow(<Team {...props} />);
+        const { container } = render(<Team {...props} />);
 
-        var btnDelete = wrapper.find({ name: "delete" });
+        const btnDelete = container.querySelector('[name="delete"]');
 
-        expect(btnDelete.length).toEqual(0);
+        expect(btnDelete).not.toBeInTheDocument();
     });
 });

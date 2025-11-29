@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
-import { shallow } from "enzyme";
-import PlayerScorecard from "./PlayerScorecard";
+import { render } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
 import TeamTotals from "./TeamTotals";
 
 var props;
@@ -32,13 +31,13 @@ describe("TeamTotals tests", () => {
     });
 
     it("renders team totals with player names", () => {
-        const wrapper = shallow(<TeamTotals {...props} />);
+        const { container } = render(<TeamTotals {...props} />);
 
-        var totalTeamName = wrapper.find({ name: "totalTeamName" });
+        const totalTeamName = container.querySelector('[name="totalTeamName"]');
 
-        var player1NameCombined = props.player1.firstName + " " + props.player1.lastName;
-        var player2NameCombined = props.player2.firstName + " " + props.player2.lastName;
+        const player1NameCombined = props.player1.firstName + " " + props.player1.lastName;
+        const player2NameCombined = props.player2.firstName + " " + props.player2.lastName;
 
-        expect(totalTeamName.text()).toEqual("Team Points: " + player1NameCombined + "/" + player2NameCombined);
+        expect(totalTeamName.textContent).toEqual("Team Points: " + player1NameCombined + "/" + player2NameCombined);
     });
 });

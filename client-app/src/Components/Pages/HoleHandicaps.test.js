@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
-import { shallow } from "enzyme";
+import { render } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
 import HoleHandicaps from "./HoleHandicaps";
 
 var props;
@@ -109,59 +109,59 @@ describe("Scorecard tests", () => {
     });
 
     it("renders tee in name", () => {
-        const wrapper = shallow(<HoleHandicaps {...props} />);
+        const { container } = render(<HoleHandicaps {...props} />);
 
-        var tee = wrapper.find({ name: "tee" });
+        const tee = container.querySelector('[name="tee"]');
 
-        expect(tee.text()).toEqual(props.course.tee + " tee index");
+        expect(tee.textContent).toEqual(props.course.tee + " tee index");
     });
 
     it("renders correct components for front nine", () => {
-        const wrapper = shallow(<HoleHandicaps {...props} />);
+        const { container } = render(<HoleHandicaps {...props} />);
 
-        var hole1Handicap = wrapper.find({ name: "hole1Handicap" });
-        var hole2Handicap = wrapper.find({ name: "hole2Handicap" });
-        var hole3Handicap = wrapper.find({ name: "hole3Handicap" });
-        var hole4Handicap = wrapper.find({ name: "hole4Handicap" });
-        var hole5Handicap = wrapper.find({ name: "hole5Handicap" });
-        var hole6Handicap = wrapper.find({ name: "hole6Handicap" });
-        var hole7Handicap = wrapper.find({ name: "hole7Handicap" });
-        var hole8Handicap = wrapper.find({ name: "hole8Handicap" });
-        var hole9Handicap = wrapper.find({ name: "hole9Handicap" });
+        const hole1Handicap = container.querySelector('[name="hole1Handicap"]');
+        const hole2Handicap = container.querySelector('[name="hole2Handicap"]');
+        const hole3Handicap = container.querySelector('[name="hole3Handicap"]');
+        const hole4Handicap = container.querySelector('[name="hole4Handicap"]');
+        const hole5Handicap = container.querySelector('[name="hole5Handicap"]');
+        const hole6Handicap = container.querySelector('[name="hole6Handicap"]');
+        const hole7Handicap = container.querySelector('[name="hole7Handicap"]');
+        const hole8Handicap = container.querySelector('[name="hole8Handicap"]');
+        const hole9Handicap = container.querySelector('[name="hole9Handicap"]');
 
-        expect(hole1Handicap.text()).toEqual("7");
-        expect(hole2Handicap.text()).toEqual("13");
-        expect(hole3Handicap.text()).toEqual("3");
-        expect(hole4Handicap.text()).toEqual("11");
-        expect(hole5Handicap.text()).toEqual("5");
-        expect(hole6Handicap.text()).toEqual("1");
-        expect(hole7Handicap.text()).toEqual("17");
-        expect(hole8Handicap.text()).toEqual("9");
-        expect(hole9Handicap.text()).toEqual("15");
+        expect(hole1Handicap.textContent).toEqual("7");
+        expect(hole2Handicap.textContent).toEqual("13");
+        expect(hole3Handicap.textContent).toEqual("3");
+        expect(hole4Handicap.textContent).toEqual("11");
+        expect(hole5Handicap.textContent).toEqual("5");
+        expect(hole6Handicap.textContent).toEqual("1");
+        expect(hole7Handicap.textContent).toEqual("17");
+        expect(hole8Handicap.textContent).toEqual("9");
+        expect(hole9Handicap.textContent).toEqual("15");
     });
 
     it("renders correct components for back nine", () => {
         props.frontBackNine = "backNine";
-        const wrapper = shallow(<HoleHandicaps {...props} />);
+        const { container } = render(<HoleHandicaps {...props} />);
 
-        var hole1Handicap = wrapper.find({ name: "hole1Handicap" });
-        var hole2Handicap = wrapper.find({ name: "hole2Handicap" });
-        var hole3Handicap = wrapper.find({ name: "hole3Handicap" });
-        var hole4Handicap = wrapper.find({ name: "hole4Handicap" });
-        var hole5Handicap = wrapper.find({ name: "hole5Handicap" });
-        var hole6Handicap = wrapper.find({ name: "hole6Handicap" });
-        var hole7Handicap = wrapper.find({ name: "hole7Handicap" });
-        var hole8Handicap = wrapper.find({ name: "hole8Handicap" });
-        var hole9Handicap = wrapper.find({ name: "hole9Handicap" });
+        const hole1Handicap = container.querySelector('[name="hole1Handicap"]');
+        const hole2Handicap = container.querySelector('[name="hole2Handicap"]');
+        const hole3Handicap = container.querySelector('[name="hole3Handicap"]');
+        const hole4Handicap = container.querySelector('[name="hole4Handicap"]');
+        const hole5Handicap = container.querySelector('[name="hole5Handicap"]');
+        const hole6Handicap = container.querySelector('[name="hole6Handicap"]');
+        const hole7Handicap = container.querySelector('[name="hole7Handicap"]');
+        const hole8Handicap = container.querySelector('[name="hole8Handicap"]');
+        const hole9Handicap = container.querySelector('[name="hole9Handicap"]');
 
-        expect(hole1Handicap.text()).toEqual("4");
-        expect(hole2Handicap.text()).toEqual("14");
-        expect(hole3Handicap.text()).toEqual("8");
-        expect(hole4Handicap.text()).toEqual("16");
-        expect(hole5Handicap.text()).toEqual("6");
-        expect(hole6Handicap.text()).toEqual("18");
-        expect(hole7Handicap.text()).toEqual("12");
-        expect(hole8Handicap.text()).toEqual("10");
-        expect(hole9Handicap.text()).toEqual("2");
+        expect(hole1Handicap.textContent).toEqual("4");
+        expect(hole2Handicap.textContent).toEqual("14");
+        expect(hole3Handicap.textContent).toEqual("8");
+        expect(hole4Handicap.textContent).toEqual("16");
+        expect(hole5Handicap.textContent).toEqual("6");
+        expect(hole6Handicap.textContent).toEqual("18");
+        expect(hole7Handicap.textContent).toEqual("12");
+        expect(hole8Handicap.textContent).toEqual("10");
+        expect(hole9Handicap.textContent).toEqual("2");
     });
 });

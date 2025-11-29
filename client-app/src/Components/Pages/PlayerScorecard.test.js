@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi, test } from "vitest";
-import { shallow } from "enzyme";
+import { render } from "@testing-library/react";
+import { describe, it, expect, beforeEach, test } from "vitest";
 import PlayerScorecard from "./PlayerScorecard";
 
 var props;
@@ -539,15 +539,21 @@ describe("Scorecard tests", () => {
     });
 
     it("renders tee in name, tee pref, handicap, and strokes", () => {
-        const wrapper = shallow(<PlayerScorecard {...props} />);
+        const { container } = render(
+            <table>
+                <tbody>
+                    <PlayerScorecard {...props} />
+                </tbody>
+            </table>
+        );
 
-        var name = wrapper.find({ name: "name" });
-        var tee = wrapper.find({ name: "tee" });
-        var strokes = wrapper.find({ name: "strokes" });
+        const name = container.querySelector('[name="name"]');
+        const tee = container.querySelector('[name="tee"]');
+        const strokes = container.querySelector('[name="strokes"]');
 
-        expect(name.text()).toEqual(props.player.firstName + " " + props.player.lastName);
-        expect(tee.text()).toEqual(props.player.teePreference);
-        expect(strokes.text()).toEqual(props.strokes.toString());
+        expect(name.textContent).toEqual(props.player.firstName + " " + props.player.lastName);
+        expect(tee.textContent).toEqual(props.player.teePreference);
+        expect(strokes.textContent).toEqual(props.strokes.toString());
     });
 
     test.each([
@@ -555,11 +561,17 @@ describe("Scorecard tests", () => {
         ["backNine", "9"],
     ])("renders handicap based on front or back nine", (frontOrBack, handicapValue) => {
         props.frontBackNine = frontOrBack;
-        const wrapper = shallow(<PlayerScorecard {...props} />);
+        const { container } = render(
+            <table>
+                <tbody>
+                    <PlayerScorecard {...props} />
+                </tbody>
+            </table>
+        );
 
-        var handicap = wrapper.find({ name: "handicap" });
+        const handicap = container.querySelector('[name="handicap"]');
 
-        expect(handicap.text()).toEqual(handicapValue);
+        expect(handicap.textContent).toEqual(handicapValue);
     });
 
     test.each([
@@ -574,26 +586,32 @@ describe("Scorecard tests", () => {
         props.course = course;
         props.player = player;
         props.strokes = strokes;
-        const wrapper = shallow(<PlayerScorecard {...props} />);
+        const { container } = render(
+            <table>
+                <tbody>
+                    <PlayerScorecard {...props} />
+                </tbody>
+            </table>
+        );
 
-        var stroke1 = wrapper.find({ name: "stroke1" });
-        var stroke2 = wrapper.find({ name: "stroke2" });
-        var stroke3 = wrapper.find({ name: "stroke3" });
-        var stroke4 = wrapper.find({ name: "stroke4" });
-        var stroke5 = wrapper.find({ name: "stroke5" });
-        var stroke6 = wrapper.find({ name: "stroke6" });
-        var stroke7 = wrapper.find({ name: "stroke7" });
-        var stroke8 = wrapper.find({ name: "stroke8" });
-        var stroke9 = wrapper.find({ name: "stroke9" });
-        expect(stroke1.text()).toEqual(h1);
-        expect(stroke2.text()).toEqual(h2);
-        expect(stroke3.text()).toEqual(h3);
-        expect(stroke4.text()).toEqual(h4);
-        expect(stroke5.text()).toEqual(h5);
-        expect(stroke6.text()).toEqual(h6);
-        expect(stroke7.text()).toEqual(h7);
-        expect(stroke8.text()).toEqual(h8);
-        expect(stroke9.text()).toEqual(h9);
+        const stroke1 = container.querySelector('[name="stroke1"]');
+        const stroke2 = container.querySelector('[name="stroke2"]');
+        const stroke3 = container.querySelector('[name="stroke3"]');
+        const stroke4 = container.querySelector('[name="stroke4"]');
+        const stroke5 = container.querySelector('[name="stroke5"]');
+        const stroke6 = container.querySelector('[name="stroke6"]');
+        const stroke7 = container.querySelector('[name="stroke7"]');
+        const stroke8 = container.querySelector('[name="stroke8"]');
+        const stroke9 = container.querySelector('[name="stroke9"]');
+        expect(stroke1.textContent).toEqual(h1);
+        expect(stroke2.textContent).toEqual(h2);
+        expect(stroke3.textContent).toEqual(h3);
+        expect(stroke4.textContent).toEqual(h4);
+        expect(stroke5.textContent).toEqual(h5);
+        expect(stroke6.textContent).toEqual(h6);
+        expect(stroke7.textContent).toEqual(h7);
+        expect(stroke8.textContent).toEqual(h8);
+        expect(stroke9.textContent).toEqual(h9);
     });
 
     test.each([
@@ -608,25 +626,31 @@ describe("Scorecard tests", () => {
         props.course = course;
         props.player = player;
         props.strokes = strokes;
-        const wrapper = shallow(<PlayerScorecard {...props} />);
+        const { container } = render(
+            <table>
+                <tbody>
+                    <PlayerScorecard {...props} />
+                </tbody>
+            </table>
+        );
 
-        var stroke1 = wrapper.find({ name: "stroke1" });
-        var stroke2 = wrapper.find({ name: "stroke2" });
-        var stroke3 = wrapper.find({ name: "stroke3" });
-        var stroke4 = wrapper.find({ name: "stroke4" });
-        var stroke5 = wrapper.find({ name: "stroke5" });
-        var stroke6 = wrapper.find({ name: "stroke6" });
-        var stroke7 = wrapper.find({ name: "stroke7" });
-        var stroke8 = wrapper.find({ name: "stroke8" });
-        var stroke9 = wrapper.find({ name: "stroke9" });
-        expect(stroke1.text()).toEqual(h1);
-        expect(stroke2.text()).toEqual(h2);
-        expect(stroke3.text()).toEqual(h3);
-        expect(stroke4.text()).toEqual(h4);
-        expect(stroke5.text()).toEqual(h5);
-        expect(stroke6.text()).toEqual(h6);
-        expect(stroke7.text()).toEqual(h7);
-        expect(stroke8.text()).toEqual(h8);
-        expect(stroke9.text()).toEqual(h9);
+        const stroke1 = container.querySelector('[name="stroke1"]');
+        const stroke2 = container.querySelector('[name="stroke2"]');
+        const stroke3 = container.querySelector('[name="stroke3"]');
+        const stroke4 = container.querySelector('[name="stroke4"]');
+        const stroke5 = container.querySelector('[name="stroke5"]');
+        const stroke6 = container.querySelector('[name="stroke6"]');
+        const stroke7 = container.querySelector('[name="stroke7"]');
+        const stroke8 = container.querySelector('[name="stroke8"]');
+        const stroke9 = container.querySelector('[name="stroke9"]');
+        expect(stroke1.textContent).toEqual(h1);
+        expect(stroke2.textContent).toEqual(h2);
+        expect(stroke3.textContent).toEqual(h3);
+        expect(stroke4.textContent).toEqual(h4);
+        expect(stroke5.textContent).toEqual(h5);
+        expect(stroke6.textContent).toEqual(h6);
+        expect(stroke7.textContent).toEqual(h7);
+        expect(stroke8.textContent).toEqual(h8);
+        expect(stroke9.textContent).toEqual(h9);
     });
 });
