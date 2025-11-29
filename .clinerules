@@ -1,0 +1,368 @@
+# Golf Scoring Application - Cline Project Context
+
+**Purpose**: Golf match play league management system  
+**Architecture**: Full-stack web application with React frontend and Python Flask backend  
+**Database**: SQLite with SQLAlchemy ORM  
+**Deployment**: Docker containerized microservices  
+**Current Version**: Client v3.0.2
+
+---
+
+## Application Purpose
+
+This application manages golf match play leagues, providing comprehensive tools for:
+
+- **Player Management**: Track golfers with GHIN integration for automatic handicap updates
+- **Team Organization**: Create and manage teams with A/B player designations
+- **Division Management**: Organize teams into competitive divisions
+- **Match Scheduling**: Plan and track match play events
+- **Scorecard Management**: Record and calculate scores with hole-by-hole handicapping
+- **Course Management**: Configure courses with hole handicap indexes
+
+**Project Context**: Also serves as a learning project for React and Python development.
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    Client Layer                      │
+│  React 18 + Redux + Vite (Port: varies by env)     │
+│  - Component-based UI                                │
+│  - Redux state management                            │
+│  - Axios for API calls                               │
+└──────────────────┬──────────────────────────────────┘
+                   │ HTTP/REST API
+┌──────────────────▼──────────────────────────────────┐
+│                   Backend Layer                      │
+│     Python Flask REST API (Port 8082)               │
+│  - Blueprint-based routing                           │
+│  - SQLAlchemy ORM                                    │
+│  - CORS enabled                                      │
+└──────────────────┬──────────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────────┐
+│                  Database Layer                      │
+│              SQLite (league.db)                      │
+│  - File-based database                               │
+│  - Volume-mounted in production                      │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Backend Architecture
+
+### Tech Stack
+
+- **Framework**: Flask (Python)
+- **ORM**: SQLAlchemy
+- **CORS**: Flask-CORS
+- **Testing**: pytest with pytest-cov
+- **Server**: Runs on 0.0.0.0:8082 in debug mode
+
+### Project Structure
+
+```
+backend/
+├── server.py              # Flask app entry point, blueprint registration
+├── db.py                  # Database connection and configuration
+├── models.py              # SQLAlchemy ORM models
+├── requirements.txt       # Python dependencies
+├── Entities/              # Entity business logic classes
+│   ├── Course.py, Division.py, Hole.py, Player.py, Team.py, TeamMember.py
+├── routes/                # API route blueprints
+│   ├── courses.py, divisions.py, players.py, teams.py
+├── tests/                 # Comprehensive test suite with conftest.py fixtures
+└── data/                  # SQLite database location (league.db)
+```
+
+### Database Models
+
+**Player Model**: id, GHIN, firstName, lastName, handicap, frontNine, backNine, teePreference, autoUpdateGHIN, handicap_updated_date
+- GHIN integration for automatic handicap updates
+- Supports 9-hole handicaps
+
+**Team Model**: id, teamNumber, divisionId, forceAB
+- One-to-many with TeamMember
+- Cascade delete for members
+
+**TeamMember Model**: id, team_id (FK), player_id (FK), APlayer
+- Junction table for Team-Player many-to-many
+- APlayer boolean for A-team vs B-team designation
+
+**Course Model**: id, name, tee
+- One-to-many with Hole
+
+**Hole Model**: id, number, handicapIndex, course_id (FK)
+- Handicap index for stroke allocation
+
+**Division Model**: id, name
+- Simple division categorization
+
+### API Patterns
+
+- All models implement `to_dict()` method for JSON serialization
+- Blueprint-based routing registered in `server.py`
+- RESTful conventions: GET /api/resource, GET /api/resource/<id>, POST /api/resource, PUT /api/resource/<id>, DELETE /api/resource/<id>
+
+---
+
+## Frontend Architecture
+
+### Tech Stack
+
+- **Framework**: React 18.2.0
+- **State Management**: Redux 4.2.1 with Redux Thunk 2.4.2
+- **Build Tool**: Vite 5.0.8 (migrated from Create React App)
+- **HTTP Client**: Axios 1.6.0
+- **Testing**: Vitest 1.0.4 + React Testing Library 14.1.2
+
+### Project Structure
+
+```
+client-app/
+├── index.html, vite.config.js, package.json, Dockerfile
+├── .env.development       # Development environment config
+├── .prettierrc            # Code formatting rules
+├── public/                # Static assets + test data JSON files
+└── src/
+    ├── index.js, Root.js, config.js, setupTests.js
+    ├── Components/        # App/, NavBar/, Login/, Pages/
+    │   └── Pages/         # Players, Teams, Matches, Divisions, Scorecard, etc.
+    ├── Actions/           # ActionTypes.js, GolfActions.js
+    ├── Store/             # configureStore, InitialState, rootReducer, golfReducer
+    ├── DataServices/      # AppData.js (API client), GhinDataService.js
+    └── Commons/           # commonMethods.js
+```
+
+### Redux State Management
+
+**State Structure**:
+```javascript
+{
+  golf: {
+    currentPage: 'Login',    // Navigation state
+    loggedInUser: undefined, // User session
+    players: [], teams: [], divisions: [], courses: []
+  }
+}
+```
+
+**Action Pattern**:
+- Action Types defined in ActionTypes.js
+- Action Creators in GolfActions.js use Redux Thunk for async API calls
+- Reducers in golfReducer.js handle state updates
+
+### Component Patterns
+
+**Connected Component Pattern**:
+```javascript
+import { connect } from "react-redux";
+
+export class ComponentName extends Component {
+  render() { /* ... */ }
+}
+
+const mapStateToProps = (state) => ({ golf: state.golf });
+const actionCreators = { /* action creators */ };
+export default connect(mapStateToProps, actionCreators)(ComponentName);
+```
+
+**Page Navigation**: Via Redux state - App.js shows pages based on `currentPage` state
+
+### API Service Layer
+
+**AppData.js**: Main API client with methods like getPlayers(), getTeams(), getCourses(), etc. (Axios-based, baseURL in config.js)
+
+**GhinDataService.js**: GHIN integration for real-time handicap data
+
+---
+
+## Key Features & Business Logic
+
+1. **Player Management**: GHIN integration, 9-hole handicaps, tee preferences, auto-update toggle
+2. **Team Organization**: Team numbers, TeamMember junction, A/B player designation, forceAB flag, division assignment
+3. **Match Play**: Scheduling, results, hole-by-hole scoring, handicap stroke allocation
+4. **Course Management**: Multiple courses/tees, 18 holes, handicap index per hole
+5. **Division Management**: Team organization into competitive divisions
+
+---
+
+## Development Conventions
+
+### Backend Conventions
+
+- **Naming**: snake_case for variables, functions, database columns
+- **Models**: Inherit from SQLAlchemy Base, implement to_dict()
+- **Blueprints**: Routes organized by resource type
+- **Testing**: pytest with fixtures in conftest.py
+- **Error Handling**: Use Flask error handlers
+
+### Frontend Conventions
+
+- **Naming**: camelCase for variables and functions
+- **Components**: Class components with Redux connect HOC
+- **File Structure**: Test files alongside component files (e.g., App.js + App.test.js)
+- **Exports**: Named export for testable class, default export for connected component
+- **PropTypes**: Use prop-types for validation
+- **Testing**: Vitest with React Testing Library, colocated tests
+
+### Code Style
+
+- **Frontend**: Prettier configured (.prettierrc)
+- **Backend**: PEP 8 Python style guide
+- **Imports**: Group by standard library, third-party, local
+- **Comments**: Document complex business logic, not obvious code
+
+---
+
+## Deployment & Running
+
+### Running the Application
+
+**Backend**:
+```bash
+cd backend
+pip3 install -r requirements.txt
+python3 server.py  # Port 8082
+```
+
+**Frontend**:
+```bash
+cd client-app
+npm install
+npm start  # Vite dev server
+```
+
+**Docker Development**: `docker-compose up`
+**Docker Production**: `docker-compose -f docker-compose-prod.yml up -d`
+
+### Environment Variables
+
+**Production**: `DATABASE_LOCATION` - Path to directory (not file) for SQLite database
+**Frontend**: `VITE_API_URL` in .env.development - Backend API base URL
+
+---
+
+## Testing
+
+### Backend
+
+- **Framework**: pytest with pytest-cov
+- **Location**: backend/tests/
+- **Commands**: pytest, pytest -v, pytest --cov=. --cov-report=html
+
+### Frontend
+
+- **Framework**: Vitest + React Testing Library
+- **Location**: Colocated with components
+- **Commands**: npm test, npm run test:ui, npm run test:run
+
+---
+
+## Database Schema
+
+```
+Player (id, GHIN, firstName, lastName, handicap, frontNine, backNine, ...)
+  ↑
+  │
+TeamMember (id, team_id FK, player_id FK, APlayer)
+  ↑
+  │
+Team (id, teamNumber, divisionId, forceAB)
+  ↓
+Division (id, name)
+
+Course (id, name, tee)
+  ↑
+  │
+Hole (id, number, handicapIndex, course_id FK)
+```
+
+---
+
+## Common Development Tasks
+
+### Adding a New Entity/Model
+
+**Backend**:
+1. Add model class to backend/models.py
+2. Create Entity class in backend/Entities/
+3. Create route blueprint in backend/routes/
+4. Register blueprint in backend/server.py
+5. Add tests in backend/tests/
+
+**Frontend**:
+1. Add action types to Actions/ActionTypes.js
+2. Create action creators in Actions/GolfActions.js
+3. Add reducer cases to Store/golfReducer.js
+4. Create API methods in DataServices/AppData.js
+5. Create page component in Components/Pages/
+6. Add navigation in Components/App/App.js
+
+### Adding a New API Endpoint
+
+1. Add route function to appropriate blueprint in backend/routes/
+2. Add API method in client-app/src/DataServices/AppData.js
+3. Create Redux action in client-app/src/Actions/GolfActions.js
+4. Update reducer in client-app/src/Store/golfReducer.js
+5. Add tests for both backend route and frontend components
+
+---
+
+## Project-Specific Patterns to Follow
+
+### When Working with Redux State
+
+- Always use action creators, never dispatch plain objects directly
+- Use Redux Thunk for async operations (API calls)
+- Keep state normalized (arrays of objects with IDs)
+- Use mapStateToProps to access state, actionCreators object for actions
+
+### When Creating Components
+
+- Export both named class (for testing) and default connected component
+- Put test file next to component file
+- Use class components (existing pattern in codebase)
+- Connect to Redux even for simple components
+
+### When Writing Backend Routes
+
+- Follow RESTful conventions
+- Return JSON with appropriate HTTP status codes
+- Use SQLAlchemy sessions properly (commit, rollback)
+- Add comprehensive error handling
+- Write tests in backend/tests/
+
+### When Working with Database
+
+- Never directly modify database schema manually
+- Use SQLAlchemy models only
+- Implement migrations if needed (not currently in place)
+- Use to_dict() for all model serialization
+
+---
+
+## Important Notes
+
+1. **Database Location**: DATABASE_LOCATION env var points to directory, not file. App creates league.db automatically.
+2. **GHIN Integration**: Players can auto-update handicaps from GHIN if autoUpdateGHIN enabled.
+3. **Team A/B Players**: A/B designation for match play. forceAB flag can override automatic assignments.
+4. **Vite Migration**: Migrated from Create React App to Vite. Legacy files in public/ for reference.
+5. **Port Configuration**: Backend on 8082. Frontend varies by environment (Vite default 5173 in dev).
+
+---
+
+## Additional Resources
+
+- **Postman Collection**: Postman/Golf Scoring Backend.postman_collection.json
+- **Migration Notes**: client-app/MIGRATION_SUMMARY.md (CRA to Vite)
+- **Git Repository**: git@github.com:sokolb/GolfScoring.git
+- **Detailed Documentation**: PROJECT_OVERVIEW.md in project root
+
+---
+
+**Last Updated**: November 29, 2025  
+**Purpose**: Automatically provide Cline with comprehensive context for AI-assisted development
