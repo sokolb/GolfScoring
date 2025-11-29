@@ -1,7 +1,7 @@
 """Database initialization and connection management."""
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.pool import QueuePool
+from sqlalchemy.pool import NullPool
 from models import Base
 
 
@@ -10,12 +10,21 @@ class Database:
     
     def __init__(self):
         self.engine = create_engine(
-            'sqlite:///data/league.db?check_same_thread=False',
-            poolclass=QueuePool,
-            pool_size=20,
-            max_overflow=100,
-            pool_timeout=30
+            'sqlite:///data/league.db',
+            poolclass=NullPool,  # NullPool is better for SQLite
+            connect_args={
+                'check_same_thread': False,
+                'timeout': 30  # Wait up to 30 seconds for locks
+            }
         )
+        
+        # Configure SQLite-specific settings for each connection
+        @event.listens_for(self.engine, "connect")
+        def set_sqlite_pragma(dbapi_conn, connection_record):
+            cursor = dbapi_conn.cursor()
+            cursor.execute("PRAGMA journal_mode=WAL")  # Write-Ahead Logging for better concurrency
+            cursor.execute("PRAGMA busy_timeout=30000")  # 30 second timeout in milliseconds
+            cursor.close()
         
         # Create session factory
         self.Session = scoped_session(sessionmaker(bind=self.engine))
