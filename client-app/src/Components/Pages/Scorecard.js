@@ -221,10 +221,10 @@ export class Scorecard extends Component {
                                 <th>Tees</th>
                                 <th>Strokes Received</th>
                             </tr>
-                            <PlayerScorecard name="player1A" player={this.state.team1A} course={this.getCourseByName(this.state.team1A.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team1AStrokes} />
-                            <PlayerScorecard name="player1B" player={this.state.team1B} course={this.getCourseByName(this.state.team1B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team1BStrokes} />
-                            <PlayerScorecard name="player2A" player={this.state.team2A} course={this.getCourseByName(this.state.team2A.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2AStrokes} />
-                            <PlayerScorecard name="player2B" player={this.state.team2B} course={this.getCourseByName(this.state.team2B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2BStrokes} />
+                            {this.state.team1A && this.state.team1A.teePreference && <PlayerScorecard name="player1A" player={this.state.team1A} course={this.getCourseByName(this.state.team1A.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team1AStrokes} />}
+                            {this.state.team1B && this.state.team1B.teePreference && <PlayerScorecard name="player1B" player={this.state.team1B} course={this.getCourseByName(this.state.team1B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team1BStrokes} />}
+                            {this.state.team2A && this.state.team2A.teePreference && <PlayerScorecard name="player2A" player={this.state.team2A} course={this.getCourseByName(this.state.team2A.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2AStrokes} />}
+                            {this.state.team2B && this.state.team2B.teePreference && <PlayerScorecard name="player2B" player={this.state.team2B} course={this.getCourseByName(this.state.team2B.teePreference)} frontBackNine={this.props.frontBackNine} strokes={this.state.team2BStrokes} />}
                             <tr></tr>
                             <tr></tr>
                             <TeamTotals name="team1Points" player1={this.findAPlayer(this.props.team1Id)} player2={this.findBPlayer(this.props.team1Id)} />

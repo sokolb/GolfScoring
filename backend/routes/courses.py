@@ -113,8 +113,8 @@ def get_all_courses():
         for course in courseData:
             holes = []
             holeData = con.execute(
-                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?"),
-                (course[0],)
+                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = :course_id"),
+                {"course_id": course[0]}
             )
             for hole in holeData:
                 holes.append(Hole(hole[0], hole[1], hole[2]))
