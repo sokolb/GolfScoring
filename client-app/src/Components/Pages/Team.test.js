@@ -60,13 +60,22 @@ describe("Team Tests", () => {
     it("Renders correct components", () => {
         const { container } = render(<Team {...props} />);
 
+        const teamNumber = container.querySelector('[name="teamNumber"]');
         const division = container.querySelector('[name="division"]');
         const teamMembers = container.querySelector('[name="teamMembers"]');
         const deleteButton = container.querySelector('[name="delete"]');
 
+        expect(teamNumber).toBeInTheDocument();
         expect(division).toBeInTheDocument();
         expect(teamMembers).toBeInTheDocument();
         expect(deleteButton).toBeInTheDocument();
+    });
+
+    it("Team number renders with correct value", () => {
+        const { container } = render(<Team {...props} />);
+
+        const teamNumber = container.querySelector('[name="teamNumber"]');
+        expect(teamNumber.textContent).toEqual(props.team.teamNumber.toString());
     });
 
     it("Division renders with correct value", () => {

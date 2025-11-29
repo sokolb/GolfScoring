@@ -145,6 +145,19 @@ describe("Teams Tests", () => {
         expect(allTeams.length).toEqual(3);
     });
 
+    it("Renders table headers correctly", () => {
+        const { container } = render(<Teams {...props} />);
+
+        const table = container.querySelector("table");
+        const headers = table.querySelectorAll("thead th, tbody > tr:first-child th");
+
+        expect(headers.length).toEqual(4);
+        expect(headers[0].textContent).toEqual("Team Number");
+        expect(headers[1].textContent).toEqual("Division");
+        expect(headers[2].textContent).toEqual("Team Members");
+        expect(headers[3].textContent).toEqual("");
+    });
+
     describe("Player Selection Box", () => {
         it("Renders select box", () => {
             const { container } = render(<Teams {...props} />);

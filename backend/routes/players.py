@@ -75,6 +75,35 @@ def player(player_id):
             return retval
         
         if request.method == 'DELETE':
+            from models import TeamMember, Team
+            
+            # Check if player is assigned to any teams
+            team_members = session.query(TeamMember).filter_by(player_id=player_id).all()
+            
+            if team_members:
+                # Get team numbers for all teams this player is on
+                team_numbers = []
+                for tm in team_members:
+                    team = session.query(Team).filter_by(id=tm.team_id).first()
+                    if team:
+                        team_numbers.append(team.teamNumber)
+                
+                # Get player info for the error message
+                player_obj = session.query(Player).filter_by(id=player_id).first()
+                
+                error_message = {
+                    'error': f"Cannot delete player {player_obj.firstName} {player_obj.lastName} because they are assigned to team(s): {', '.join(map(str, team_numbers))}"
+                }
+                
+                retval = Response(
+                    response=json.dumps(error_message),
+                    status=400,
+                    mimetype="application/json"
+                )
+                retval.headers.add('Access-Control-Allow-Origin', '*')
+                return retval
+            
+            # If not assigned to any team, proceed with deletion
             player_obj = session.query(Player).filter_by(id=player_id).first()
             if player_obj:
                 session.delete(player_obj)

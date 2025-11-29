@@ -107,18 +107,31 @@ class TestPlayerRoutes:
         mock_session.commit.assert_called_once()
         mock_session.close.assert_called_once()
     
+    @patch('models.TeamMember')
     @patch('db.db.get_session')
-    def test_delete_player(self, mock_get_session, client):
-        """Test deleting a player."""
+    def test_delete_player(self, mock_get_session, mock_team_member_class, client):
+        """Test deleting a player not assigned to any team."""
         # Mock database session and ORM behavior
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
         
+        # Mock that no TeamMember records exist for this player
+        mock_team_member_query = MagicMock()
+        mock_team_member_query.filter_by.return_value.all.return_value = []
+        
         # Mock existing player
         mock_player = MagicMock()
-        mock_query = MagicMock()
-        mock_query.filter_by.return_value.first.return_value = mock_player
-        mock_session.query.return_value = mock_query
+        mock_player_query = MagicMock()
+        mock_player_query.filter_by.return_value.first.return_value = mock_player
+        
+        # Setup query to return different results based on model
+        def query_side_effect(model):
+            if model == mock_team_member_class:
+                return mock_team_member_query
+            else:
+                return mock_player_query
+        
+        mock_session.query.side_effect = query_side_effect
         
         response = client.delete('/player/1')
         
@@ -193,4 +206,164 @@ class TestPlayerRoutes:
         response = client.get('/getAllPlayers')
         
         assert response.status_code == 204
+        mock_session.close.assert_called_once()
+    
+    @patch('models.TeamMember')
+    @patch('db.db.get_session')
+    def test_delete_player_not_assigned_to_team(self, mock_get_session, mock_team_member_class, client):
+        """Test deleting a player who is not assigned to any team."""
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock that no TeamMember records exist for this player
+        mock_team_member_query = MagicMock()
+        mock_team_member_query.filter_by.return_value.all.return_value = []
+        
+        # Mock existing player
+        mock_player = MagicMock()
+        mock_player_query = MagicMock()
+        mock_player_query.filter_by.return_value.first.return_value = mock_player
+        
+        # Setup query to return different results based on model
+        def query_side_effect(model):
+            if model == mock_team_member_class:
+                return mock_team_member_query
+            else:
+                return mock_player_query
+        
+        mock_session.query.side_effect = query_side_effect
+        
+        response = client.delete('/player/1')
+        
+        assert response.status_code == 200
+        assert b'Success' in response.data
+        mock_session.delete.assert_called_once_with(mock_player)
+        mock_session.commit.assert_called_once()
+        mock_session.close.assert_called_once()
+    
+    @patch('models.Team')
+    @patch('models.TeamMember')
+    @patch('db.db.get_session')
+    def test_delete_player_assigned_to_one_team(self, mock_get_session, mock_team_member_class, mock_team_class, client):
+        """Test deleting a player who is assigned to one team."""
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock TeamMember record
+        mock_team_member = MagicMock()
+        mock_team_member.team_id = 1
+        mock_team_member_query = MagicMock()
+        mock_team_member_query.filter_by.return_value.all.return_value = [mock_team_member]
+        
+        # Mock Team record
+        mock_team = MagicMock()
+        mock_team.teamNumber = 5
+        mock_team_query = MagicMock()
+        mock_team_query.filter_by.return_value.first.return_value = mock_team
+        
+        # Mock Player record
+        mock_player = MagicMock()
+        mock_player.firstName = 'John'
+        mock_player.lastName = 'Doe'
+        mock_player_query = MagicMock()
+        mock_player_query.filter_by.return_value.first.return_value = mock_player
+        
+        # Setup query to return different results based on model
+        def query_side_effect(model):
+            if model == mock_team_member_class:
+                return mock_team_member_query
+            elif model == mock_team_class:
+                return mock_team_query
+            else:
+                return mock_player_query
+        
+        mock_session.query.side_effect = query_side_effect
+        
+        response = client.delete('/player/1')
+        
+        assert response.status_code == 400
+        assert 'Access-Control-Allow-Origin' in response.headers
+        
+        data = json.loads(response.data)
+        assert 'error' in data
+        assert 'Cannot delete player John Doe' in data['error']
+        assert 'team(s): 5' in data['error']
+        
+        # Verify that delete and commit were NOT called
+        mock_session.delete.assert_not_called()
+        mock_session.commit.assert_not_called()
+        mock_session.close.assert_called_once()
+    
+    @patch('models.Team')
+    @patch('models.TeamMember')
+    @patch('db.db.get_session')
+    def test_delete_player_assigned_to_multiple_teams(self, mock_get_session, mock_team_member_class, mock_team_class, client):
+        """Test deleting a player who is assigned to multiple teams."""
+        # Mock database session and ORM behavior
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        
+        # Mock TeamMember records for multiple teams
+        mock_team_member1 = MagicMock()
+        mock_team_member1.team_id = 1
+        mock_team_member2 = MagicMock()
+        mock_team_member2.team_id = 2
+        mock_team_member_query = MagicMock()
+        mock_team_member_query.filter_by.return_value.all.return_value = [mock_team_member1, mock_team_member2]
+        
+        # Mock Team records
+        mock_team1 = MagicMock()
+        mock_team1.teamNumber = 5
+        mock_team2 = MagicMock()
+        mock_team2.teamNumber = 12
+        
+        # Mock Player record
+        mock_player = MagicMock()
+        mock_player.firstName = 'Jane'
+        mock_player.lastName = 'Smith'
+        
+        # Setup queries with different return values based on filter
+        call_count = {'team': 0}
+        
+        def team_filter_by(**kwargs):
+            mock_result = MagicMock()
+            if call_count['team'] == 0:
+                mock_result.first.return_value = mock_team1
+            else:
+                mock_result.first.return_value = mock_team2
+            call_count['team'] += 1
+            return mock_result
+        
+        mock_team_query = MagicMock()
+        mock_team_query.filter_by = team_filter_by
+        
+        mock_player_query = MagicMock()
+        mock_player_query.filter_by.return_value.first.return_value = mock_player
+        
+        # Setup query to return different results based on model
+        def query_side_effect(model):
+            if model == mock_team_member_class:
+                return mock_team_member_query
+            elif model == mock_team_class:
+                return mock_team_query
+            else:
+                return mock_player_query
+        
+        mock_session.query.side_effect = query_side_effect
+        
+        response = client.delete('/player/1')
+        
+        assert response.status_code == 400
+        assert 'Access-Control-Allow-Origin' in response.headers
+        
+        data = json.loads(response.data)
+        assert 'error' in data
+        assert 'Cannot delete player Jane Smith' in data['error']
+        assert 'team(s): 5, 12' in data['error']
+        
+        # Verify that delete and commit were NOT called
+        mock_session.delete.assert_not_called()
+        mock_session.commit.assert_not_called()
         mock_session.close.assert_called_once()

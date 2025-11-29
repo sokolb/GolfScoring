@@ -384,6 +384,73 @@ describe("Actions tests", () => {
             expect(dispatch).not.toHaveBeenCalled();
         });
 
+        it("removePlayer displays alert when player is assigned to one team", async () => {
+            const dispatch = vi.fn();
+            const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+            let id = "12345";
+            const errorMessage = "Cannot delete player John Doe because they are assigned to team(s): 5";
+            const errorResponse = {
+                response: {
+                    data: {
+                        error: errorMessage,
+                    },
+                },
+            };
+
+            AppData.deletePlayer.mockReturnValue(Promise.reject(errorResponse));
+
+            await removePlayer(id)(dispatch);
+
+            expect(alertMock).toHaveBeenCalledWith(errorMessage);
+            expect(dispatch).not.toHaveBeenCalled();
+
+            alertMock.mockRestore();
+        });
+
+        it("removePlayer displays alert when player is assigned to multiple teams", async () => {
+            const dispatch = vi.fn();
+            const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+            let id = "67890";
+            const errorMessage = "Cannot delete player Jane Smith because they are assigned to team(s): 5, 12";
+            const errorResponse = {
+                response: {
+                    data: {
+                        error: errorMessage,
+                    },
+                },
+            };
+
+            AppData.deletePlayer.mockReturnValue(Promise.reject(errorResponse));
+
+            await removePlayer(id)(dispatch);
+
+            expect(alertMock).toHaveBeenCalledWith(errorMessage);
+            expect(dispatch).not.toHaveBeenCalled();
+
+            alertMock.mockRestore();
+        });
+
+        it("removePlayer logs error to console when error response has no error field", async () => {
+            const dispatch = vi.fn();
+            const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+            let id = "12345";
+            const errorResponse = {
+                response: {
+                    status: 500,
+                    data: "Server error",
+                },
+            };
+
+            AppData.deletePlayer.mockReturnValue(Promise.reject(errorResponse));
+
+            await removePlayer(id)(dispatch);
+
+            expect(consoleSpy).toHaveBeenCalledWith(errorResponse.response);
+            expect(dispatch).not.toHaveBeenCalled();
+
+            consoleSpy.mockRestore();
+        });
+
         it("addPlayer dispatches SET_ERROR_MESSAGE when API call call fails", async () => {
             const dispatch = vi.fn();
             var firstName = "Brian";

@@ -29,6 +29,9 @@ export class Team extends Component {
         return (
             <tr>
                 <td>
+                    <label name="teamNumber">{this.props.team.teamNumber}</label>
+                </td>
+                <td>
                     <label name="division">{this.getDivisionName()}</label>
                 </td>
                 <td>

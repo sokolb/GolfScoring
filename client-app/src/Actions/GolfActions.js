@@ -153,7 +153,12 @@ export const removePlayer = (id) => async (dispatch) => {
             dispatch(removePlayerCreator(id));
         })
         .catch((error) => {
-            console.log(error.response);
+            // Display error message in alert if player is assigned to team(s)
+            if (error.response && error.response.data && error.response.data.error) {
+                alert(error.response.data.error);
+            } else {
+                console.log(error.response);
+            }
         });
 };
 

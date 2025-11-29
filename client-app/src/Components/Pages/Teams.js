@@ -186,6 +186,7 @@ export class Teams extends Component {
                     >
                         <tbody>
                             <tr key="header">
+                                <th>Team Number</th>
                                 <th>Division</th>
                                 <th>Team Members</th>
                                 <th></th>
