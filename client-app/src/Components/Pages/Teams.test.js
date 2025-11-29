@@ -109,14 +109,16 @@ describe("Teams Tests", () => {
             addTeam: vi.fn(),
             getTeams: vi.fn(),
             getPlayers: vi.fn(),
+            getDivisions: vi.fn(),
         };
     });
 
-    it("Calls GetTeams and GetPlayers when rendered", () => {
+    it("Calls GetTeams, GetPlayers and GetDivisions when rendered", () => {
         render(<Teams {...props} />);
 
         expect(props.getTeams).toHaveBeenCalled();
         expect(props.getPlayers).toHaveBeenCalled();
+        expect(props.getDivisions).toHaveBeenCalled();
     });
 
     it("Renders divisions drop down correctly", () => {

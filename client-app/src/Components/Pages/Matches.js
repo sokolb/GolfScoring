@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTeams, getPlayers, logInUser, addOrUpdatePlayer } from "../../Actions/GolfActions";
+import { getTeams, getPlayers, getDivisions, logInUser, addOrUpdatePlayer } from "../../Actions/GolfActions";
 import CommonMethods from "../../Commons/commonMethods";
 import Scorecard from "./Scorecard";
 
@@ -29,6 +29,7 @@ export class Matches extends Component {
         this.props.logInUser(username, password);
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
+        this.props.getDivisions("http://localhost:8082/getAllDivisions");
     }
 
     handleDateChange(event) {
@@ -247,6 +248,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const actionCreators = { getTeams, getPlayers, logInUser, addOrUpdatePlayer };
+const actionCreators = { getTeams, getPlayers, getDivisions, logInUser, addOrUpdatePlayer };
 
 export default connect(mapStateToProps, actionCreators)(Matches);

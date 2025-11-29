@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTeams, addTeam, getPlayers } from "../../Actions/GolfActions";
+import { getTeams, addTeam, getPlayers, getDivisions } from "../../Actions/GolfActions";
 import Team from "./Team";
 import CommonMethods from "../../Commons/commonMethods";
 
@@ -24,6 +24,7 @@ export class Teams extends Component {
     componentDidMount() {
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
+        this.props.getDivisions("http://localhost:8082/getAllDivisions");
     }
 
     handleChkForceABChange = (event) => {
@@ -227,6 +228,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-const actionCreators = { getTeams, addTeam, getPlayers };
+const actionCreators = { getTeams, addTeam, getPlayers, getDivisions };
 
 export default connect(mapStateToProps, actionCreators)(Teams);

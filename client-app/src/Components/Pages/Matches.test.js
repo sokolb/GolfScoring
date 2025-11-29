@@ -90,6 +90,7 @@ describe("Matches tests", () => {
             },
             getTeams: vi.fn(),
             getPlayers: vi.fn(),
+            getDivisions: vi.fn(),
             logInUser: vi.fn(),
             addOrUpdatePlayer: vi.fn(),
         };
@@ -121,11 +122,12 @@ describe("Matches tests", () => {
         expect(props.logInUser).toHaveBeenCalledWith(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD);
     });
 
-    it("populate teams and players on page load", () => {
+    it("populate teams, players and divisions on page load", () => {
         render(<Matches {...props} />);
 
         expect(props.getTeams).toHaveBeenCalled();
         expect(props.getPlayers).toHaveBeenCalled();
+        expect(props.getDivisions).toHaveBeenCalled();
     });
 
     it("renders teams correctly in each team list", () => {
