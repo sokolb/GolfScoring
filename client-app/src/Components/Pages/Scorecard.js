@@ -216,7 +216,7 @@ export class Scorecard extends Component {
                             <tr>
                                 <th>Player</th>
                                 <th>
-                                    <label name="frontBackNineHandicap">{this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"} Handicap</label>
+                                    <label name="frontBackNineHandicap">Course {this.props.frontBackNine === "frontNine" ? "Front Nine" : "Back Nine"} Handicap</label>
                                 </th>
                                 <th>Tees</th>
                                 <th>Strokes Received</th>
