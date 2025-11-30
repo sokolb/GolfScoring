@@ -1,5 +1,14 @@
 .App {
     text-align: center;
+    padding-top: var(--nav-height);
+    min-height: 100vh;
+    background-color: var(--background);
+}
+
+.App-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
 .App-logo {
