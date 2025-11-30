@@ -50,9 +50,9 @@ export class PlayerScorecard extends Component {
                 <td>
                     <label name="name">{this.props.player.firstName + " " + this.props.player.lastName}</label>
                     <br />
-                    {/* <span name="handicapAsOf" style={{ fontSize: "xx-small" }}>
-                        Handicap as of: {this.getHandicapDateForPlayer(this.props.player)}
-                    </span> */}
+                    <span name="handicapIndex" style={{ fontSize: "x-small" }}>
+                        Handicap Index: {this.props.player.handicap}
+                    </span>
                 </td>
                 <td>
                     <label name="handicap">{this.getPlayerHandicap()}</label>
