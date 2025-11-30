@@ -296,3 +296,23 @@ legend {
     font-weight: var(--font-weight-semibold);
     color: var(--primary-green);
 }
+
+/* Form row - for compact side-by-side inputs */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-row .form-group {
+    margin-bottom: 0;
+}
+
+/* Compact inputs - max-width constraint */
+input.compact,
+select.compact,
+.form-group.compact input,
+.form-group.compact select {
+    max-width: 300px;
+}

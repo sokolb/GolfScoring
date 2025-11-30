@@ -173,102 +173,128 @@ export class Players extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 {this.props.golf.loggedInUser !== undefined && (
-                    <div name="addPlayer">
-                        <h2>Players</h2>
-                        <button name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
-                            Refresh All Handicaps
-                        </button>
-                        <br />
-                        <br />
-                        <select name="players" onChange={this.handlePlayersSelectionChange}>
-                            {this.getPlayers()}
-                        </select>
-                        <br />
-                        <label>First Name:</label>
-                        <input name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
-                        <br />
-                        <label>Last Name:</label>
-                        <input name="lastName" onChange={this.handleLastNameChange} value={this.state.lastName} />
-                        <br />
-                        <label>GHIN:</label>
-                        <input name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
-                        <br />
-                        <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange} value={this.state.selectedTeePreference}>
-                            {tees.map((tee) => {
-                                return (
-                                    <option key={tee} value={tee}>
-                                        {tee}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                        <br />
-                        <label>Auto Update GHIN:</label>
-                        <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} checked={this.state.autoUpdateGHIN}></input>
-                        <br />
-                        <div hidden={this.state.autoUpdateGHIN}>
-                            <label>Handicap:</label>
-                            <input name="handicap" onChange={this.handleHandicapChange} value={this.state.handicap} />
-                            <br />
-                            <label>Front Nine:</label>
-                            <input name="frontNine" onChange={this.handleFrontNineChange} value={this.state.frontNine} />
-                            <br />
-                            <label>Back Nine:</label>
-                            <input name="backNine" onChange={this.handleBackNineChange} value={this.state.backNine} />
-                            <br />
+                    <div className="card" name="addPlayer">
+                        <div className="card-header">
+                            <h2>Manage Players</h2>
                         </div>
+                        <div className="card-body">
+                            <div className="d-flex justify-between align-center mb-3">
+                                <button className="btn-secondary btn-sm" name="refreshAllHandicaps" onClick={this.handleRefreshAllHandicapsClick}>
+                                    Refresh All Handicaps
+                                </button>
+                            </div>
 
-                        <button name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
-                            Submit
-                        </button>
+                            <div className="form-group">
+                                <label>Select Player:</label>
+                                <select name="players" onChange={this.handlePlayersSelectionChange}>
+                                    {this.getPlayers()}
+                                </select>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group compact">
+                                    <label>First Name:</label>
+                                    <input type="text" name="firstName" onChange={this.handleFirstNameChange} value={this.state.firstName} />
+                                </div>
+                                <div className="form-group compact">
+                                    <label>Last Name:</label>
+                                    <input type="text" name="lastName" onChange={this.handleLastNameChange} value={this.state.lastName} />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group compact">
+                                    <label>GHIN:</label>
+                                    <input type="text" name="GHIN" onChange={this.handleGHINChange} value={this.state.GHIN} />
+                                </div>
+                                <div className="form-group compact">
+                                    <label>Tee Preference:</label>
+                                    <select name="teePreferenceSelectionBox" onChange={this.handleTeePreferenceSelectionBoxChange} value={this.state.selectedTeePreference}>
+                                        {tees.map((tee) => {
+                                            return (
+                                                <option key={tee} value={tee}>
+                                                    {tee}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-group form-check">
+                                <input name="autoUpdateGHIN" type="checkbox" onChange={this.handleAutoUpdateGHINChange} checked={this.state.autoUpdateGHIN} />
+                                <label>Auto Update GHIN</label>
+                            </div>
+
+                            {!this.state.autoUpdateGHIN && (
+                                <div className="form-row">
+                                    <div className="form-group compact">
+                                        <label>Handicap:</label>
+                                        <input type="number" name="handicap" onChange={this.handleHandicapChange} value={this.state.handicap} />
+                                    </div>
+                                    <div className="form-group compact">
+                                        <label>Front Nine:</label>
+                                        <input type="number" name="frontNine" onChange={this.handleFrontNineChange} value={this.state.frontNine} />
+                                    </div>
+                                    <div className="form-group compact">
+                                        <label>Back Nine:</label>
+                                        <input type="number" name="backNine" onChange={this.handleBackNineChange} value={this.state.backNine} />
+                                    </div>
+                                </div>
+                            )}
+
+                            <button className="btn-primary" name="submit" onClick={this.handleSubmitClick} disabled={this.submitButtonDisabled()}>
+                                {this.state.selectedPlayerId === -1 ? "Add Player" : "Update Player"}
+                            </button>
+                        </div>
                     </div>
                 )}
 
                 {this.props.golf.errorMessage !== undefined && this.props.golf.errorMessage.length > 0 && (
-                    <label name="lblError" style={{ color: "red" }}>
+                    <div className="alert alert-danger" name="lblError">
                         {this.props.golf.errorMessage}
-                    </label>
+                    </div>
                 )}
-                <div class="section-to-print" style={{ textAlign: "center" }}>
+
+                <div className="section-to-print">
                     <h2>Player List</h2>
-                    <label>*Course adjusted handicap based on tee preference</label>
-                    <table
-                        style={{
-                            textAlign: "left",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                            width: "80%",
-                        }}
-                    >
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>GHIN</th>
-                            <th>Handicap Index</th>
-                            <th>Tee</th>
-                            <th>Front Nine*</th>
-                            <th>Back Nine*</th>
-                            <th></th>
-                        </tr>
-                        {this.props.golf.players !== undefined &&
-                            this.props.golf.players
-                                .sort((a, b) => {
-                                    if (a.handicap === "NH" && b.handicap === "NH") {
-                                        return 0;
-                                    } else if (a.handicap === "NH") {
-                                        return 1;
-                                    } else if (b.handicap === "NH") {
-                                        return -1;
-                                    } else {
-                                        return a.handicap - b.handicap;
-                                    }
-                                })
-                                .map((p) => {
-                                    return <Player key={p.GHIN} player={p} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
-                                })}
-                    </table>
+                    <p className="text-muted">*Course adjusted handicap based on tee preference</p>
+                    <div className="table-responsive">
+                        <table className="player-table">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>GHIN</th>
+                                    <th className="handicap-column">Handicap Index</th>
+                                    <th>Tee</th>
+                                    <th className="col-numeric">Front Nine*</th>
+                                    <th className="col-numeric">Back Nine*</th>
+                                    <th className="col-actions"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.golf.players !== undefined &&
+                                    this.props.golf.players
+                                        .sort((a, b) => {
+                                            if (a.handicap === "NH" && b.handicap === "NH") {
+                                                return 0;
+                                            } else if (a.handicap === "NH") {
+                                                return 1;
+                                            } else if (b.handicap === "NH") {
+                                                return -1;
+                                            } else {
+                                                return a.handicap - b.handicap;
+                                            }
+                                        })
+                                        .map((p) => {
+                                            return <Player key={p.GHIN} player={p} showDeleteButton={this.props.golf.loggedInUser !== undefined} />;
+                                        })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );
