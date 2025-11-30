@@ -187,7 +187,7 @@ export class Players extends Component {
 
                             <div className="form-group">
                                 <label>Select Player:</label>
-                                <select name="players" onChange={this.handlePlayersSelectionChange}>
+                                <select name="players" onChange={this.handlePlayersSelectionChange} value={this.state.selectedPlayerId}>
                                     {this.getPlayers()}
                                 </select>
                             </div>
