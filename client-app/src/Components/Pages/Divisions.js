@@ -15,7 +15,7 @@ export class Divisions extends Component {
     }
 
     componentDidMount() {
-        this.props.getDivisions("http://localhost:8082/getAllDivisions");
+        this.props.getDivisions();
     }
 
     handleNameChange(event) {

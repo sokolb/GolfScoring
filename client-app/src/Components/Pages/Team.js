@@ -5,7 +5,7 @@ import CommonMethods from "../../Commons/commonMethods";
 
 export class Team extends Component {
     componentDidMount() {
-        this.props.getDivisions("http://localhost:8082/getAllDivisions");
+        this.props.getDivisions();
     }
 
     getTeamMemberNames() {

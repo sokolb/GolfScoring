@@ -1,5 +1,6 @@
 import AppData from "../DataServices/AppData.js";
 import GhinDataService from "../DataServices/GhinDataService.js";
+import config from "../config.js";
 import * as actionTypes from "./ActionTypes.js";
 
 export const logInUser = (user, pwd) => async (dispatch) => {
@@ -8,7 +9,8 @@ export const logInUser = (user, pwd) => async (dispatch) => {
             dispatch(setLoggedInUserCreator(user, response.data.golfer_user.golfer_user_token));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // Only log errors in development mode (Vite's DEV is a boolean)
+            if (import.meta.env.DEV) {
                 console.log(error.response);
             }
         });
@@ -172,13 +174,14 @@ const setErrorMessageCreator = (errorMessage) => ({
     type: actionTypes.SET_ERROR_MESSAGE,
 });
 
-export const getPlayers = (fileName) => async (dispatch) => {
-    await AppData.getPlayers(fileName)
+export const getPlayers = () => async (dispatch) => {
+    await AppData.getPlayers(`${config.apiBaseUrl}/getAllPlayers`)
         .then((response) => {
             dispatch(setPlayersCreator(response.data));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // Only log errors in development mode (Vite's DEV is a boolean)
+            if (import.meta.env.DEV) {
                 console.log(error.response);
             }
         });
@@ -189,13 +192,14 @@ const setPlayersCreator = (players) => ({
     type: actionTypes.SET_PLAYERS,
 });
 
-export const getTeams = (fileName) => async (dispatch) => {
-    await AppData.getTeams(fileName)
+export const getTeams = () => async (dispatch) => {
+    await AppData.getTeams(`${config.apiBaseUrl}/getAllTeams`)
         .then((response) => {
             dispatch(setTeamsCreator(response.data));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // Only log errors in development mode (Vite's DEV is a boolean)
+            if (import.meta.env.DEV) {
                 console.log(error.response);
             }
         });
@@ -242,13 +246,14 @@ const addTeamCreator = (id, teamNumber, teamMembers, divisionId, forceAB) => ({
     type: actionTypes.ADD_TEAM,
 });
 
-export const getCourses = (fileName) => async (dispatch) => {
-    await AppData.getCourses(fileName)
+export const getCourses = () => async (dispatch) => {
+    await AppData.getCourses(`${config.apiBaseUrl}/getAllCourses`)
         .then((response) => {
             dispatch(setCoursesCreator(response.data));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // Only log errors in development mode (Vite's DEV is a boolean)
+            if (import.meta.env.DEV) {
                 console.log(error.response);
             }
         });
@@ -259,13 +264,14 @@ const setCoursesCreator = (courses) => ({
     type: actionTypes.SET_COURSES,
 });
 
-export const getDivisions = (fileName) => async (dispatch) => {
-    await AppData.getDivisions(fileName)
+export const getDivisions = () => async (dispatch) => {
+    await AppData.getDivisions(`${config.apiBaseUrl}/getAllDivisions`)
         .then((response) => {
             dispatch(setDivisionsCreator(response.data));
         })
         .catch((error) => {
-            if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+            // Only log errors in development mode (Vite's DEV is a boolean)
+            if (import.meta.env.DEV) {
                 console.log(error.response);
             }
         });

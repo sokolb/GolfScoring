@@ -27,9 +27,9 @@ export class Matches extends Component {
         const username = import.meta.env.VITE_USERNAME || ""; // Fallback
         const password = import.meta.env.VITE_PASSWORD || ""; // Fallback
         this.props.logInUser(username, password);
-        this.props.getPlayers("http://localhost:8082/getAllPlayers");
-        this.props.getTeams("http://localhost:8082/getAllTeams");
-        this.props.getDivisions("http://localhost:8082/getAllDivisions");
+        this.props.getPlayers();
+        this.props.getTeams();
+        this.props.getDivisions();
     }
 
     handleDateChange(event) {

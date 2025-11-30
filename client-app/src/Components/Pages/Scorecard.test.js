@@ -507,7 +507,7 @@ describe("Scorecard tests", () => {
         const frontBackNineHandicap = container.querySelector('[name="frontBackNineHandicap"]');
 
         expect(frontBackNine.textContent).toEqual(textValue);
-        expect(frontBackNineHandicap.textContent).toEqual(textValue + " Handicap");
+        expect(frontBackNineHandicap.textContent).toEqual("Course " + textValue + " Handicap");
     });
 
     it("renders division when present in props", () => {

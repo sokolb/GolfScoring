@@ -13,6 +13,7 @@ function configureStoreProd(initialState) {
     return createStore(rootReducer, initialState, applyMiddleware(...middlewares));
 }
 
-const configureStore = process.env.NODE_ENV === "development" ? configureStoreDev : configureStoreProd;
+// Use Vite's built-in DEV boolean for environment detection
+const configureStore = import.meta.env.DEV ? configureStoreDev : configureStoreProd;
 
 export default configureStore;

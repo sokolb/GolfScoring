@@ -19,7 +19,7 @@ This application is designed to manage golf match play leagues, providing featur
 
 ## Tech Stack
 
-- **Frontend:** React
+- **Frontend:** React 18 with Vite
 - **Backend:** Python (Flask)
 - **Database:** SQLite
 
@@ -91,18 +91,33 @@ Before you begin, ensure you have the following installed:
    npm install
    ```
 
-3. Start the development server:
+3. Configure environment variables (optional):
+
+   Copy `.env.development` and configure as needed:
+
+   ```bash
+   # Backend API URL (defaults to http://localhost:8082)
+   VITE_API_URL=http://localhost:8082
+
+   # GHIN credentials for automatic handicap updates (optional)
+   VITE_USERNAME=your.email@example.com
+   VITE_PASSWORD=your_password
+   ```
+
+4. Start the development server:
 
    ```bash
    npm start
    ```
 
-4. Run tests:
+   The app will be available at `http://localhost:5173` (Vite default port)
+
+5. Run tests:
    ```bash
    npm test
    ```
 
-> **Tip:** Install Prettier for consistent code formatting
+> **Note:** The frontend uses Vite for fast development and optimized builds. After changing environment variables, restart the dev server.
 
 ## Production Deployment
 

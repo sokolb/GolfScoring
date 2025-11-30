@@ -21,8 +21,9 @@ var user_token = "abcxyz";
 
 describe("Matches tests", () => {
     beforeEach(() => {
-        process.env.REACT_APP_USERNAME = "b@b.com";
-        process.env.REACT_APP_PASSWORD = "abc123";
+        // Mock Vite environment variables using vi.stubEnv
+        vi.stubEnv("VITE_USERNAME", "b@b.com");
+        vi.stubEnv("VITE_PASSWORD", "abc123");
 
         props = {
             golf: {
@@ -97,8 +98,8 @@ describe("Matches tests", () => {
     });
 
     afterEach(() => {
-        delete process.env.REACT_APP_USERNAME;
-        delete process.env.REACT_APP_PASSWORD;
+        // Restore environment variables
+        vi.unstubAllEnvs();
         vi.clearAllMocks();
     });
 
@@ -119,7 +120,7 @@ describe("Matches tests", () => {
     it("Gets user token on page load", () => {
         render(<Matches {...props} />);
 
-        expect(props.logInUser).toHaveBeenCalledWith(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD);
+        expect(props.logInUser).toHaveBeenCalledWith("b@b.com", "abc123");
     });
 
     it("populate teams, players and divisions on page load", () => {

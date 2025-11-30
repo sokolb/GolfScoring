@@ -34,8 +34,7 @@ export class Players extends Component {
     }
 
     componentDidMount() {
-        // this.props.getPlayers("Players_Testing.json");
-        this.props.getPlayers(`${config.apiBaseUrl}/getAllPlayers`);
+        this.props.getPlayers();
     }
 
     resetState() {

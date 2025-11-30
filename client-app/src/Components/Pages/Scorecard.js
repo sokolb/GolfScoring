@@ -26,7 +26,7 @@ export class Scorecard extends Component {
     }
 
     componentDidMount() {
-        this.props.getCourses("http://localhost:8082/getAllCourses");
+        this.props.getCourses();
 
         if (this.props.team1Id > -1 && this.props.team2Id > -1) {
             this.setScorecardData();

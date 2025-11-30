@@ -99,5 +99,75 @@ The following test files are renamed to `.test.js.skip` and need migration:
 
 ---
 
+## 🔄 Post-Migration Improvements (November 29, 2025)
+
+### Environment Variables - Full Vite Compatibility
+
+**Completed:**
+
+-   ✅ Updated all `process.env.REACT_APP_*` to `import.meta.env.VITE_*`
+-   ✅ Updated `process.env.NODE_ENV` checks to `import.meta.env.DEV`
+-   ✅ Fixed test environment variable mocking for Vitest
+-   ✅ Enhanced `.env.development` with comprehensive documentation
+
+**Files Updated:**
+
+-   `config.js` - API base URL configuration
+-   `configureStore.js` - Development/production mode detection
+-   `GolfActions.js` - Error logging conditional on environment
+-   `Matches.js` - GHIN credentials from environment
+-   `Matches.test.js` - Test environment variable mocking
+
+### API URL Standardization
+
+**Completed:**
+
+-   ✅ Removed all hardcoded `http://localhost:8082` URLs
+-   ✅ Centralized API configuration in `config.js`
+-   ✅ Updated all action creators to use config-based URLs
+-   ✅ Updated all components to call actions without URL parameters
+
+**Benefits:**
+
+-   Single source of truth for API URL configuration
+-   Easy environment-specific configuration
+-   Simplified component code
+-   Better maintainability
+
+**Files Updated:**
+
+-   `GolfActions.js` - All API calls now use `config.apiBaseUrl`
+-   `Matches.js`, `Players.js`, `Teams.js`, `Divisions.js`, `Team.js`, `Scorecard.js` - Removed URL parameters
+
+### Documentation Improvements
+
+**Completed:**
+
+-   ✅ Enhanced `.env.development` with detailed comments
+-   ✅ Updated README.md with Vite-specific instructions
+-   ✅ Added `client-app/public/README.md` explaining legacy files
+-   ✅ Updated this migration summary
+
+### Environment Variables Guide
+
+**Required:**
+
+-   `VITE_API_URL` - Backend API URL (defaults to http://localhost:8082)
+
+**Optional:**
+
+-   `VITE_USERNAME` - GHIN username for automatic handicap updates
+-   `VITE_PASSWORD` - GHIN password for automatic handicap updates
+
+**Note:** GHIN credentials are optional. Without them:
+
+-   The app works normally for all features
+-   You'll see a 400 error in console on Matches page (ignorable)
+-   Automatic handicap updates won't work
+-   Manual handicap entry still available
+
+---
+
 **Migration Date**: November 16, 2025  
-**Status**: Core migration complete, optional component test migration pending
+**Status**: Core migration complete, environment variables fully migrated  
+**Last Updated**: November 29, 2025

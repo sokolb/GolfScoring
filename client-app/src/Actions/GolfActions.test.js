@@ -483,17 +483,15 @@ describe("Actions tests", () => {
 
         it("getPlayers calls getPlayers endpoint", async () => {
             const dispatch = vi.fn();
-            var fileName = "test.json";
             AppData.getPlayers.mockReturnValue(Promise.resolve({ data: {} }));
 
-            await getPlayers(fileName)(dispatch);
+            await getPlayers()(dispatch);
 
-            expect(AppData.getPlayers).toHaveBeenCalledWith(fileName);
+            expect(AppData.getPlayers).toHaveBeenCalledWith("http://localhost:8082/getAllPlayers");
         });
 
         it("getPlayers dispatches SET_PLAYERS on successful API call", async () => {
             const dispatch = vi.fn();
-            var fileName = "test.json";
 
             var responseData = [
                 {
@@ -512,7 +510,7 @@ describe("Actions tests", () => {
 
             AppData.getPlayers.mockReturnValue(Promise.resolve({ data: responseData }));
 
-            await getPlayers(fileName)(dispatch);
+            await getPlayers()(dispatch);
 
             expect(dispatch).toHaveBeenCalledWith({
                 players: responseData,
