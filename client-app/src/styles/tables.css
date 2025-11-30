@@ -1,0 +1,261 @@
+/* Table Styles */
+
+/* Base table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Table header */
+thead {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+thead th {
+    padding: var(--spacing-lg) var(--spacing-md);
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table body */
+tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-fast);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--background);
+}
+
+tbody td {
+    padding: var(--spacing-md);
+    color: var(--text-dark);
+}
+
+/* Table footer */
+tfoot {
+    background-color: var(--background);
+    font-weight: var(--font-weight-semibold);
+}
+
+tfoot td {
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-top: 2px solid var(--primary-green);
+}
+
+/* Alternating row colors */
+.table-striped tbody tr:nth-child(even) {
+    background-color: var(--background);
+}
+
+.table-striped tbody tr:hover {
+    background-color: #e8f2ec;
+}
+
+/* Bordered table */
+.table-bordered {
+    border: 2px solid var(--border-color);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--border-color);
+}
+
+/* Compact table */
+.table-sm thead th,
+.table-sm tbody td,
+.table-sm tfoot td {
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* Centered content */
+.table-center th,
+.table-center td {
+    text-align: center;
+}
+
+/* Numeric columns (right-aligned) */
+.col-numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Action column */
+.col-actions {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.col-actions button {
+    margin: 0 var(--spacing-xs);
+}
+
+/* Status indicators */
+.status-active {
+    color: var(--success);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-inactive {
+    color: var(--text-light);
+}
+
+.status-warning {
+    color: var(--warning);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-error {
+    color: var(--danger);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Table wrapper for responsive scrolling */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Empty state */
+.table-empty {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Golf-specific table styles */
+
+/* Scorecard table */
+.scorecard-table {
+    font-size: var(--font-size-sm);
+}
+
+.scorecard-table thead th {
+    background-color: var(--accent-blue);
+    font-size: 0.75rem;
+    padding: var(--spacing-sm);
+}
+
+.scorecard-table .hole-number {
+    font-weight: var(--font-weight-bold);
+    background-color: var(--background);
+}
+
+.scorecard-table .total-column {
+    background-color: var(--secondary-green);
+    color: var(--white);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Team roster table */
+.team-table tbody tr {
+    cursor: pointer;
+}
+
+.team-table .team-captain {
+    background-color: #fff9e6;
+}
+
+/* Player table */
+.player-table .handicap-column {
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent-blue);
+}
+
+/* Division table */
+.division-table tbody tr:hover {
+    background-color: #e8f2ec;
+    cursor: pointer;
+}
+
+/* Responsive tables */
+@media (max-width: 768px) {
+    table {
+        font-size: var(--font-size-sm);
+    }
+
+    thead th,
+    tbody td,
+    tfoot td {
+        padding: var(--spacing-sm);
+    }
+
+    /* Stack table on small screens */
+    .table-mobile-stack thead {
+        display: none;
+    }
+
+    .table-mobile-stack tbody tr {
+        display: block;
+        margin-bottom: var(--spacing-lg);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius);
+    }
+
+    .table-mobile-stack tbody td {
+        display: block;
+        text-align: right;
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-mobile-stack tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .table-mobile-stack tbody td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-light);
+    }
+
+    /* Horizontal scroll for scorecards on mobile */
+    .scorecard-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* Table loading state */
+.table-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.table-loading::after {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Table with fixed header */
+.table-fixed-header {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.table-fixed-header thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}

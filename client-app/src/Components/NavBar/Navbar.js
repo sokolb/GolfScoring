@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setCurrentPage, setLoggedInUser } from "../../Actions/GolfActions";
 import packageJson from "../../../package.json";
+import "./Navbar.css";
 
 const version = packageJson.version;
 
@@ -22,36 +23,46 @@ export class NavBar extends Component {
         this.props.setCurrentPage(pageName);
     }
 
+    isActivePage(pageName) {
+        return this.props.golf.currentPage === pageName;
+    }
+
     render() {
+        const isLoggedIn = this.props.golf.loggedInUser !== undefined;
+
         return (
-            <div style={{ width: "100%" }}>
-                <div style={{ textAlign: "left" }}>
-                    <button name="btnLogin" onClick={() => this.handleLogInLogOutClick()}>
-                        {this.getLoginLogoutText()}
-                    </button>
+            <nav className="navbar">
+                <div className="navbar-brand">
+                    <span className="navbar-brand-icon">⛳</span>
+                    <span>Golf Scoring</span>
                 </div>
-                <div>
-                    <button name="btnPlayers" onClick={() => this.handleNavigationButtonClick("Players")}>
+
+                <div className="navbar-nav">
+                    <button name="btnPlayers" className={`nav-button ${this.isActivePage("Players") ? "active" : ""}`} onClick={() => this.handleNavigationButtonClick("Players")}>
                         Players
                     </button>
-                    <button name="btnTeams" onClick={() => this.handleNavigationButtonClick("Teams")}>
+                    <button name="btnTeams" className={`nav-button ${this.isActivePage("Teams") ? "active" : ""}`} onClick={() => this.handleNavigationButtonClick("Teams")}>
                         Teams
                     </button>
-                    {this.props.golf.loggedInUser !== undefined && (
-                        <button name="btnDivisions" onClick={() => this.handleNavigationButtonClick("Divisions")}>
+                    {isLoggedIn && (
+                        <button name="btnDivisions" className={`nav-button ${this.isActivePage("Divisions") ? "active" : ""}`} onClick={() => this.handleNavigationButtonClick("Divisions")}>
                             Divisions
                         </button>
                     )}
-                    <button name="btnMatches" onClick={() => this.handleNavigationButtonClick("Matches")}>
+                    <button name="btnMatches" className={`nav-button ${this.isActivePage("Matches") ? "active" : ""}`} onClick={() => this.handleNavigationButtonClick("Matches")}>
                         Matches
                     </button>
                 </div>
-                <div style={{ position: "absolute", top: 0, right: 2 }}>
-                    <label name="lblVersion" style={{ fontSize: 10 }}>
-                        Version: {version}
-                    </label>
+
+                <div className="navbar-actions">
+                    <span className="navbar-version" name="lblVersion">
+                        v{version}
+                    </span>
+                    <button name="btnLogin" className={`nav-button ${isLoggedIn ? "nav-button-logout" : "nav-button-login"}`} onClick={() => this.handleLogInLogOutClick()}>
+                        {this.getLoginLogoutText()}
+                    </button>
                 </div>
-            </div>
+            </nav>
         );
     }
 }

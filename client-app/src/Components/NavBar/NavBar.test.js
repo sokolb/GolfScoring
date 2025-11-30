@@ -79,6 +79,6 @@ describe("NavBar Tests", () => {
     it("displays the correct version", () => {
         render(<NavBar {...props} />);
 
-        expect(screen.getByText("Version: 2.1.0")).toBeInTheDocument();
+        expect(screen.getByText("v2.1.0")).toBeInTheDocument();
     });
 });

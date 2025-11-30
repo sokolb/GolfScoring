@@ -6,30 +6,22 @@ export class Player extends Component {
     render() {
         return (
             <tr>
-                <td>
-                    <label name="firstName">{this.props.player.firstName}</label>
+                <td name="firstName">{this.props.player.firstName}</td>
+                <td name="lastName">{this.props.player.lastName}</td>
+                <td name="GHIN">{this.props.player.GHIN}</td>
+                <td className="handicap-column" name="handicapIndex">
+                    {this.props.player.handicap}
                 </td>
-                <td>
-                    <label name="lastName">{this.props.player.lastName}</label>
+                <td name="teePreference">{this.props.player.teePreference}</td>
+                <td className="col-numeric" name="frontNine">
+                    {this.props.player.frontNine}
                 </td>
-                <td>
-                    <label name="GHIN">{this.props.player.GHIN}</label>
+                <td className="col-numeric" name="backNine">
+                    {this.props.player.backNine}
                 </td>
-                <td>
-                    <label name="handicapIndex">{this.props.player.handicap}</label>
-                </td>
-                <td>
-                    <label name="teePreference">{this.props.player.teePreference}</label>
-                </td>
-                <td>
-                    <label name="frontNine">{this.props.player.frontNine}</label>
-                </td>
-                <td>
-                    <label name="backNine">{this.props.player.backNine}</label>
-                </td>
-                <td>
+                <td className="col-actions">
                     {this.props.showDeleteButton && (
-                        <button name="delete" class="section-to-not-print" onClick={() => this.props.removePlayer(this.props.player.id)}>
+                        <button name="delete" className="btn-danger btn-sm section-to-not-print" onClick={() => this.props.removePlayer(this.props.player.id)}>
                             Delete
                         </button>
                     )}

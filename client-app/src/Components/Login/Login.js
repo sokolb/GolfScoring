@@ -34,16 +34,18 @@ export class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
                 <h1>Login:</h1>
                 <br />
-                <label>Email Address or GHIN</label>
-                <input name="userName" onChange={this.handleUserNameChange}></input>
-                <br />
-                <label>Password</label>
-                <input name="password" type="password" onChange={this.handlePasswordChange}></input>
-                <br />
-                <button name="btnSubmit" onClick={this.handleSubmitClick}>
+                <div className="form-group">
+                    <label>Email Address or GHIN</label>
+                    <input type="text" name="userName" onChange={this.handleUserNameChange} />
+                </div>
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" onChange={this.handlePasswordChange} />
+                </div>
+                <button className="btn-primary" name="btnSubmit" onClick={this.handleSubmitClick}>
                     Submit
                 </button>
             </div>
