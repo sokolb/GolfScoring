@@ -556,6 +556,24 @@ describe("Scorecard tests", () => {
         expect(strokes.textContent).toEqual(props.strokes.toString());
     });
 
+    it("renders handicap index, course front, and course back", () => {
+        const { container } = render(
+            <table>
+                <tbody>
+                    <PlayerScorecard {...props} />
+                </tbody>
+            </table>
+        );
+
+        const handicapIndex = container.querySelector('[name="handicapIndex"]');
+        const courseFront = container.querySelector('[name="courseFront"]');
+        const courseBack = container.querySelector('[name="courseBack"]');
+
+        expect(handicapIndex.textContent).toEqual("Handicap Index: " + props.player.handicap);
+        expect(courseFront.textContent).toEqual("Course Front: " + props.player.frontNine);
+        expect(courseBack.textContent).toEqual("Course Back: " + props.player.backNine);
+    });
+
     test.each([
         ["frontNine", "8"],
         ["backNine", "9"],
