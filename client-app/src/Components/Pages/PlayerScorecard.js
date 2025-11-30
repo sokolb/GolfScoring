@@ -50,9 +50,19 @@ export class PlayerScorecard extends Component {
                 <td>
                     <label name="name">{this.props.player.firstName + " " + this.props.player.lastName}</label>
                     <br />
-                    <span name="handicapIndex" style={{ fontSize: "x-small" }}>
-                        Handicap Index: {this.props.player.handicap}
-                    </span>
+                    <div style={{ lineHeight: "1.2" }}>
+                        <span name="handicapIndex" style={{ fontSize: "x-small" }}>
+                            Handicap Index: {this.props.player.handicap}
+                        </span>
+                        <br />
+                        <span name="courseFront" style={{ fontSize: "x-small" }}>
+                            Course Front: {this.props.player.frontNine}
+                        </span>
+                        <br />
+                        <span name="courseBack" style={{ fontSize: "x-small" }}>
+                            Course Back: {this.props.player.backNine}
+                        </span>
+                    </div>
                 </td>
                 <td>
                     <label name="handicap">{this.getPlayerHandicap()}</label>
