@@ -312,4 +312,76 @@ describe("Players Tests", () => {
             expect(options[3].textContent).toEqual("Red");
         });
     });
+
+    describe("Player Dropdown Reset", () => {
+        it("Resets dropdown to 'Add new player' after updating a player", async () => {
+            const user = userEvent.setup();
+            const { container } = render(<Players {...props} />);
+
+            // Select a player from the dropdown
+            const playersDropdown = container.querySelector('[name="players"]');
+            const player = props.golf.players[0];
+            await user.selectOptions(playersDropdown, player.id.toString());
+
+            // Verify the dropdown shows the selected player
+            expect(playersDropdown.value).toEqual(player.id.toString());
+
+            // Verify form is populated with player data
+            const firstNameTextBox = container.querySelector('[name="firstName"]');
+            expect(firstNameTextBox.value).toEqual(player.firstName);
+
+            // Make a change to the first name
+            await user.clear(firstNameTextBox);
+            await user.type(firstNameTextBox, "UpdatedName");
+
+            // Submit the update
+            const submitButton = container.querySelector('[name="submit"]');
+            await user.click(submitButton);
+
+            // Verify the dropdown has reset to "Add new player" (-1)
+            expect(playersDropdown.value).toEqual("-1");
+
+            // Verify form fields are cleared
+            expect(firstNameTextBox.value).toEqual("");
+            const lastNameTextBox = container.querySelector('[name="lastName"]');
+            expect(lastNameTextBox.value).toEqual("");
+            const ghinTextBox = container.querySelector('[name="GHIN"]');
+            expect(ghinTextBox.value).toEqual("");
+        });
+
+        it("Resets dropdown to 'Add new player' after adding a new player", async () => {
+            const user = userEvent.setup();
+            const firstName = "NewPlayer";
+            const lastName = "TestName";
+            const GHIN = "999999";
+
+            const { container } = render(<Players {...props} />);
+
+            // Verify dropdown starts at "Add new player"
+            const playersDropdown = container.querySelector('[name="players"]');
+            expect(playersDropdown.value).toEqual("-1");
+
+            // Fill in new player details
+            const firstNameTextBox = container.querySelector('[name="firstName"]');
+            await user.type(firstNameTextBox, firstName);
+
+            const lastNameTextBox = container.querySelector('[name="lastName"]');
+            await user.type(lastNameTextBox, lastName);
+
+            const ghinTextBox = container.querySelector('[name="GHIN"]');
+            await user.type(ghinTextBox, GHIN);
+
+            // Submit the new player
+            const submitButton = container.querySelector('[name="submit"]');
+            await user.click(submitButton);
+
+            // Verify the dropdown remains at "Add new player" (-1)
+            expect(playersDropdown.value).toEqual("-1");
+
+            // Verify form fields are cleared
+            expect(firstNameTextBox.value).toEqual("");
+            expect(lastNameTextBox.value).toEqual("");
+            expect(ghinTextBox.value).toEqual("");
+        });
+    });
 });
