@@ -24,8 +24,8 @@ export class Matches extends Component {
     }
 
     componentDidMount() {
-        const username = process.env.REACT_APP_USERNAME || ""; // Fallback
-        const password = process.env.REACT_APP_PASSWORD || ""; // Fallback
+        const username = import.meta.env.VITE_USERNAME || ""; // Fallback
+        const password = import.meta.env.VITE_PASSWORD || ""; // Fallback
         this.props.logInUser(username, password);
         this.props.getPlayers("http://localhost:8082/getAllPlayers");
         this.props.getTeams("http://localhost:8082/getAllTeams");
