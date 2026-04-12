@@ -90,7 +90,7 @@ export class Matches extends Component {
             </option>
         );
 
-        if (this.props.golf.teams !== undefined) {
+        if (Array.isArray(this.props.golf.teams)) {
             teampOptions = this.props.golf.teams
                 .sort((a, b) => {
                     var divisionAname = CommonMethods.getDivisionById(a.divisionId, this.props.golf.divisions).name;

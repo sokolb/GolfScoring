@@ -12,12 +12,16 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
+# Build args are baked into the Vite bundle at build time
+ARG VITE_API_URL
+ARG VITE_USERNAME
+ARG VITE_PASSWORD
+
 # Build the production version of the application
-# Node 18 uses OpenSSL 3.0, requires legacy provider for react-scripts 4.0.3
 RUN npm run build
 
 # Expose port 3000 to the host
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Serve the built files with vite preview
+CMD ["npx", "vite", "preview", "--host", "0.0.0.0", "--port", "3000"]
