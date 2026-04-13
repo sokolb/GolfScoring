@@ -49,7 +49,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/golfbackend:latest
         working-directory: ${{ github.workspace }}/backend
       - name: Build the Frontend Docker image
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/golffrontend:latest
+        run: docker build . --file Dockerfile --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} --build-arg VITE_USERNAME=${{ secrets.VITE_USERNAME }} --build-arg VITE_PASSWORD=${{ secrets.VITE_PASSWORD }} --tag ${{ secrets.DOCKER_USER }}/golffrontend:latest
         working-directory: ${{ github.workspace }}/client-app
       - name: Push Backend Docker image
         run: docker push ${{ secrets.DOCKER_USER }}/golfbackend:latest
