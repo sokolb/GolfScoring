@@ -191,7 +191,7 @@ export class Teams extends Component {
                                 <th>Team Members</th>
                                 <th></th>
                             </tr>
-                            {this.props.golf.teams !== undefined &&
+                            {Array.isArray(this.props.golf.teams) &&
                                 this.props.golf.teams
                                     .sort((a, b) => {
                                         var divisionAname = CommonMethods.getDivisionById(a.divisionId, this.props.golf.divisions).name;

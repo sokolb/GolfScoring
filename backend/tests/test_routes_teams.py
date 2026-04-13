@@ -197,8 +197,9 @@ class TestTeamRoutes:
         mock_session.query.return_value = mock_query
         
         response = client.get('/getAllTeams')
-        
-        assert response.status_code == 204
+
+        assert response.status_code == 200
+        assert response.get_json() == []
         mock_session.close.assert_called_once()
     
     @patch('routes.teams.TeamMember')

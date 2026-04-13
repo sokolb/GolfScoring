@@ -88,9 +88,9 @@ def get_all_divisions():
     data = conn.execute(text("SELECT id, name FROM division"))
     if data is None:
         retval = Response(
-            response="no divisions found",
-            status=204,
-            mimetype="application/text"
+            response=json.dumps([]),
+            status=200,
+            mimetype="application/json"
         )
     else:
         for divisionData in data:

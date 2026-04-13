@@ -105,9 +105,9 @@ def get_all_courses():
     courseData = con.execute(text("SELECT id, name, tee FROM course"))
     if courseData is None:
         retval = Response(
-            response="No courses found",
-            status=204,
-            mimetype="application/text"
+            response=json.dumps([]),
+            status=200,
+            mimetype="application/json"
         )
     else:
         for course in courseData:

@@ -141,9 +141,9 @@ def get_all_players():
         
         if not players:
             retval = Response(
-                response="no players found",
-                status=204,
-                mimetype="application/text"
+                response=json.dumps([]),
+                status=200,
+                mimetype="application/json"
             )
         else:
             players_list = [player.to_dict() for player in players]

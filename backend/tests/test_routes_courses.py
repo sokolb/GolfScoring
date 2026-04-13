@@ -144,8 +144,9 @@ class TestCourseRoutes:
         mock_get_conn.return_value = mock_conn
         
         response = client.get('/getAllCourses')
-        
-        assert response.status_code == 204
+
+        assert response.status_code == 200
+        assert response.get_json() == []
     
     @patch('db.db.get_connection')
     def test_create_course_with_18_holes(self, mock_get_conn, client):

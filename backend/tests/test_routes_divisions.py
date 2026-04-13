@@ -118,5 +118,6 @@ class TestDivisionRoutes:
         mock_get_conn.return_value = mock_conn
         
         response = client.get('/getAllDivisions')
-        
-        assert response.status_code == 204
+
+        assert response.status_code == 200
+        assert response.get_json() == []

@@ -124,9 +124,9 @@ def get_all_teams():
         
         if not teams:
             retval = Response(
-                response="no teams found",
-                status=204,
-                mimetype="application/text"
+                response=json.dumps([]),
+                status=200,
+                mimetype="application/json"
             )
         else:
             teams_list = [team.to_dict() for team in teams]
