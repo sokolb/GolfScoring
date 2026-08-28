@@ -158,7 +158,8 @@ export class Matches extends Component {
         if (team.forceAB) {
             return team.teamMembers[0].APlayer == 1 ? player1 : player2;
         } else {
-            return player1.handicap < player2.handicap ? player1 : player2;
+            // On a tie, player1 is the A player so findBPlayer's tie pick (player2) stays distinct
+            return player1.handicap <= player2.handicap ? player1 : player2;
         }
     }
 

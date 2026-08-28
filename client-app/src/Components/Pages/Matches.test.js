@@ -272,4 +272,17 @@ describe("Matches tests", () => {
         const team2PlayerB = props.golf.players[3];
         expect(props.addOrUpdatePlayer).not.toHaveBeenCalledWith(team2PlayerB.id, team2PlayerB.firstName, team2PlayerB.lastName, team2PlayerB.GHIN, team2PlayerB.teePreference, team2PlayerB.autoUpdateGHIN, props.golf.userToken);
     });
+
+    it("assigns distinct A and B players when teammates have identical handicaps", () => {
+        props.golf.players[0].handicap = 10;
+        props.golf.players[1].handicap = 10;
+
+        const matches = new Matches(props);
+        const aPlayer = matches.findAPlayer(1);
+        const bPlayer = matches.findBPlayer(1);
+
+        expect(aPlayer.id).toEqual(1);
+        expect(bPlayer.id).toEqual(2);
+        expect(aPlayer.id).not.toEqual(bPlayer.id);
+    });
 });

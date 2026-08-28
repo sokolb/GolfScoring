@@ -612,6 +612,38 @@ describe("Scorecard tests", () => {
         expect(tableRows.length).toBeGreaterThan(10); // Should have at least the expected rows
     });
 
+    it("assigns distinct A and B players when teammates have identical handicaps", () => {
+        props.golf.players[0].handicap = 10;
+        props.golf.players[0].frontNine = 5;
+        props.golf.players[0].backNine = 5;
+        props.golf.players[1].handicap = 10;
+        props.golf.players[1].frontNine = 5;
+        props.golf.players[1].backNine = 5;
+
+        const scorecard = new Scorecard(props);
+        const aPlayer = scorecard.findAPlayer(1);
+        const bPlayer = scorecard.findBPlayer(1);
+
+        expect(aPlayer.id).toEqual(1);
+        expect(bPlayer.id).toEqual(2);
+        expect(aPlayer.id).not.toEqual(bPlayer.id);
+    });
+
+    it("renders both teammates on the scorecard when their handicaps are identical", () => {
+        props.golf.players[0].handicap = 10;
+        props.golf.players[0].frontNine = 5;
+        props.golf.players[0].backNine = 5;
+        props.golf.players[1].handicap = 10;
+        props.golf.players[1].frontNine = 5;
+        props.golf.players[1].backNine = 5;
+
+        const { container } = render(<Scorecard {...props} />);
+
+        const tableContent = container.querySelector('[name="scoreCardTable"]').textContent;
+        expect(tableContent).toContain("Brian Sokoloski");
+        expect(tableContent).toContain("Bob Smith");
+    });
+
     test.each([
         [false, 2, 1],
         [true, 1, 2],

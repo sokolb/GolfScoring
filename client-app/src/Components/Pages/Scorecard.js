@@ -92,7 +92,8 @@ export class Scorecard extends Component {
         } else {
             const handicap1 = parseFloat(player1.handicap);
             const handicap2 = parseFloat(player2.handicap);
-            return handicap1 < handicap2 ? player1 : player2;
+            // On a tie, player1 is the A player so findBPlayer's tie pick (player2) stays distinct
+            return handicap1 <= handicap2 ? player1 : player2;
         }
     }
 
