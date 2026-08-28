@@ -1,4 +1,6 @@
 """Flask application entry point."""
+import os
+
 from flask import Flask
 from flask_cors import CORS
 from db import db
@@ -15,4 +17,7 @@ app.register_blueprint(courses_bp)
 app.register_blueprint(divisions_bp)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8082, debug=True)
+    # Debug mode exposes the Werkzeug interactive debugger (remote code
+    # execution) — never enable it by default. Opt in with FLASK_DEBUG=1.
+    debug = os.environ.get('FLASK_DEBUG', '').lower() in ('1', 'true')
+    app.run(host='0.0.0.0', port=8082, debug=debug)
