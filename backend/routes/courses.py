@@ -16,8 +16,8 @@ def course(course_id):
     
     if request.method == 'GET':
         result = con.execute(
-            text("SELECT id, name, tee FROM course WHERE id = ?"),
-            (course_id,)
+            text("SELECT id, name, tee FROM course WHERE id = :id"),
+            {"id": course_id}
         )
         courseData = result.fetchone()
         if courseData is None:
@@ -29,8 +29,8 @@ def course(course_id):
         else:
             holes = []
             holesResult = con.execute(
-                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = ?"),
-                (course_id,)
+                text("SELECT id, number, handicapIndex FROM hole WHERE course_id = :course_id"),
+                {"course_id": course_id}
             )
             holesData = holesResult.fetchall()
             for row in holesData:
@@ -47,22 +47,21 @@ def course(course_id):
     
     if request.method == 'POST':
         data = request.get_json()['course']
-        data_tuple = (data['name'], data['tee'])
         if course_id == "-1":
-            sql = text("INSERT INTO course(name, tee) VALUES (?, ?)")
-            result = con.execute(sql, data_tuple)
+            sql = text("INSERT INTO course(name, tee) VALUES (:name, :tee)")
+            result = con.execute(sql, {"name": data['name'], "tee": data['tee']})
             course_id = str(result.lastrowid)
         else:
-            sql = text('''UPDATE course SET name = ?, 
-                tee = ?
-                WHERE id = ?''')
-            con.execute(sql, data_tuple + (course_id,))
-            sql = text("DELETE from hole WHERE course_id = ?")
-            con.execute(sql, (course_id,))
-        
+            sql = text('''UPDATE course SET name = :name,
+                tee = :tee
+                WHERE id = :id''')
+            con.execute(sql, {"name": data['name'], "tee": data['tee'], "id": course_id})
+            sql = text("DELETE from hole WHERE course_id = :course_id")
+            con.execute(sql, {"course_id": course_id})
+
         for hole in data['holes']:
-            sql = text("INSERT INTO hole(number, handicapIndex, course_id) VALUES (?,?,?)")
-            con.execute(sql, (hole["number"], hole["handicapIndex"], course_id))
+            sql = text("INSERT INTO hole(number, handicapIndex, course_id) VALUES (:number, :handicapIndex, :course_id)")
+            con.execute(sql, {"number": hole["number"], "handicapIndex": hole["handicapIndex"], "course_id": course_id})
         
         retval = Response(
             response=course_id,
@@ -74,8 +73,8 @@ def course(course_id):
         return retval
     
     if request.method == 'DELETE':
-        con.execute(text("DELETE FROM course WHERE id = ?"), (course_id,))
-        con.execute(text("DELETE FROM hole WHERE course_id = ?"), (course_id,))
+        con.execute(text("DELETE FROM course WHERE id = :id"), {"id": course_id})
+        con.execute(text("DELETE FROM hole WHERE course_id = :course_id"), {"course_id": course_id})
         retval = Response(
             response="Success",
             status=200,

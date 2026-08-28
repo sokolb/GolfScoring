@@ -15,8 +15,8 @@ def division(division_id):
     
     if request.method == 'GET':
         result = con.execute(
-            text("SELECT id, name FROM division WHERE id = ?"),
-            (division_id,)
+            text("SELECT id, name FROM division WHERE id = :id"),
+            {"id": division_id}
         )
         data = result.fetchone()
         if data is None:
@@ -38,15 +38,14 @@ def division(division_id):
     
     if request.method == 'POST':
         data = request.get_json()['division']
-        data_tuple = (data['name'],)
         if division_id == "-1":
-            sql = text("INSERT INTO division(name) VALUES (?)")
-            result = con.execute(sql, data_tuple)
+            sql = text("INSERT INTO division(name) VALUES (:name)")
+            result = con.execute(sql, {"name": data['name']})
             division_id = str(result.lastrowid)
         else:
-            sql = text('''UPDATE division SET name = ?
-                WHERE id = ?''')
-            con.execute(sql, data_tuple + (division_id,))
+            sql = text('''UPDATE division SET name = :name
+                WHERE id = :id''')
+            con.execute(sql, {"name": data['name'], "id": division_id})
         
         retval = Response(
             response=division_id,
@@ -58,7 +57,7 @@ def division(division_id):
         return retval
     
     if request.method == 'DELETE':
-        con.execute(text("DELETE FROM division WHERE id = ?"), (division_id,))
+        con.execute(text("DELETE FROM division WHERE id = :id"), {"id": division_id})
         retval = Response(
             response="Success",
             status=200,
